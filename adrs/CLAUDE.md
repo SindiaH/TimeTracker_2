@@ -1,6 +1,6 @@
 # TimeTracker_2 ADR Repository
 
-This repository contains Architecture Decision Records (ADRs) for the TimeTracker_2 project. ADRs document architecture decisions across four categories: Frontend, Backend Integration, Electron, Database.
+This repository contains Architecture Decision Records (ADRs) for the TimeTracker_2 project. ADRs document architecture decisions across four categories: Frontend, Backend Integration, Tauri, Database.
 
 ## File Structure
 
@@ -14,7 +14,7 @@ This repository contains Architecture Decision Records (ADRs) for the TimeTracke
 |----------------------|--------------------------|
 | Frontend             | `1-frontend/`            |
 | Backend Integration  | `2-backend-integration/` |
-| Electron             | `3-electron/`            |
+| Tauri                | `3-tauri/`               |
 | Database             | `4-database/`            |
 
 ## ADR Conventions
@@ -29,7 +29,7 @@ The first digit encodes the category, followed by a 4-digit sequence number:
 |----------------------|--------|-------------------------------------------------------|
 | Frontend             | 1xxxx  | `ADR-10001-angular-v21-as-frontend-framework.md`      |
 | Backend Integration  | 2xxxx  | `ADR-20001-backend-abstraction-layer.md`               |
-| Electron             | 3xxxx  | `ADR-30001-electron-as-desktop-runtime.md`             |
+| Tauri                | 3xxxx  | `ADR-30001-tauri-as-desktop-runtime.md`                |
 | Database             | 4xxxx  | `ADR-40001-data-model-design.md`                       |
 
 ### Categories
@@ -37,7 +37,7 @@ The first digit encodes the category, followed by a 4-digit sequence number:
 Each ADR belongs to exactly one category (determined by its number prefix):
 - Frontend (1xxxx)
 - Backend Integration (2xxxx)
-- Electron (3xxxx)
+- Tauri (3xxxx)
 - Database (4xxxx)
 
 ### Structure

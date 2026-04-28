@@ -27,13 +27,18 @@
 | [ADR-20003](./2-backend-integration/ADR-20003-postgrest-as-alternative-backend.md) | PostgREST as Alternative Backend Implementation | proposed |
 | [ADR-20004](./2-backend-integration/ADR-20004-provider-pattern-for-data-access.md) | Provider Pattern for Data Access | proposed |
 
-## Electron
+## Tauri
 
 | ADR | Title | Status |
 |-----|-------|--------|
-| [ADR-30001](./3-electron/ADR-30001-electron-as-desktop-runtime.md) | Electron as Desktop Runtime | proposed |
-| [ADR-30002](./3-electron/ADR-30002-context-isolation-and-preload-scripts.md) | Context Isolation and Preload Scripts | proposed |
-| [ADR-30003](./3-electron/ADR-30003-ipc-communication-pattern.md) | IPC Communication Pattern | proposed |
+| [ADR-30001](./3-tauri/ADR-30001-tauri-as-desktop-runtime.md) | Tauri 2 as Desktop Runtime | proposed |
+| [ADR-30002](./3-tauri/ADR-30002-capability-based-security-model.md) | Capability-based Security Model | proposed |
+| [ADR-30003](./3-tauri/ADR-30003-command-and-event-ipc-pattern.md) | Tauri Command and Event IPC Pattern | proposed |
+| [ADR-30004](./3-tauri/ADR-30004-active-window-and-idle-detection-in-rust.md) | Active Window and Idle Detection in Rust | proposed |
+| [ADR-30005](./3-tauri/ADR-30005-sidecar-binaries-for-platform-helpers.md) | Sidecar Binaries for Platform-Specific Helpers | proposed |
+| [ADR-30006](./3-tauri/ADR-30006-persistent-configuration-via-store-plugin.md) | Persistent Configuration via tauri-plugin-store | proposed |
+| [ADR-30007](./3-tauri/ADR-30007-platform-integration-plugins.md) | Platform Integration Plugins | proposed |
+| [ADR-30008](./3-tauri/ADR-30008-desktop-service-abstraction-in-angular.md) | Desktop Service Abstraction in Angular | proposed |
 
 ## Database
 

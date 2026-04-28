@@ -1,6 +1,6 @@
 # Data Model Design
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -69,7 +69,7 @@ class TimeEntryEntity extends BaseEntity {
 
 #### ActivityInfoEntity
 ```typescript
-class ActivityInfoEntity extends BaseEntity {
+class ActivityInfoEntityu extends BaseEntity {
   hostname: string;          // Machine identifier
   title: string;             // Window title
   processId: number;         // OS process ID
