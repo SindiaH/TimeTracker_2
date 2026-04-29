@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Minimal capability set for the main window. Phase 0.2 only — sidecars and custom commands are added in Phase 0.7 (see ADR-30002).",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
