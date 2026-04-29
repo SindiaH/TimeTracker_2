@@ -1,0 +1,28 @@
+@use '@angular/material' as mat;
+@use './themes/light-theme' as light;
+@use './themes/dark-theme' as dark;
+
+:root,
+.theme-light {
+  @include mat.all-component-themes(light.$light-theme);
+
+  color-scheme: light;
+
+  --app-tracker-running: #2e7d32;
+  --app-tracker-idle: #9e9e9e;
+  --app-day-grid-line: rgb(0 0 0 / 8%);
+  --app-day-grid-line-strong: rgb(0 0 0 / 16%);
+  --app-activity-block-border: rgb(0 0 0 / 12%);
+}
+
+.theme-dark {
+  @include mat.all-component-colors(dark.$dark-theme);
+
+  color-scheme: dark;
+
+  --app-tracker-running: #81c784;
+  --app-tracker-idle: #616161;
+  --app-day-grid-line: rgb(255 255 255 / 10%);
+  --app-day-grid-line-strong: rgb(255 255 255 / 22%);
+  --app-activity-block-border: rgb(255 255 255 / 16%);
+}

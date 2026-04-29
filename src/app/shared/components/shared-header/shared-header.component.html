@@ -1,0 +1,17 @@
+@let themeControl = this.themeControl;
+@let themeOptions = this.themeOptions();
+
+<header class="shared-header">
+  <div class="shared-header__brand">
+    <app-icon>schedule</app-icon>
+    <span class="shared-header__title">TimeTrack</span>
+  </div>
+
+  <div class="shared-header__actions">
+    <app-button-toggle
+      [control]="themeControl"
+      [options]="themeOptions"
+      [hideIndicator]="true"
+      (optionChanged)="onThemeChanged($event)" />
+  </div>
+</header>

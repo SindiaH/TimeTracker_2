@@ -1,0 +1,26 @@
+.shared-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--mat-sys-surface-container);
+  color: var(--mat-sys-on-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.shared-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shared-header__title {
+  font: var(--mat-sys-title-medium);
+}
+
+.shared-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
