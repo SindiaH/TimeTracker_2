@@ -1,6 +1,6 @@
 # OnPush Change Detection as Default
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

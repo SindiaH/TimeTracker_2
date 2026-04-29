@@ -1,6 +1,6 @@
 # date-fns as Date Utility Library
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

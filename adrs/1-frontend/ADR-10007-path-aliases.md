@@ -1,6 +1,6 @@
 # TypeScript Path Aliases for Clean Imports
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -40,7 +40,7 @@ import { TaskEntity } from '@database/entities/task.entity';
 - Import paths communicate the architectural layer (core, shared, modules, database)
 - IDE auto-imports work with path aliases in VS Code and WebStorm
 - Slight initial configuration overhead in `tsconfig.json`
-- Electron main process code should not use these aliases (separate tsconfig)
+- The Tauri Rust core (`src-tauri/`) is built with `cargo` and does not use these TypeScript aliases at all (see ADR-30001)
 
 ## Alternatives Considered
 

@@ -1,6 +1,6 @@
 # Provider Pattern for Data Access
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -35,7 +35,7 @@ Planned providers:
 - `FolderProvider` — Folder hierarchy, CRUD, folder read models
 - `TimeEntryProvider` — Time entries, running timer, filtering
 - `ActivityProvider` — Activities, grouping, hostname filtering
-- `SettingsProvider` — Electron config, user options
+- `SettingsProvider` — Desktop config (Tauri store, see ADR-30006) and user options
 
 ## Consequences
 

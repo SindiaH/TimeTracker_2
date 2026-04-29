@@ -1,6 +1,6 @@
 # Backend Abstraction Layer
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -12,10 +12,10 @@ The previous TimeTracker version already implements a factory-based abstraction 
 
 An interface-based backend abstraction layer is adopted, refined from the previous project's `DatabaseFactory` pattern:
 
-- **Service interfaces**: Each data domain defines a TypeScript interface (e.g., `ITaskService`, `ITimeEntryService`, `IActivityService`, `IAuthService`) specifying the contract for data operations
+- **Service interfaces**: Each data domain defines a TypeScript interface specifying the contract for data operations
 - **Implementation swapping**: Concrete implementations (e.g., `SupabaseTaskService`, `PostgrestTaskService`) implement these interfaces
 - **Dependency Injection**: Angular's DI system provides the active implementation via `InjectionToken` and provider configuration, replacing the factory function approach
-- **Environment-driven**: The active backend implementation is selected via environment configuration
+- **Two independent environment axes**: Auth and data are configured separately via `environment.authBackend` and `environment.dataBackend`. They are never collapsed into a single `backend: 'supabase' | 'postgrest'` flag — see ADR-10013 for why this matters when the data layer moves to standalone PostgREST
 
 Interface example:
 ```typescript
@@ -28,8 +28,16 @@ export interface ITaskService {
 }
 ```
 
-Interfaces are defined for:
-- `IAuthService` — Authentication operations
+### Auth axis (`IAuthService`)
+
+`IAuthService` is the interface for the **authentication provider**. It is bound independently of the data services and configured via `environment.authBackend`. Concrete implementations: `SupabaseAuthService` (Hosted Supabase or self-hosted GoTrue), or any other implementation for Path 3 swaps (see ADR-10013).
+
+The auth provider and the data provider can — and sometimes should — point at different infrastructure. A standalone PostgREST data backend (ADR-20003) does not replace the auth provider; it only replaces the data services.
+
+### Data axis (`IXxxService` family)
+
+Interfaces for each data domain, bound via `environment.dataBackend`:
+
 - `ITaskService` — Task CRUD
 - `IFolderService` — Folder CRUD + hierarchy
 - `ITimeEntryService` — Time entry CRUD + running timer

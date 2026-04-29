@@ -1,6 +1,6 @@
 # Theming and Dark/Light Mode
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

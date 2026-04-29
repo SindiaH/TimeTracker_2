@@ -1,6 +1,6 @@
 # Platform Integration Plugins
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

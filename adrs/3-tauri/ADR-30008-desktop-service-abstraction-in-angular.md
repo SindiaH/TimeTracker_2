@@ -1,6 +1,6 @@
 # Desktop Service Abstraction in Angular
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

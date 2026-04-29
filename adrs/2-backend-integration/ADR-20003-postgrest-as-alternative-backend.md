@@ -1,6 +1,6 @@
 # PostgREST as Alternative Backend Implementation
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -22,7 +22,9 @@ Implementation:
 - `PostgrestFolderService implements IFolderService`
 - `PostgrestTimeEntryService implements ITimeEntryService`
 - Uses `postgrest-js` client or direct HTTP calls
-- Auth handled separately (e.g., external JWT issuer)
+- Bound via `environment.dataBackend` — auth remains separately configured via `environment.authBackend` (ADR-20001)
+
+PostgREST is **not** an auth provider — it validates JWTs against a configured secret and enforces RLS, but does not issue tokens. The auth provider must be chosen independently; see ADR-10013 (Backend Swap Scenarios) for the three viable paths. The recommended starting point is Path 1 (keep Supabase Auth / GoTrue, swap only the data services), which requires zero Angular changes beyond the `environment.dataBackend` URL.
 
 This ADR documents the option — implementation is deferred until needed.
 

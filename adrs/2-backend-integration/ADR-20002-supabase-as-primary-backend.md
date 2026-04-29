@@ -1,6 +1,6 @@
 # Supabase as Primary Backend Implementation
 
-- **Status:** proposed
+- **Status:** approved
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
@@ -13,19 +13,20 @@ The application needs a backend that provides database storage, real-time capabi
 Supabase is adopted as the primary backend implementation. Key reasons:
 
 - **Proven**: The previous TimeTracker version demonstrates Supabase's suitability for this use case
-- **All-in-one**: Database (PostgreSQL), authentication, storage, and auto-generated REST API in a single service
+- **All-in-one for the default deployment**: Database (PostgreSQL), authentication (GoTrue), and auto-generated REST API (PostgREST) in a single hosted service — no separate infrastructure needed to get started
 - **Row-Level Security**: Built-in per-user data isolation at the database level, enforced by auth tokens
 - **Auto-generated API**: PostgREST provides REST endpoints for all tables without writing backend code
 - **Hosted or self-hosted**: Supabase can be used as a hosted service or self-hosted via Docker
 - **Client library**: `@supabase/supabase-js` provides a typed TypeScript client
 
 Implementation details:
+- `SupabaseAuthService implements IAuthService` — bound via `environment.authBackend`
 - `SupabaseTaskService implements ITaskService`
 - `SupabaseFolderService implements IFolderService`
 - `SupabaseTimeEntryService implements ITimeEntryService`
 - `SupabaseActivityService implements IActivityService`
-- etc.
-- Singleton Supabase client instance (`CustomSupabaseInstance`)
+- etc. — all data services bound via `environment.dataBackend`
+- **Two Supabase client instances** (not one singleton): one for auth (`supabase.auth.*`, configured from `environment.authBackend.url` / `anonKey`), one for data (`supabase.from(...)`, configured from `environment.dataBackend.url` / `anonKey`). In the default Supabase deployment both URLs are identical; they diverge when auth and data backends are hosted separately (see ADR-10013, Backend Swap Scenarios).
 - Response wrappers (`SupabaseResponseModel<T>`, `SupabaseListResponseModel<T>`) for consistent error handling
 
 ## Consequences
