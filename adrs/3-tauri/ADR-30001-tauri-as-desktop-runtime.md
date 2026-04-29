@@ -1,6 +1,6 @@
 # Tauri 2 as Desktop Runtime
 
-- **Status:** approved
+- **Status:** accepted
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

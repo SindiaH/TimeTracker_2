@@ -1,6 +1,6 @@
 # Active Window and Idle Detection in Rust
 
-- **Status:** approved
+- **Status:** accepted
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

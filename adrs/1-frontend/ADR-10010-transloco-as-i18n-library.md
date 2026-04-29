@@ -1,6 +1,6 @@
 # Transloco as i18n Library
 
-- **Status:** approved
+- **Status:** accepted
 - **Date:** 2026-04-28
 - **Participants:** Aki
 

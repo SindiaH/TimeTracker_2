@@ -1,6 +1,6 @@
 # Capability-based Security Model
 
-- **Status:** approved
+- **Status:** accepted
 - **Date:** 2026-04-28
 - **Participants:** Aki
 
