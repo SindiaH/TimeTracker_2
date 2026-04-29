@@ -1,13 +1,36 @@
 @let themeControl = this.themeControl;
 @let themeOptions = this.themeOptions();
+@let languageControl = this.languageControl;
+@let languageOptions = this.languageOptions();
+@let navLinks = this.navLinks;
 
 <header class="shared-header">
   <div class="shared-header__brand">
     <app-icon>schedule</app-icon>
-    <span class="shared-header__title">TimeTrack</span>
+    <span class="shared-header__title">{{ 'app.title' | translate }}</span>
   </div>
 
+  <nav
+    class="shared-header__nav"
+    [attr.aria-label]="'header.navigation' | translate">
+    @for (link of navLinks; track link.path) {
+      <a
+        mat-button
+        class="shared-header__nav-link"
+        [routerLink]="link.path"
+        routerLinkActive="shared-header__nav-link--active">
+        <app-icon>{{ link.icon }}</app-icon>
+        <span>{{ link.translationKey | translate }}</span>
+      </a>
+    }
+  </nav>
+
   <div class="shared-header__actions">
+    <app-button-toggle
+      [control]="languageControl"
+      [options]="languageOptions"
+      [hideIndicator]="true"
+      (optionChanged)="onLanguageChanged($event)" />
     <app-button-toggle
       [control]="themeControl"
       [options]="themeOptions"

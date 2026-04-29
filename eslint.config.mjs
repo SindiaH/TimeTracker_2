@@ -55,6 +55,24 @@ export default [
       '@angular-eslint/prefer-inject': 'off',
     },
   },
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['src/app/core/i18n/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@jsverse/transloco',
+              message:
+                'Use TranslationService and TranslatePipe from @core/i18n instead of importing Transloco directly (ADR-10010).',
+            },
+          ],
+        },
+      ],
+    },
+  },
   ...compat.extends('plugin:@angular-eslint/template/recommended').map((config) => ({
     ...config,
     files: ['**/*.html'],

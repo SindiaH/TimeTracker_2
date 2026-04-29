@@ -22,14 +22,14 @@ The MEP reference project (`BrandspotHubApp/src/app/core/i18n/translation.servic
 - **Plugin ecosystem**: Scoped translations, locale formatting, message format support
 
 Configuration:
-- Translation files in `assets/i18n/` as JSON (`en.json`, `de.json`)
-- Default language: `en`
-- Available languages: `en`, `de`
+- Translation files in `assets/i18n/` as JSON (`en-US.json`, `de-AT.json`)
+- Default language: `en-US`
+- Available languages: `en-US`, `de-AT`
 - Lazy loading of translation files per route
 
-### Encapsulation in `TranslationService`
+### Encapsulation in `TranslationService` and `TranslatePipe`
 
-All Transloco usage in application code MUST go through a single `TranslationService` (`src/app/core/i18n/translation.service.ts`), modelled on the MEP reference project's `TranslationService`. No component, provider, guard, or other service is allowed to inject `TranslocoService` directly — `TranslationService` is the only consumer of the underlying library.
+All Transloco usage in application code MUST go through a single `TranslationService` (`src/app/core/i18n/translation.service.ts`) for programmatic access and a single `TranslatePipe` (`src/app/core/i18n/translate.pipe.ts`) for templates. Both are modelled on the MEP reference project's `TranslationService`. No component, provider, guard, directive, or other service is allowed to inject `TranslocoService` or import `TranslocoPipe`/`TranslocoDirective` directly — `TranslationService` and `TranslatePipe` are the only consumers of the underlying library.
 
 The service responsibilities are:
 
@@ -46,17 +46,30 @@ The service responsibilities are:
   - `selectTranslate(key: string, params?: HashMap): Observable<string>` for reactive consumers (mostly RxJS-heavy code paths like guards or interceptors)
 - **Writing the active language onto `document.documentElement.lang`** whenever it changes (effect on `selectedLanguageId`), so screen readers and Material's locale-dependent components see the correct value.
 
-Templates continue to use Transloco's structural directive (`*transloco="let t"`) and the `transloco` pipe — those are not re-wrapped, since they read from the same Transloco state that `TranslationService` owns. Components MUST NOT import `TranslocoService` to switch languages or read the current language; both go through `TranslationService`.
+### Templates use `TranslatePipe` only
+
+Templates MUST use the project's own `TranslatePipe` (selector `translate`), exported via `SharedModule`:
+
+```html
+<span>{{ 'app.title' | translate }}</span>
+<p>{{ 'modules.stubMessage' | translate: { moduleName } }}</p>
+```
+
+`TranslatePipe` is a thin `pure: false` wrapper that injects `TranslationService`, subscribes to `selectTranslate(key, params)` (which re-emits on language change), and calls `cdr.markForCheck()` so the host component updates under OnPush. It is the only pipe permitted for translations.
+
+Transloco's own `transloco` pipe and `*transloco="let t"` structural directive are **not** used in this project. The directive's per-block subscription benefit is small at this scale, and re-exporting Transloco surface from `SharedModule` would defeat the encapsulation goal — every template would otherwise depend on `@jsverse/transloco` transitively.
+
+Components MUST NOT import `TranslocoService`, `TranslocoPipe`, or `TranslocoDirective`. Language switching and current-language reads go through `TranslationService`; in-template translations go through `TranslatePipe`.
 
 ## Consequences
 
-- Migration from ngx-translate requires updating template pipes (`translate` → `transloco`) and service calls
+- Migration from ngx-translate requires updating template pipes (`translate` ngx → `translate` project pipe) and service calls; the pipe selector happens to match, but the implementation, params shape, and re-render mechanism are different.
 - Translation file structure may differ from ngx-translate's flat keys
 - Scoped translations add flexibility but require understanding the scope resolution mechanism
-- Transloco's structural directive (`*transloco="let t"`) is more verbose than a simple pipe but provides better performance (single subscription per template block)
-- **Single boundary for the i18n library**: Replacing Transloco later (or upgrading across a breaking major) only touches `TranslationService` and the templates that use the `*transloco` directive — no fan-out across feature modules.
-- **Thin wrapper, real cost**: `TranslationService` adds one indirection over the Transloco API. The cost is justified by the swappability and the central place to put persistence, locale registration, and Tauri-store mirroring.
-- **Lint guardrail**: An ESLint rule (`no-restricted-imports`) forbids importing `TranslocoService` outside `src/app/core/i18n/` so the encapsulation cannot drift silently in PR review.
+- Choosing pipe-only over Transloco's structural directive trades a small per-template-block subscription win for a much smaller public surface (one project pipe instead of two Transloco constructs).
+- **Single boundary for the i18n library**: Replacing Transloco later (or upgrading across a breaking major) only touches `TranslationService` and `TranslatePipe` — no fan-out across feature modules or templates.
+- **Thin wrapper, real cost**: `TranslationService` and `TranslatePipe` add one indirection each over the Transloco API. The cost is justified by the swappability and the central place to put persistence, locale registration, and Tauri-store mirroring.
+- **Lint guardrail**: An ESLint `no-restricted-imports` rule forbids importing from `@jsverse/transloco` anywhere outside `src/app/core/i18n/` so the encapsulation cannot drift silently in PR review.
 
 ## Alternatives Considered
 

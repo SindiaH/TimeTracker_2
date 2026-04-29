@@ -19,6 +19,26 @@
   font: var(--mat-sys-title-medium);
 }
 
+.shared-header__nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.shared-header__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.shared-header__nav-link--active {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
 .shared-header__actions {
   display: flex;
   align-items: center;

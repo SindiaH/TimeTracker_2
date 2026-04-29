@@ -1,0 +1,26 @@
+{
+  "app": {
+    "title": "TimeTrack"
+  },
+  "modules": {
+    "auth": "Anmeldung",
+    "tasks": "Aufgaben",
+    "timeEntries": "Zeiteinträge",
+    "calendar": "Kalender",
+    "activities": "Aktivitäten",
+    "settings": "Einstellungen",
+    "stubMessage": "Modul-Skelett für {{moduleName}} — die Feature-Implementierung folgt in einer späteren Phase."
+  },
+  "header": {
+    "navigation": "Navigation",
+    "theme": {
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    },
+    "language": {
+      "en-US": "English",
+      "de-AT": "Deutsch"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@let moduleName = this.moduleName();
+@let translationKey = this.translationKey();
+
+<section class="module-stub">
+  <h2 class="module-stub__title">{{ moduleName }}</h2>
+  @if (translationKey) {
+    <p class="module-stub__hint">{{ translationKey | translate: { moduleName } }}</p>
+  }
+</section>

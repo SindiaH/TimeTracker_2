@@ -170,7 +170,13 @@ Supabase Auth, wrapped by `SessionProvider` (signal-based session state) and `IA
 
 ### Internationalization (ADR-10010)
 
-`@jsverse/transloco` with translation files in `src/assets/i18n/` (`en.json`, `de.json`). Default `en`. Lazy-load translations per route where applicable. Use the `transloco` pipe and `*transloco="let t"` directive in templates; use `TranslocoService` programmatically.
+`@jsverse/transloco` with translation files in `src/assets/i18n/` (`en-US.json`, `de-AT.json`). Default `en-US`. Lazy-load translations per route where applicable.
+
+**All Transloco access is wrapped — consumers never import from `@jsverse/transloco` directly:**
+
+- **Templates**: use the project's own `TranslatePipe` (selector `translate`), exported via `SharedModule`. Syntax: `{{ 'key' | translate }}` and `{{ 'key' | translate: { param } }}`. The Transloco structural directive (`*transloco="let t"`) and the built-in `transloco` pipe are **not** used.
+- **Programmatic access**: inject `TranslationService` from `@core/i18n/translation.service`. It owns the active language signal (`selectedLanguageId$`), persistence (`localStorage` key `time-tracker-language`), Angular locale registration, and `documentElement.lang`. Use `instant()` for sync lookups and `selectTranslate()` for reactive ones.
+- **Encapsulation guardrail**: an ESLint `no-restricted-imports` rule forbids `@jsverse/transloco` imports anywhere outside `src/app/core/i18n/`. `TranslationService` and `TranslatePipe` are the only consumers of the underlying library.
 
 ### Theming (ADR-10014)
 
