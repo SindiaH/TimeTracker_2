@@ -1,0 +1,12 @@
+@let type = this.type();
+@let hideIcon = this.hideIcon();
+@let icon = this.icon();
+
+<div [class]="'info-container info-container-' + type">
+  @if (!hideIcon) {
+    <app-icon>{{ icon }}</app-icon>
+  }
+  <div class="info-content">
+    <ng-content></ng-content>
+  </div>
+</div>

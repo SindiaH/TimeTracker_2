@@ -1,0 +1,44 @@
+@let group = this.formGroup();
+@let startControl = this.startControl();
+@let endControl = this.endControl();
+@let labelText = this.labelText();
+@let appearance = this.appearance();
+@let hint = this.hint();
+@let minStartDate = this.minStartDate();
+@let useTouchUi = this.useTouchUi();
+@let fromLabel = this.fromLabel();
+@let toLabel = this.toLabel();
+@let minDateErrorText = this.minDateErrorText();
+
+@if (group) {
+  <mat-form-field [appearance]="appearance">
+    <mat-label>{{ labelText }}</mat-label>
+    <mat-date-range-input
+      [formGroup]="group"
+      [rangePicker]="picker"
+      [min]="minStartDate">
+      <input
+        matStartDate
+        [placeholder]="fromLabel"
+        [formControl]="startControl" />
+      <input
+        matEndDate
+        [placeholder]="toLabel"
+        [formControl]="endControl" />
+    </mat-date-range-input>
+    @if (hint) {
+      <mat-hint>{{ hint }}</mat-hint>
+    }
+    <mat-datepicker-toggle
+      matIconSuffix
+      [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker
+      #picker
+      [touchUi]="useTouchUi"></mat-date-range-picker>
+    @if (startControl.hasError('matDatepickerMin')) {
+      <mat-error [matTooltip]="minDateErrorText">{{ minDateErrorText }}</mat-error>
+    }
+  </mat-form-field>
+} @else {
+  <app-progress-indicator type="bar" />
+}

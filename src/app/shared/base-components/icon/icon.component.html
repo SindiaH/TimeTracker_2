@@ -1,16 +1,30 @@
 @let outlined = this.outlined();
+@let backgroundColor = this.backgroundColor();
+@let iconSize = this.iconSize();
 
-@if (outlined) {
-  <span
-    class="material-symbols-outlined"
+@if (backgroundColor || iconSize) {
+  <div
+    [class]="backgroundColor + ' ' + iconSize"
     translate="no">
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-  </span>
+    <ng-container *ngTemplateOutlet="iconTpl"></ng-container>
+  </div>
 } @else {
-  <mat-icon>
-    <ng-container *ngTemplateOutlet="content"></ng-container>
-  </mat-icon>
+  <ng-container *ngTemplateOutlet="iconTpl"></ng-container>
 }
+
+<ng-template #iconTpl>
+  @if (outlined) {
+    <span
+      class="material-symbols-outlined"
+      translate="no">
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </span>
+  } @else {
+    <mat-icon>
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </mat-icon>
+  }
+</ng-template>
 
 <ng-template #content>
   <ng-content></ng-content>

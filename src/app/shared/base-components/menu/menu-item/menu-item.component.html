@@ -1,0 +1,18 @@
+@let tooltip = this.tooltip();
+@let disabled = this.disabled();
+@let icon = this.icon();
+@let pushIconToRight = this.pushIconToRight();
+
+<button
+  mat-menu-item
+  [class.push-icon-to-right]="pushIconToRight"
+  [disabled]="disabled"
+  [matTooltip]="tooltip"
+  (click)="clicked.emit()">
+  @if (icon) {
+    <app-icon>{{ icon }}</app-icon>
+  }
+  <span>
+    <ng-content></ng-content>
+  </span>
+</button>

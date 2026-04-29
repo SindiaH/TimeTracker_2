@@ -1,0 +1,26 @@
+@let icon = this.icon();
+@let labelText = this.labelText();
+@let appearance = this.appearance();
+
+@if (icon && !labelText) {
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    [class.filled-button]="appearance === 'filled'">
+    <app-icon>{{ icon }}</app-icon>
+  </button>
+} @else {
+  <button
+    mat-button
+    [matMenuTriggerFor]="menu"
+    [class.filled-button]="appearance === 'filled'">
+    @if (icon) {
+      <app-icon class="menu-icon">{{ icon }}</app-icon>
+    }
+    <span class="label">{{ labelText }}</span>
+  </button>
+}
+
+<mat-menu #menu>
+  <ng-content></ng-content>
+</mat-menu>

@@ -1,0 +1,16 @@
+@let titleText = this.titleText();
+
+<ng-template #sideSheet>
+  <div class="sheets-header">
+    <h2 mat-dialog-title>{{ titleText }}</h2>
+    <app-button
+      variant="icon"
+      icon="close"
+      (clicked)="close()">
+    </app-button>
+  </div>
+  <mat-dialog-content class="mat-typography">
+    <ng-content></ng-content>
+  </mat-dialog-content>
+  <ng-content select="[dialog-actions]"></ng-content>
+</ng-template>

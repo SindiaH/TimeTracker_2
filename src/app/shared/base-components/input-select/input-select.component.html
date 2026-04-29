@@ -1,0 +1,43 @@
+@let control = this.control();
+@let items = this.items();
+@let labelText = this.labelText();
+@let appearance = this.appearance();
+@let multiple = this.multiple();
+@let showAsNumbered = this.showAsNumbered();
+@let hideErrorField = this.hideErrorField();
+@let errorText = this.errorText();
+@let errorRequiredText = this.errorRequiredText();
+@let selectedItemsText = this.selectedItemsText();
+
+<mat-form-field
+  [appearance]="appearance"
+  [class]="appearance + '-style'"
+  [class.hide-error-field]="hideErrorField">
+  <mat-label>{{ labelText }}</mat-label>
+  <mat-select
+    [formControl]="control"
+    [multiple]="multiple"
+    (closed)="closed.emit()">
+    <mat-select-trigger>
+      <div class="select-name">{{ selectedItemsText ? selectedItemsText : control.value }}</div>
+    </mat-select-trigger>
+    @for (item of items; track item.id; let i = $index) {
+      <mat-option [value]="item.id">
+        <div class="mat-option-content">
+          @if (item.icon) {
+            <app-icon [class]="'select-icon select-icon-' + item.icon">{{ item.icon }}</app-icon>
+          } @else if (showAsNumbered) {
+            <div class="select-index">{{ i + 1 }}</div>
+          }
+          <div class="select-name">{{ item.name }}</div>
+        </div>
+      </mat-option>
+    }
+  </mat-select>
+  @if (control.invalid && control.hasError('required')) {
+    <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
+  }
+  @if (errorText) {
+    <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+  }
+</mat-form-field>

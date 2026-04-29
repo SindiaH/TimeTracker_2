@@ -1,0 +1,68 @@
+@let editing = this.editing();
+@let editingAllowed = this.editingAllowed();
+@let loading = this.loading();
+@let appearance = this.appearance();
+@let titleText = this.titleText();
+@let subTitleText = this.subTitleText();
+@let hasHoverEffect = this.hasHoverEffect();
+@let loadingButtons = this.loadingButtons();
+@let saveDisabled = this.saveDisabled();
+@let discardButtonText = this.discardButtonText();
+@let saveButtonText = this.saveButtonText();
+@let editButtonText = this.editButtonText();
+
+@if (loading) {
+  <app-panel
+    [appearance]="appearance"
+    [subTitleText]="subTitleText"
+    [titleText]="titleText"
+    [hasHoverEffect]="hasHoverEffect">
+    <app-progress-indicator></app-progress-indicator>
+  </app-panel>
+} @else {
+  <app-panel
+    [appearance]="appearance"
+    [subTitleText]="subTitleText"
+    [titleText]="titleText"
+    [hasHoverEffect]="hasHoverEffect">
+    <div actions>
+      <ng-content select="[actions]"></ng-content>
+      @if (!editing && editingAllowed) {
+        <app-button
+          variant="stroked"
+          icon="edit"
+          [loading]="loadingButtons"
+          [disabled]="loadingButtons"
+          (clicked)="edit()">
+          {{ editButtonText }}
+        </app-button>
+      }
+    </div>
+
+    <div footer>
+      <ng-content select="[footer]"></ng-content>
+      @if (editing && editingAllowed) {
+        <app-button
+          variant="stroked"
+          (clicked)="discard()">
+          {{ discardButtonText }}
+        </app-button>
+        <app-button
+          variant="flat"
+          [loading]="loadingButtons"
+          [disabled]="saveDisabled || loadingButtons"
+          (clicked)="save()">
+          {{ saveButtonText }}
+        </app-button>
+      }
+    </div>
+
+    <ng-content></ng-content>
+
+    @if (editing && editingAllowed) {
+      <ng-content select="[editModeContent]"></ng-content>
+    } @else {
+      <ng-content select="[readModeContent]"></ng-content>
+    }
+  </app-panel>
+}

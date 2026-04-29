@@ -1,0 +1,36 @@
+@let tooltip = this.tooltip();
+@let disabled = this.disabled();
+@let icon = this.icon();
+@let href = this.href();
+@let fragment = this.fragment();
+@let target = this.target();
+@let externalLink = this.externalLink();
+
+@if (!externalLink) {
+  <a
+    mat-menu-item
+    [routerLink]="href"
+    [fragment]="fragment"
+    [disabled]="disabled"
+    [matTooltip]="tooltip"
+    [target]="target">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
+} @else {
+  <a
+    mat-menu-item
+    rel="noopener noreferrer"
+    [href]="href"
+    [disabled]="disabled"
+    [matTooltip]="tooltip"
+    [target]="target">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </a>
+}
+
+<ng-template #content>
+  @if (icon) {
+    <app-icon>{{ icon }}</app-icon>
+  }
+  <ng-content></ng-content>
+</ng-template>

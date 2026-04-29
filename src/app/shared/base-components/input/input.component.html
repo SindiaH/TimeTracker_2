@@ -1,0 +1,84 @@
+@let control = this.control();
+@let appearance = this.appearance();
+@let type = this.type();
+@let labelText = this.labelText();
+@let placeholder = this.placeholder();
+@let errorText = this.errorText();
+@let errorRequiredText = this.errorRequiredText();
+@let errorMaxLengthText = this.errorMaxLengthText();
+@let errorMinLengthText = this.errorMinLengthText();
+@let errorPatternText = this.errorPatternText();
+@let prefixIcon = this.prefixIcon();
+@let showClearButton = this.showClearButton();
+@let displayOnly = this.displayOnly();
+@let subscriptSizingDynamic = this.subscriptSizingDynamic();
+@let max = this.max();
+@let min = this.min();
+@let step = this.step();
+@let rows = this.rows();
+@let readonlyValue = this.readonlyValue();
+
+@if (displayOnly) {
+  <app-text-readonly
+    [labelText]="labelText"
+    [value]="readonlyValue" />
+} @else {
+  <mat-form-field
+    [appearance]="appearance"
+    [subscriptSizing]="subscriptSizingDynamic ? 'dynamic' : 'fixed'">
+    @if (labelText) {
+      <mat-label>{{ labelText }}</mat-label>
+    }
+    @switch (type) {
+      @case ('text-area') {
+        <textarea
+          matInput
+          [rows]="rows"
+          [formControl]="control"
+          [placeholder]="placeholder ?? ''"
+          (keyup)="keyupEvent.emit($event)"></textarea>
+      }
+      @default {
+        <input
+          matInput
+          [type]="type"
+          [formControl]="control"
+          [placeholder]="placeholder ?? ''"
+          [max]="max"
+          [min]="min"
+          [step]="step"
+          (keyup)="keyupEvent.emit($event)" />
+      }
+    }
+    @if (prefixIcon) {
+      <app-icon matPrefix>{{ prefixIcon }}</app-icon>
+    }
+    @if (showClearButton && control.value) {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearValue()">
+        <app-icon>close</app-icon>
+      </button>
+    }
+    @if (control.hasError('required')) {
+      <mat-error>{{ errorRequiredText }}</mat-error>
+    }
+    @if (control.hasError('maxlength') || control.hasError('max')) {
+      <mat-error [matTooltip]="errorMaxLengthText">{{ errorMaxLengthText }}</mat-error>
+    }
+    @if (control.hasError('minlength') || control.hasError('min')) {
+      <mat-error [matTooltip]="errorMinLengthText">{{ errorMinLengthText }}</mat-error>
+    }
+    @if (control.hasError('pattern')) {
+      <mat-error [matTooltip]="errorPatternText">{{ errorPatternText }}</mat-error>
+    }
+    @if (control.hasError('email')) {
+      <mat-error>E-Mail ungültig</mat-error>
+    }
+    @if (control.invalid && errorText) {
+      <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+    }
+  </mat-form-field>
+}

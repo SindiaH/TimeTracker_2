@@ -1,0 +1,29 @@
+@let fitInkBarToContent = this.fitInkBarToContent();
+@let stretchTabs = this.stretchTabs();
+@let computedTabs = this.computedTabs();
+
+<nav
+  mat-tab-nav-bar
+  animationDuration="0ms"
+  [tabPanel]="tabPanel"
+  [fitInkBarToContent]="fitInkBarToContent"
+  [mat-stretch-tabs]="stretchTabs">
+  @for (tab of computedTabs; track tab.label) {
+    @if (tab.link) {
+      <a
+        mat-tab-link
+        [active]="!!tab.active"
+        [routerLink]="tab.link">
+        {{ tab.label }}
+      </a>
+    } @else {
+      <a
+        mat-tab-link
+        [active]="!!tab.active"
+        (click)="activateTab(tab)">
+        {{ tab.label }}
+      </a>
+    }
+  }
+</nav>
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>

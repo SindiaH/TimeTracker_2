@@ -1,0 +1,91 @@
+@let control = this.searchControl;
+@let labelText = this.labelText();
+@let appearance = this.appearance();
+@let options = this.filteredOptions();
+@let loading = this.loading();
+@let loadingMore = this.loadingMore();
+@let hasMore = this.hasMore();
+@let loadMoreText = this.loadMoreText();
+@let disableClientFilter = this.disableClientFilter();
+@let hideClearButton = this.hideClearButton();
+@let errorText = this.errorText();
+@let errorRequiredText = this.errorRequiredText();
+@let selectedItem = this.selectedItem();
+@let required = this.required();
+
+<div class="input-select-search-container">
+  <mat-form-field
+    class="input-select-search"
+    [appearance]="appearance">
+    <mat-label>{{ labelText }}{{ required ? ' *' : '' }}</mat-label>
+    <input
+      type="text"
+      #searchInput
+      matInput
+      [placeholder]="labelText"
+      [formControl]="control"
+      [matAutocomplete]="auto"
+      (input)="filterOptions(searchInput.value)"
+      (keydown.enter)="triggerSearch($event)" />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      class="input-select-search-overlay"
+      [autoSelectActiveOption]="!disableClientFilter"
+      [displayWith]="displayFn"
+      (optionSelected)="optionSelected($event)"
+      (closed)="closeDropdown()"
+      (opened)="openDropdown()">
+      @for (option of options; track option.id) {
+        <mat-option
+          [class]="'option-' + option?.id"
+          [class.is-active-option]="option?.id === selectedItem?.id"
+          [value]="option.id">
+          @if (option.highlightedInfo?.value) {
+            {{ option.highlightedInfo?.prefix }}
+            <b>{{ option.highlightedInfo?.value }}</b> {{ option.highlightedInfo?.suffix }}
+          } @else {
+            {{ option.name }}
+          }
+        </mat-option>
+      }
+      @if (hasMore) {
+        <div
+          class="load-more-option"
+          (mousedown)="$event.preventDefault()"
+          (click)="onLoadMoreClick($event)">
+          @if (loadingMore) {
+            <app-progress-indicator class="loading-items"></app-progress-indicator>
+          } @else {
+            <app-icon>expand_more</app-icon>
+          }
+          <span>{{ loadMoreText }}</span>
+        </div>
+      }
+    </mat-autocomplete>
+
+    <div
+      class="suffix"
+      matIconSuffix>
+      @if (loading) {
+        <app-progress-indicator class="loading-items"></app-progress-indicator>
+      } @else {
+        <div class="arrow-indicator"></div>
+      }
+    </div>
+
+    @if (control.invalid && control.hasError('required')) {
+      <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
+    }
+    @if (errorText) {
+      <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+    }
+  </mat-form-field>
+  @if (!hideClearButton && control.value && !loading) {
+    <app-button
+      class="clear-input-select-search"
+      variant="icon"
+      icon="close"
+      (clicked)="clearInputAndMarkTouched()">
+    </app-button>
+  }
+</div>

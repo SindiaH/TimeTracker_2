@@ -1,0 +1,52 @@
+@let stepperService = this.stepperService();
+@let titleText = this.titleText();
+@let descriptionText = this.descriptionText();
+@let disabled = this.disabled();
+@let hideToggle = this.hideToggle();
+@let isExpanded = this.isExpanded();
+@let step = this.step();
+@let previousLabel = this.previousLabel();
+@let nextLabel = this.nextLabel();
+@let closeLabel = this.closeLabel();
+
+<mat-expansion-panel
+  [disabled]="disabled"
+  [expanded]="isExpanded"
+  [hideToggle]="hideToggle"
+  (opened)="onOpened()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ titleText }}</mat-panel-title>
+    <mat-panel-description>
+      {{ descriptionText }}
+      <ng-content select="[description]"></ng-content>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <ng-content></ng-content>
+
+  @if (stepperService) {
+    <mat-action-row>
+      @if (stepperService.minStep() !== step) {
+        <app-button
+          variant="stroked"
+          (clicked)="stepperService.prevStep()">
+          {{ previousLabel }}
+        </app-button>
+      }
+      @if (stepperService.maxStep() !== step) {
+        <app-button
+          variant="stroked"
+          (clicked)="stepperService.nextStep()">
+          {{ nextLabel }}
+        </app-button>
+      }
+      @if (stepperService.maxStep() === step) {
+        <app-button
+          variant="stroked"
+          (clicked)="stepperService.close()">
+          {{ closeLabel }}
+        </app-button>
+      }
+    </mat-action-row>
+  }
+</mat-expansion-panel>

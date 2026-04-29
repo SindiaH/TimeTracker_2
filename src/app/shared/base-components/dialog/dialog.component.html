@@ -1,0 +1,58 @@
+@let titleText = this.titleText();
+@let cancelButtonText = this.cancelButtonText();
+@let submitButtonText = this.submitButtonText();
+@let submitDisabled = this.submitDisabled();
+@let showPopupOnly = this.showPopupOnly();
+@let hideHeader = this.hideHeader();
+@let hideFooter = this.hideFooter();
+@let showMiniCloseButton = this.showMiniCloseButton();
+@let hidePredefinedActions = this.hidePredefinedActions();
+
+<ng-template #dialog>
+  @if (!showPopupOnly) {
+    @if (!hideHeader) {
+      <div mat-dialog-title>
+        <div class="custom-dialog-title-container">
+          <div class="custom-dialog-title">{{ titleText }}</div>
+          @if (showMiniCloseButton) {
+            <app-button
+              class="mini-close-button"
+              variant="icon"
+              icon="close"
+              (clicked)="close()">
+            </app-button>
+          }
+        </div>
+      </div>
+    }
+    <mat-dialog-content class="mat-typography">
+      <ng-container *ngTemplateOutlet="ngContent"></ng-container>
+    </mat-dialog-content>
+    @if (!hideFooter) {
+      <mat-dialog-actions align="end">
+        <div class="dialog-actions">
+          <ng-content select="[custom-actions]"></ng-content>
+          @if (!hidePredefinedActions) {
+            <app-button
+              variant="basic"
+              (clicked)="close()">
+              {{ cancelButtonText }}
+            </app-button>
+            <app-button
+              variant="flat"
+              [disabled]="submitDisabled"
+              (clicked)="submit()">
+              {{ submitButtonText }}
+            </app-button>
+          }
+        </div>
+      </mat-dialog-actions>
+    }
+  } @else {
+    <ng-container *ngTemplateOutlet="ngContent"></ng-container>
+  }
+</ng-template>
+
+<ng-template #ngContent>
+  <ng-content></ng-content>
+</ng-template>

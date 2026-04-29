@@ -1,0 +1,15 @@
+@let disabled = this.disabled();
+@let pageSize = this.pageSize();
+@let pageSizeOptions = this.pageSizeOptions();
+@let fullLength = this.fullLength();
+@let pageIndex = this.pageIndex();
+
+<mat-paginator
+  [length]="fullLength"
+  [pageSize]="pageSize"
+  [disabled]="disabled"
+  [showFirstLastButtons]="true"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageIndex]="pageIndex"
+  (page)="handlePageEvent($event)">
+</mat-paginator>

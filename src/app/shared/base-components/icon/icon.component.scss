@@ -9,3 +9,46 @@
   font-size: var(--mat-sys-body-large-size, 24px);
   line-height: 1;
 }
+
+.icon-success,
+.icon-info,
+.icon-warning,
+.icon-error {
+  border-radius: 40px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-info {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.icon-success {
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.icon-warning {
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.icon-error {
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+$icon-header-size: 64px;
+
+.icon-header-size {
+  height: $icon-header-size;
+  width: $icon-header-size;
+
+  > * {
+    font-size: $icon-header-size !important;
+  }
+}

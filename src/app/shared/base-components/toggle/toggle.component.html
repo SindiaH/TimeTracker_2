@@ -1,0 +1,12 @@
+@let checkedValue = this.checkedValue();
+@let disabled = this.disabled();
+@let labelPosition = this.labelPosition();
+
+<mat-slide-toggle
+  class="custom-toggle"
+  [checked]="checkedValue"
+  [disabled]="disabled"
+  [labelPosition]="labelPosition"
+  (change)="valueChanged($event)">
+  <ng-content></ng-content>
+</mat-slide-toggle>

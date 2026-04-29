@@ -33,6 +33,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @NgModule({
   declarations: [],
@@ -74,6 +76,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatAutocompleteModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatPaginatorModule,
+    MatBottomSheetModule,
   ],
   exports: [
     MatTooltip,
@@ -114,6 +118,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatAutocompleteModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatPaginatorModule,
+    MatBottomSheetModule,
   ],
 })
 export class MaterialComponentsModule {}

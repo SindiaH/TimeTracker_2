@@ -1,0 +1,167 @@
+@let variant = this.variant();
+@let icon = this.icon();
+@let tooltip = this.tooltip();
+@let disabled = this.disabled();
+@let routerLinkUrl = this.routerLinkUrl();
+@let queryParams = this.queryParams();
+@let href = this.href();
+@let target = this.target();
+@let outlined = this.outlined();
+
+@switch (variant) {
+  @case ('basic') {
+    @if (routerLinkUrl) {
+      <a
+        mat-button
+        [disabled]="disabled"
+        [routerLink]="routerLinkUrl"
+        [queryParams]="queryParams"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    } @else {
+      <a
+        mat-button
+        [disabled]="disabled"
+        [href]="href"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    }
+  }
+  @case ('raised') {
+    @if (routerLinkUrl) {
+      <a
+        mat-raised-button
+        [disabled]="disabled"
+        [routerLink]="routerLinkUrl"
+        [queryParams]="queryParams"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    } @else {
+      <a
+        mat-raised-button
+        [disabled]="disabled"
+        [href]="href"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    }
+  }
+  @case ('stroked') {
+    @if (routerLinkUrl) {
+      <a
+        mat-stroked-button
+        [disabled]="disabled"
+        [routerLink]="routerLinkUrl"
+        [queryParams]="queryParams"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    } @else {
+      <a
+        mat-stroked-button
+        [disabled]="disabled"
+        [href]="href"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    }
+  }
+  @case ('flat') {
+    @if (routerLinkUrl) {
+      <a
+        mat-flat-button
+        [disabled]="disabled"
+        [routerLink]="routerLinkUrl"
+        [queryParams]="queryParams"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    } @else {
+      <a
+        mat-flat-button
+        [disabled]="disabled"
+        [href]="href"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+      </a>
+    }
+  }
+  @case ('icon') {
+    @if (routerLinkUrl) {
+      <a
+        mat-icon-button
+        [disabled]="disabled"
+        [routerLink]="routerLinkUrl"
+        [queryParams]="queryParams"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <app-icon [outlined]="outlined">
+          <ng-container *ngTemplateOutlet="content"></ng-container>
+        </app-icon>
+      </a>
+    } @else {
+      <a
+        mat-icon-button
+        [disabled]="disabled"
+        [href]="href"
+        [target]="target"
+        [matTooltip]="tooltip">
+        <app-icon [outlined]="outlined">
+          <ng-container *ngTemplateOutlet="content"></ng-container>
+        </app-icon>
+      </a>
+    }
+  }
+  @case ('fab') {
+    <a
+      mat-mini-fab
+      [disabled]="disabled"
+      [routerLink]="routerLinkUrl"
+      [queryParams]="queryParams"
+      [target]="target"
+      [matTooltip]="tooltip">
+      <app-icon [outlined]="outlined">
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+      </app-icon>
+    </a>
+  }
+  @case ('extended-fab') {
+    <a
+      mat-fab
+      extended
+      [disabled]="disabled"
+      [routerLink]="routerLinkUrl"
+      [queryParams]="queryParams"
+      [target]="target"
+      [matTooltip]="tooltip">
+      @if (icon) {
+        <app-icon [outlined]="outlined">{{ icon }}</app-icon>
+      }
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </a>
+  }
+}
+
+<ng-template #contentTpl>
+  <span class="link-content">
+    @if (icon) {
+      <app-icon [outlined]="outlined">{{ icon }}</app-icon>
+    }
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </span>
+</ng-template>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

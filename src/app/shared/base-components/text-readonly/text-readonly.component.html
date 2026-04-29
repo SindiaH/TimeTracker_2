@@ -1,0 +1,9 @@
+@let labelText = this.labelText();
+@let valueToDisplay = this.valueToDisplay();
+
+<div class="text-readonly-container">
+  @if (labelText) {
+    <label class="text-readonly-label">{{ labelText }}</label>
+  }
+  <div class="text-readonly-value">{{ valueToDisplay }}</div>
+</div>

@@ -1,0 +1,26 @@
+@let control = this.control();
+@let placeholderText = this.placeholderText();
+
+<mat-form-field
+  class="search"
+  appearance="outline">
+  <app-icon matPrefix>search</app-icon>
+  <mat-label>{{ placeholderText }}</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="control"
+    (focus)="focusInEvent.emit()"
+    (keyup)="search(getValue($event))"
+    (keydown)="keyPressed($event)"
+    (change)="onChange()" />
+  @if (control.value) {
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="resetValue()">
+      <app-icon>close</app-icon>
+    </button>
+  }
+</mat-form-field>

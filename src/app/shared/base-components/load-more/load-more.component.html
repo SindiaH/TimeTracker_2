@@ -1,0 +1,29 @@
+@let count = this.count();
+@let totalCount = this.totalCount();
+@let loading = this.loading();
+@let disableLoadMore = this.disableLoadMore();
+@let isLastPageReached = this.isLastPageReached();
+@let buttonTitle = this.buttonTitle();
+@let counterLabel = this.counterLabel();
+
+<div class="load-more-container">
+  <div class="load-more-counter">
+    {{ counterLabel ?? count + ' / ' + totalCount }}
+    @if (loading) {
+      <app-progress-indicator
+        class="load-more-process-indicator"
+        mode="indeterminate"
+        type="bar"></app-progress-indicator>
+    }
+  </div>
+
+  @if (!isLastPageReached && !disableLoadMore) {
+    <app-button
+      variant="stroked"
+      class="load-more-button"
+      (clicked)="loadNextPage.emit()">
+      {{ buttonTitle }}
+    </app-button>
+  }
+  <ng-content></ng-content>
+</div>

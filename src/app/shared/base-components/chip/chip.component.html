@@ -1,0 +1,20 @@
+@let avatarUrl = this.avatarUrl();
+@let disabled = this.disabled();
+@let removable = this.removable();
+
+<mat-chip-row
+  [disabled]="disabled"
+  (removed)="removed.emit()">
+  @if (avatarUrl) {
+    <img
+      matChipAvatar
+      [src]="avatarUrl"
+      alt="avatar" />
+  }
+  <ng-content></ng-content>
+  @if (removable) {
+    <button matChipRemove>
+      <app-icon>cancel</app-icon>
+    </button>
+  }
+</mat-chip-row>

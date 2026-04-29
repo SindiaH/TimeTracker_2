@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.input-select-search-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-select-search {
+  flex: 1;
+}
+
+.load-more-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--mat-sys-primary);
+}
+
+.is-active-option {
+  background-color: var(--mat-sys-surface-container-high);
+}

@@ -1,0 +1,31 @@
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.card-footer {
+  margin-top: 16px;
+}
+
+.custom-outlined-card {
+  display: flex;
+  background: var(--mat-sys-surface);
+  border-radius: var(--mat-sys-corner-medium);
+  border: 1px solid var(--mat-sys-outline-variant);
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.custom-outlined-card .card-header {
+  margin-bottom: 16px;
+}
+
+.custom-outlined-card .card-title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 28px;
+}

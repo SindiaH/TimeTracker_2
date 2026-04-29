@@ -1,0 +1,13 @@
+@let checkedValue = this.checkedValue();
+@let disabled = this.disabled();
+@let indeterminate = this.indeterminate();
+@let labelPosition = this.labelPosition();
+
+<mat-checkbox
+  [checked]="checkedValue"
+  [disabled]="disabled"
+  [indeterminate]="indeterminate"
+  [labelPosition]="labelPosition"
+  (change)="valueChanged($event)">
+  <ng-content></ng-content>
+</mat-checkbox>

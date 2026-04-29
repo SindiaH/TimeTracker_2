@@ -1,0 +1,18 @@
+@let type = this.type();
+@let mode = this.mode();
+@let value = this.value();
+
+@switch (type) {
+  @case ('bar') {
+    <mat-progress-bar
+      class="progress-bar"
+      [mode]="mode"
+      [value]="value"></mat-progress-bar>
+  }
+  @case ('spinner') {
+    <mat-progress-spinner
+      class="progress-spinner"
+      [mode]="mode"
+      [value]="value" />
+  }
+}

@@ -1,0 +1,29 @@
+@let icon = this.icon();
+@let titleText = this.titleText();
+@let additionalLines = this.additionalLines();
+@let showRemoveButton = this.showRemoveButton();
+@let removeTooltipText = this.removeTooltipText();
+
+<mat-list-item (click)="clickEvent.emit()">
+  @if (icon) {
+    <app-icon matListItemIcon>{{ icon }}</app-icon>
+  }
+  <div matListItemTitle>{{ titleText }}</div>
+  @for (line of additionalLines; track line) {
+    <div matListItemLine>{{ line }}</div>
+  }
+  <ng-content></ng-content>
+  @if (showRemoveButton) {
+    <div
+      matListItemMeta
+      class="list-item-remove"
+      (click)="$event.stopPropagation()">
+      <app-button
+        variant="icon"
+        icon="delete"
+        [tooltip]="removeTooltipText"
+        (clicked)="removeClicked.emit()">
+      </app-button>
+    </div>
+  }
+</mat-list-item>

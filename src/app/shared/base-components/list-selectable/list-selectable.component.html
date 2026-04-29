@@ -1,0 +1,21 @@
+@let control = this.control();
+@let list = this.list();
+@let multiple = this.multiple();
+
+<mat-selection-list
+  [formControl]="control"
+  [multiple]="multiple"
+  (selectionChange)="onSelectionChanged()">
+  @for (item of list; track item.id) {
+    <mat-list-option [value]="item.id">
+      <div class="list-option">
+        @if (item.logoUrl) {
+          <img
+            alt="logo"
+            [src]="item.logoUrl" />
+        }
+        <div>{{ item.name }}</div>
+      </div>
+    </mat-list-option>
+  }
+</mat-selection-list>
