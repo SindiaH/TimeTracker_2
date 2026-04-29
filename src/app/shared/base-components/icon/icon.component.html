@@ -1,0 +1,17 @@
+@let outlined = this.outlined();
+
+@if (outlined) {
+  <span
+    class="material-symbols-outlined"
+    translate="no">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </span>
+} @else {
+  <mat-icon>
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </mat-icon>
+}
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

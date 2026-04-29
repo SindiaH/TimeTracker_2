@@ -1,8 +1,33 @@
 @let title = this.title();
+@let isLoading = this.isLoading();
 
 <main class="app-shell">
   <h1>{{ title }}</h1>
-  <button mat-flat-button>Material smoke test</button>
+
+  <div class="app-shell__buttons">
+    <app-button
+      variant="flat"
+      icon="play_arrow"
+      tooltip="Toggle loading state"
+      [loading]="isLoading"
+      (clicked)="toggleLoading()">
+      Start
+    </app-button>
+
+    <app-button
+      variant="stroked"
+      icon="stop"
+      [disabled]="!isLoading"
+      (clicked)="toggleLoading()">
+      Stop
+    </app-button>
+
+    <app-button
+      variant="icon"
+      icon="settings"
+      tooltip="Settings"
+      (clicked)="toggleLoading()" />
+  </div>
 </main>
 
 <router-outlet />

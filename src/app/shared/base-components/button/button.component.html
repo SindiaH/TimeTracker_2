@@ -1,0 +1,61 @@
+@let variant = this.variant();
+@let icon = this.icon();
+@let tooltip = this.tooltip();
+@let loading = this.loading();
+@let disabled = this.disabled();
+@let isInteractionBlocked = disabled || loading;
+
+@switch (variant) {
+  @case ('flat') {
+    <button
+      mat-flat-button
+      [disabled]="isInteractionBlocked"
+      [matTooltip]="tooltip"
+      (click)="clicked.emit()">
+      <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+    </button>
+  }
+  @case ('stroked') {
+    <button
+      mat-stroked-button
+      [disabled]="isInteractionBlocked"
+      [matTooltip]="tooltip"
+      (click)="clicked.emit()">
+      <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+    </button>
+  }
+  @case ('icon') {
+    <button
+      mat-icon-button
+      [disabled]="isInteractionBlocked"
+      [matTooltip]="tooltip"
+      (click)="clicked.emit()">
+      <ng-container *ngTemplateOutlet="iconOnly"></ng-container>
+    </button>
+  }
+}
+
+<ng-template #contentTpl>
+  <span class="button-content">
+    @if (loading) {
+      <app-icon class="is-loading">progress_activity</app-icon>
+    } @else if (icon) {
+      <app-icon>{{ icon }}</app-icon>
+    }
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </span>
+</ng-template>
+
+<ng-template #iconOnly>
+  @if (loading) {
+    <app-icon class="is-loading">progress_activity</app-icon>
+  } @else if (icon) {
+    <app-icon>{{ icon }}</app-icon>
+  } @else {
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  }
+</ng-template>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>
