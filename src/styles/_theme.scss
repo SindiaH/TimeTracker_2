@@ -1,10 +1,12 @@
 @use '@angular/material' as mat;
 @use './themes/light-theme' as light;
 @use './themes/dark-theme' as dark;
+@include mat.core;
 
 :root,
 .theme-light {
   @include mat.all-component-themes(light.$light-theme);
+  @include mat.theme(light.$light-config);
 
   color-scheme: light;
 
@@ -17,6 +19,7 @@
 
 .theme-dark {
   @include mat.all-component-colors(dark.$dark-theme);
+  @include mat.theme(dark.$dark-config);
 
   color-scheme: dark;
 

@@ -6,12 +6,12 @@
 .app-root {
   height: 100%;
   background-color: var(--mat-sys-surface);
+
+  --mat-sidenav-container-shape: 0;
 }
 
 .app-root__drawer {
   width: min(320px, 85vw);
-  background-color: var(--mat-sys-surface-container);
-  color: var(--mat-sys-on-surface);
   border-left: 1px solid var(--mat-sys-outline-variant);
 }
 

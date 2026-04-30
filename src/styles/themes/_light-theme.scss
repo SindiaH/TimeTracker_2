@@ -1,18 +1,15 @@
 @use '@angular/material' as mat;
+@use '../variables/palette' as palette;
 
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: (
-      plain-family: Roboto,
-      brand-family: Roboto,
-    ),
-    density: (
-      scale: 0,
-    ),
-  )
+$light-config: (
+  color: (
+    theme-type: light,
+    primary: palette.$primary-palette,
+    tertiary: palette.$tertiary-palette,
+  ),
+  typography: palette.$typography-config,
+  density: (
+    scale: 0,
+  ),
 );
+$light-theme: mat.define-theme($light-config);
