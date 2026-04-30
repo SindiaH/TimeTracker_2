@@ -1,14 +1,17 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, Renderer2, RendererFactory2, Signal, signal } from '@angular/core';
 import { ServiceBase } from '@core/base/service-base';
-import { ResolvedTheme, ThemePreference } from '@core/services/theme/theme.type';
-
-const STORAGE_KEY = 'time-tracker-theme';
-const VALID_PREFERENCES: ReadonlyArray<ThemePreference> = ['light', 'dark', 'system'];
-const THEME_CLASSES: Record<ResolvedTheme, string> = {
-  light: 'theme-light',
-  dark: 'theme-dark',
-};
+import { LOCAL_STORAGE_KEYS } from '@core/constants/storage-keys';
+import {
+  DEFAULT_THEME_PREFERENCE,
+  PREFERS_DARK_MEDIA_QUERY,
+  RESOLVED_THEMES,
+  ResolvedTheme,
+  THEME_CLASS_NAMES,
+  THEME_PREFERENCE_VALUES,
+  THEME_PREFERENCES,
+  ThemePreference,
+} from '@core/constants/theme.constants';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService extends ServiceBase {
@@ -16,7 +19,7 @@ export class ThemeService extends ServiceBase {
   private readonly renderer: Renderer2 = inject(RendererFactory2).createRenderer(null, null);
 
   private readonly mediaQuery: MediaQueryList | null = this.document.defaultView?.matchMedia
-    ? this.document.defaultView.matchMedia('(prefers-color-scheme: dark)')
+    ? this.document.defaultView.matchMedia(PREFERS_DARK_MEDIA_QUERY)
     : null;
 
   private readonly _theme = signal<ThemePreference>(this.readPersistedPreference());
@@ -27,14 +30,14 @@ export class ThemeService extends ServiceBase {
   readonly resolvedTheme = computed<ResolvedTheme>(() => {
     const preference = this._theme();
 
-    if (preference === 'system') {
-      return this._systemPrefersDark() ? 'dark' : 'light';
+    if (preference === THEME_PREFERENCES.system) {
+      return this._systemPrefersDark() ? RESOLVED_THEMES.dark : RESOLVED_THEMES.light;
     }
 
     return preference;
   });
 
-  readonly isDark = computed<boolean>(() => this.resolvedTheme() === 'dark');
+  readonly isDark = computed<boolean>(() => this.resolvedTheme() === RESOLVED_THEMES.dark);
 
   constructor() {
     super();
@@ -59,11 +62,11 @@ export class ThemeService extends ServiceBase {
   private applyThemeClass(resolved: ResolvedTheme): void {
     const root = this.document.documentElement;
 
-    for (const themeClass of Object.values(THEME_CLASSES)) {
+    for (const themeClass of Object.values(THEME_CLASS_NAMES)) {
       this.renderer.removeClass(root, themeClass);
     }
 
-    this.renderer.addClass(root, THEME_CLASSES[resolved]);
+    this.renderer.addClass(root, THEME_CLASS_NAMES[resolved]);
   }
 
   private subscribeToSystemPreference(): void {
@@ -79,21 +82,21 @@ export class ThemeService extends ServiceBase {
 
   private readPersistedPreference(): ThemePreference {
     const storage = this.document.defaultView?.localStorage;
-    const stored = storage?.getItem(STORAGE_KEY);
+    const stored = storage?.getItem(LOCAL_STORAGE_KEYS.theme);
 
     if (stored !== null && stored !== undefined && this.isValidPreference(stored)) {
       return stored;
     }
 
-    return 'system';
+    return DEFAULT_THEME_PREFERENCE;
   }
 
   private persistPreference(preference: ThemePreference): void {
     const storage = this.document.defaultView?.localStorage;
-    storage?.setItem(STORAGE_KEY, preference);
+    storage?.setItem(LOCAL_STORAGE_KEYS.theme, preference);
   }
 
   private isValidPreference(value: string): value is ThemePreference {
-    return (VALID_PREFERENCES as ReadonlyArray<string>).includes(value);
+    return (THEME_PREFERENCE_VALUES as ReadonlyArray<string>).includes(value);
   }
 }

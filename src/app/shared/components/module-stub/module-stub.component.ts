@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@core/base/component-base';
+import { ExtendedRoutesData } from '@core/routing/extended-routes';
 
 @Component({
   selector: 'app-module-stub',
@@ -18,8 +19,8 @@ export class ModuleStubComponent extends ComponentBase {
   constructor() {
     super();
 
-    const data: Data = this.route.snapshot.data;
-    this.moduleName.set((data['moduleName'] as string | undefined) ?? '');
-    this.translationKey.set((data['translationKey'] as string | undefined) ?? '');
+    const data = this.route.snapshot.data as ExtendedRoutesData;
+    this.moduleName.set(data.moduleName ?? '');
+    this.translationKey.set(data.translationKey ?? '');
   }
 }

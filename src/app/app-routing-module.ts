@@ -1,39 +1,41 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { DEFAULT_ROUTE_SEGMENT, ROUTE_SEGMENTS } from '@core/constants/app-routes';
+import { ExtendedRoutes } from '@core/routing/extended-routes';
 
-const routes: Routes = [
+const routes: ExtendedRoutes = [
   {
-    path: '',
+    path: ROUTE_SEGMENTS.empty,
     pathMatch: 'full',
-    redirectTo: 'tasks',
+    redirectTo: DEFAULT_ROUTE_SEGMENT,
   },
   {
-    path: 'auth',
+    path: ROUTE_SEGMENTS.auth,
     loadChildren: () => import('@modules/auth/auth-module').then((m) => m.AuthModule),
   },
   {
-    path: 'tasks',
+    path: ROUTE_SEGMENTS.tasks,
     loadChildren: () => import('@modules/tasks/tasks-module').then((m) => m.TasksModule),
   },
   {
-    path: 'time-entries',
+    path: ROUTE_SEGMENTS.timeEntries,
     loadChildren: () => import('@modules/time-entries/time-entries-module').then((m) => m.TimeEntriesModule),
   },
   {
-    path: 'calendar',
+    path: ROUTE_SEGMENTS.calendar,
     loadChildren: () => import('@modules/calendar/calendar-module').then((m) => m.CalendarModule),
   },
   {
-    path: 'activities',
+    path: ROUTE_SEGMENTS.activities,
     loadChildren: () => import('@modules/activities/activities-module').then((m) => m.ActivitiesModule),
   },
   {
-    path: 'settings',
+    path: ROUTE_SEGMENTS.settings,
     loadChildren: () => import('@modules/settings/settings-module').then((m) => m.SettingsModule),
   },
   {
-    path: '**',
-    redirectTo: 'tasks',
+    path: ROUTE_SEGMENTS.wildcard,
+    redirectTo: DEFAULT_ROUTE_SEGMENT,
   },
 ];
 

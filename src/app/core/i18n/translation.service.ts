@@ -3,17 +3,18 @@ import deAT from '@angular/common/locales/de-AT';
 import enUS from '@angular/common/locales/en';
 import { effect, inject, Injectable, Signal, signal } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
-
-type TranslateParams = Record<string, unknown>;
 import { Observable } from 'rxjs';
 import { ServiceBase } from '@core/base/service-base';
 import {
-  AVAILABLE_LANGUAGES,
-  DEFAULT_LANGUAGE,
-  LANGUAGE_STORAGE_KEY,
+  AVAILABLE_LANGUAGE_IDS,
+  DEFAULT_LANGUAGE_ID,
+  LANGUAGE_IDS,
   LanguageId,
-  Locale,
-} from '@core/i18n/translation.types';
+} from '@core/constants/language.constants';
+import { LOCAL_STORAGE_KEYS } from '@core/constants/storage-keys';
+import { Locale } from '@core/i18n/translation.types';
+
+type TranslateParams = Record<string, unknown>;
 
 @Injectable({ providedIn: 'root' })
 export class TranslationService extends ServiceBase {
@@ -23,14 +24,14 @@ export class TranslationService extends ServiceBase {
   private readonly _selectedLanguageId = signal<LanguageId>(this.readPersistedLanguage());
 
   readonly selectedLanguageId$: Signal<LanguageId> = this._selectedLanguageId.asReadonly();
-  readonly availableLanguages: ReadonlyArray<LanguageId> = AVAILABLE_LANGUAGES;
+  readonly availableLanguages: ReadonlyArray<LanguageId> = AVAILABLE_LANGUAGE_IDS;
 
   constructor() {
     super();
 
     this.registerAngularLocaleData();
-    this.transloco.setAvailableLangs([...AVAILABLE_LANGUAGES]);
-    this.transloco.setDefaultLang(DEFAULT_LANGUAGE);
+    this.transloco.setAvailableLangs([...AVAILABLE_LANGUAGE_IDS]);
+    this.transloco.setDefaultLang(DEFAULT_LANGUAGE_ID);
     this.transloco.setActiveLang(this._selectedLanguageId());
 
     effect(() => {
@@ -66,27 +67,27 @@ export class TranslationService extends ServiceBase {
   }
 
   private isAvailableLanguage(value: string): value is LanguageId {
-    return (AVAILABLE_LANGUAGES as ReadonlyArray<string>).includes(value);
+    return (AVAILABLE_LANGUAGE_IDS as ReadonlyArray<string>).includes(value);
   }
 
   private registerAngularLocaleData(): void {
-    registerLocaleData(enUS, 'en-US');
-    registerLocaleData(deAT, 'de-AT');
+    registerLocaleData(enUS, LANGUAGE_IDS.enUs);
+    registerLocaleData(deAT, LANGUAGE_IDS.deAt);
   }
 
   private readPersistedLanguage(): LanguageId {
     const storage = this.document.defaultView?.localStorage;
-    const stored = storage?.getItem(LANGUAGE_STORAGE_KEY);
+    const stored = storage?.getItem(LOCAL_STORAGE_KEYS.language);
 
     if (stored !== null && stored !== undefined && this.isAvailableLanguage(stored)) {
       return stored;
     }
 
-    return DEFAULT_LANGUAGE;
+    return DEFAULT_LANGUAGE_ID;
   }
 
   private persistLanguage(langId: LanguageId): void {
     const storage = this.document.defaultView?.localStorage;
-    storage?.setItem(LANGUAGE_STORAGE_KEY, langId);
+    storage?.setItem(LOCAL_STORAGE_KEYS.language, langId);
   }
 }

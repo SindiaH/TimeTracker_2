@@ -1,4 +1,6 @@
-export type SyncTarget = 'sqllite' | 'supabase';
+import { SYNC_TARGETS, SyncTarget } from '@core/constants/backend.constants';
+
+export type { SyncTarget };
 
 export interface IDesktopConfig {
   version: string;
@@ -11,13 +13,16 @@ export interface IDesktopConfig {
   };
 }
 
+export const DESKTOP_CONFIG_VERSION = '1';
+export const DEFAULT_WINDOW_ZOOM = 1;
+
 export const defaultDesktopConfig: IDesktopConfig = {
-  version: '1',
+  version: DESKTOP_CONFIG_VERSION,
   autoTracking: { autoStartTracking: false },
-  windowOptions: { zoom: 1 },
+  windowOptions: { zoom: DEFAULT_WINDOW_ZOOM },
   sqlLiteConfig: { folder: '' },
   syncConfig: {
-    activitiesSyncType: 'supabase',
-    tasksSyncType: 'supabase',
+    activitiesSyncType: SYNC_TARGETS.supabase,
+    tasksSyncType: SYNC_TARGETS.supabase,
   },
 };
