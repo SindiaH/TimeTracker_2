@@ -4,6 +4,8 @@ export const TRANSLATION_KEYS = {
   },
   header: {
     navigation: 'header.navigation',
+    menuOpen: 'header.menuOpen',
+    menuClose: 'header.menuClose',
     theme: {
       light: 'header.theme.light',
       dark: 'header.theme.dark',

@@ -4,18 +4,13 @@ import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS, AppIcon } from '@core/constants/app-icons';
-import { ROUTE_PATHS, RoutePath } from '@core/constants/app-routes';
 import { LANGUAGE_IDS, LanguageId } from '@core/constants/language.constants';
+import { NAV_LINKS, NavLink } from '@core/constants/nav-links';
 import { THEME_PREFERENCES, ThemePreference } from '@core/constants/theme.constants';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
+import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 import { ThemeService } from '@core/services/theme/theme.service';
-
-type NavLink = {
-  path: RoutePath;
-  translationKey: TranslationKey;
-  icon: AppIcon;
-};
 
 @Component({
   selector: 'app-shared-header',
@@ -27,13 +22,27 @@ type NavLink = {
 export class SharedHeaderComponent extends ComponentBase {
   private readonly themeService = inject(ThemeService);
   private readonly translationService = inject(TranslationService);
+  private readonly menuStateService = inject(MenuStateService);
 
   protected readonly brandIcon: AppIcon = APP_ICONS.brand;
   protected readonly brandTitleKey: TranslationKey = TRANSLATION_KEYS.app.title;
   protected readonly navAriaLabelKey: TranslationKey = TRANSLATION_KEYS.header.navigation;
+  protected readonly menuOpenLabelKey: TranslationKey = TRANSLATION_KEYS.header.menuOpen;
+  protected readonly menuCloseLabelKey: TranslationKey = TRANSLATION_KEYS.header.menuClose;
 
   protected readonly theme: Signal<ThemePreference> = this.themeService.theme;
   protected readonly language: Signal<LanguageId> = this.translationService.selectedLanguageId$;
+
+  protected readonly isMobile: Signal<boolean> = this.menuStateService.isMobile;
+  protected readonly isMenuOpen: Signal<boolean> = this.menuStateService.isOpen;
+
+  protected readonly menuButtonIcon: Signal<AppIcon> = computed<AppIcon>(() =>
+    this.isMenuOpen() ? APP_ICONS.menuClose : APP_ICONS.menuOpen,
+  );
+
+  protected readonly menuButtonAriaKey: Signal<TranslationKey> = computed<TranslationKey>(() =>
+    this.isMenuOpen() ? TRANSLATION_KEYS.header.menuClose : TRANSLATION_KEYS.header.menuOpen,
+  );
 
   protected readonly themeControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>(
     this.themeService.theme(),
@@ -54,22 +63,7 @@ export class SharedHeaderComponent extends ComponentBase {
     { id: LANGUAGE_IDS.deAt, name: 'DE' },
   ]);
 
-  protected readonly navLinks: ReadonlyArray<NavLink> = [
-    { path: ROUTE_PATHS.tasks, translationKey: TRANSLATION_KEYS.modules.tasks, icon: APP_ICONS.navTasks },
-    {
-      path: ROUTE_PATHS.timeEntries,
-      translationKey: TRANSLATION_KEYS.modules.timeEntries,
-      icon: APP_ICONS.navTimeEntries,
-    },
-    { path: ROUTE_PATHS.calendar, translationKey: TRANSLATION_KEYS.modules.calendar, icon: APP_ICONS.navCalendar },
-    {
-      path: ROUTE_PATHS.activities,
-      translationKey: TRANSLATION_KEYS.modules.activities,
-      icon: APP_ICONS.navActivities,
-    },
-    { path: ROUTE_PATHS.settings, translationKey: TRANSLATION_KEYS.modules.settings, icon: APP_ICONS.navSettings },
-    { path: ROUTE_PATHS.auth, translationKey: TRANSLATION_KEYS.modules.auth, icon: APP_ICONS.navAuth },
-  ];
+  protected readonly navLinks: ReadonlyArray<NavLink> = NAV_LINKS;
 
   constructor() {
     super();
@@ -99,6 +93,10 @@ export class SharedHeaderComponent extends ComponentBase {
     if (this.isLanguageId(value)) {
       this.translationService.setLanguage(value);
     }
+  }
+
+  protected onMenuToggle(): void {
+    this.menuStateService.toggle();
   }
 
   private isThemePreference(value: ButtonToggleValue): value is ThemePreference {

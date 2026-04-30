@@ -1,3 +1,5 @@
+@use '../../../../styles/layout' as layout;
+
 .shared-header {
   display: flex;
   align-items: center;
@@ -13,10 +15,14 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .shared-header__title {
   font: var(--mat-sys-title-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .shared-header__nav {
@@ -43,4 +49,26 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: layout.$menu-breakpoint-max) {
+  .shared-header {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .shared-header__actions {
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: layout.$compact-brand-breakpoint-max) {
+  .shared-header__title {
+    display: none;
+  }
+
+  .shared-header__toggle {
+    display: none;
+  }
 }

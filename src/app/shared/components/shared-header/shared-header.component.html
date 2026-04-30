@@ -6,6 +6,9 @@
 @let languageControl = this.languageControl;
 @let languageOptions = this.languageOptions();
 @let navLinks = this.navLinks;
+@let isMobile = this.isMobile();
+@let menuButtonIcon = this.menuButtonIcon();
+@let menuButtonAriaKey = this.menuButtonAriaKey();
 
 <header class="shared-header">
   <div class="shared-header__brand">
@@ -13,31 +16,44 @@
     <span class="shared-header__title">{{ brandTitleKey | translate }}</span>
   </div>
 
-  <nav
-    class="shared-header__nav"
-    [attr.aria-label]="navAriaLabelKey | translate">
-    @for (link of navLinks; track link.path) {
-      <a
-        mat-button
-        class="shared-header__nav-link"
-        [routerLink]="link.path"
-        routerLinkActive="shared-header__nav-link--active">
-        <app-icon>{{ link.icon }}</app-icon>
-        <span>{{ link.translationKey | translate }}</span>
-      </a>
-    }
-  </nav>
+  @if (!isMobile) {
+    <nav
+      class="shared-header__nav"
+      [attr.aria-label]="navAriaLabelKey | translate">
+      @for (link of navLinks; track link.path) {
+        <a
+          mat-button
+          class="shared-header__nav-link"
+          [routerLink]="link.path"
+          routerLinkActive="shared-header__nav-link--active">
+          <app-icon>{{ link.icon }}</app-icon>
+          <span>{{ link.translationKey | translate }}</span>
+        </a>
+      }
+    </nav>
+  }
 
   <div class="shared-header__actions">
     <app-button-toggle
+      class="shared-header__toggle"
       [control]="languageControl"
       [options]="languageOptions"
       [hideIndicator]="true"
       (optionChanged)="onLanguageChanged($event)" />
     <app-button-toggle
+      class="shared-header__toggle"
       [control]="themeControl"
       [options]="themeOptions"
       [hideIndicator]="true"
       (optionChanged)="onThemeChanged($event)" />
+
+    @if (isMobile) {
+      <app-button
+        class="shared-header__menu-button"
+        variant="icon"
+        [icon]="menuButtonIcon"
+        [tooltip]="menuButtonAriaKey | translate"
+        (clicked)="onMenuToggle()" />
+    }
   </div>
 </header>

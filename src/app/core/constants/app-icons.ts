@@ -9,6 +9,8 @@ export const APP_ICONS = {
   navActivities: 'analytics',
   navSettings: 'settings',
   navAuth: 'lock',
+  menuOpen: 'menu',
+  menuClose: 'close',
 } as const;
 
 export type AppIcon = (typeof APP_ICONS)[keyof typeof APP_ICONS];

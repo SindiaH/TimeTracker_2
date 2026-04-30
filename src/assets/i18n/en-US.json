@@ -13,6 +13,8 @@
   },
   "header": {
     "navigation": "Navigation",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
     "theme": {
       "light": "Light",
       "dark": "Dark",

@@ -13,6 +13,8 @@
   },
   "header": {
     "navigation": "Navigation",
+    "menuOpen": "Menü öffnen",
+    "menuClose": "Menü schließen",
     "theme": {
       "light": "Hell",
       "dark": "Dunkel",

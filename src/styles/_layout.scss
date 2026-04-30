@@ -1,0 +1,5 @@
+// Keep in sync with MENU_BREAKPOINT_PX in src/app/core/constants/layout.ts
+$menu-breakpoint: 960px;
+$menu-breakpoint-max: $menu-breakpoint - 0.02px;
+$compact-brand-breakpoint: 480px;
+$compact-brand-breakpoint-max: $compact-brand-breakpoint - 0.02px;
