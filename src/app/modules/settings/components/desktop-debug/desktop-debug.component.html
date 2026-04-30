@@ -1,0 +1,50 @@
+@let isDesktop = this.isDesktop();
+@let hostname = this.hostname();
+@let idleSeconds = this.idleSeconds();
+@let activeWindow = this.activeWindow();
+@let errorMessage = this.errorMessage();
+@let countdown = this.countdown();
+
+<section class="desktop-debug">
+  <h2>Desktop Debug</h2>
+
+  <p>
+    <strong>isDesktop:</strong>
+    <span>{{ isDesktop ? 'true' : 'false' }}</span>
+  </p>
+
+  @if (errorMessage) {
+    <p class="desktop-debug__error">{{ errorMessage }}</p>
+  }
+
+  <dl>
+    <dt>Hostname</dt>
+    <dd>{{ hostname ?? '—' }}</dd>
+
+    <dt>Idle (s)</dt>
+    <dd>{{ idleSeconds ?? '—' }}</dd>
+
+    <dt>Active Window</dt>
+    <dd>
+      @if (activeWindow) {
+        <pre>{{ activeWindow | json }}</pre>
+      } @else {
+        —
+      }
+    </dd>
+  </dl>
+
+  <app-button
+    [disabled]="countdown !== null"
+    (clicked)="refresh()">
+    @if (countdown !== null) {
+      Refresh in {{ countdown }} s …
+    } @else {
+      Refresh
+    }
+  </app-button>
+
+  @if (countdown !== null) {
+    <p class="desktop-debug__countdown">Wechsle jetzt zum Zielfenster — Erfassung in {{ countdown }} s</p>
+  }
+</section>

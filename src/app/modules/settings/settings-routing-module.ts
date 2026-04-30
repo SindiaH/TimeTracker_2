@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ModuleStubComponent } from '@shared/components/module-stub/module-stub.component';
+import { DesktopDebugComponent } from './components/desktop-debug/desktop-debug.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ModuleStubComponent,
-    data: { moduleName: 'Settings', translationKey: 'modules.stubMessage' },
+    component: DesktopDebugComponent,
   },
 ];
 

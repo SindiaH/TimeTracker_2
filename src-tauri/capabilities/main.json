@@ -1,7 +1,29 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "main-capability",
-  "description": "Minimal capability set for the main window. Phase 0.2 only — sidecars and custom commands are added in Phase 0.7 (see ADR-30002).",
+  "description": "Main window capabilities (ADR-30002): custom commands + scoped sidecar exec + plugin permissions for store, dialog, window-state, deep-link and autostart.",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": [
+    "core:default",
+    "store:default",
+    "dialog:default",
+    "window-state:default",
+    "deep-link:default",
+    "autostart:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "binaries/timesapp-mac-active-win",
+          "sidecar": true,
+          "args": false
+        },
+        {
+          "name": "binaries/timesapp-win-browser-url",
+          "sidecar": true,
+          "args": [{ "validator": "\\d+" }]
+        }
+      ]
+    }
+  ]
 }
