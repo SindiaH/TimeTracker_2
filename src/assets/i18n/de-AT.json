@@ -9,6 +9,7 @@
     "calendar": "Kalender",
     "activities": "Aktivitäten",
     "settings": "Einstellungen",
+    "showcase": "Komponenten",
     "stubMessage": "Modul-Skelett für {{moduleName}} — die Feature-Implementierung folgt in einer späteren Phase."
   },
   "header": {
@@ -23,6 +24,23 @@
     "language": {
       "en-US": "English",
       "de-AT": "Deutsch"
+    }
+  },
+  "showcase": {
+    "pageTitle": "Komponenten-Übersicht",
+    "pageSubtitle": "Alle geteilten Komponenten in ihren Varianten — für Design-Reviews und als schnelles Nachschlagewerk.",
+    "searchPlaceholder": "Komponenten filtern…",
+    "sections": {
+      "buttons": "Schaltflächen, Links & Icons",
+      "inputs": "Text-Eingaben & Auswahllisten",
+      "toggles": "Checkboxen, Schalter, Radios & Chips",
+      "date": "Datumsauswahl",
+      "containers": "Panels & Akkordeons",
+      "navigation": "Tabs & Menüs",
+      "lists": "Listen",
+      "pagination": "Seitennavigation & Fortschritt",
+      "dialogs": "Dialoge & Sheets",
+      "info": "Hinweise & Read-only-Text"
     }
   }
 }

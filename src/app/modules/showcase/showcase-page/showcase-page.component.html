@@ -1,0 +1,30 @@
+@let translationKeys = this.translationKeys;
+@let searchControl = this.searchControl;
+@let searchTerm = this.searchTerm();
+
+<section class="showcase-page">
+  <header class="showcase-page__header">
+    <h1 class="showcase-page__title">{{ translationKeys.showcase.pageTitle | translate }}</h1>
+    <p class="showcase-page__subtitle">{{ translationKeys.showcase.pageSubtitle | translate }}</p>
+    <app-search
+      class="showcase-page__search"
+      [placeholderText]="translationKeys.showcase.searchPlaceholder | translate"
+      [control]="searchControl"
+      (keyUpEvent)="onSearchChanged($event)"
+      (clearedValue)="onSearchChanged($event)"
+      (changed)="onSearchChanged($event)" />
+  </header>
+
+  <div class="showcase-page__sections">
+    <app-buttons-section [searchTerm]="searchTerm" />
+    <app-inputs-section [searchTerm]="searchTerm" />
+    <app-toggles-section [searchTerm]="searchTerm" />
+    <app-date-section [searchTerm]="searchTerm" />
+    <app-containers-section [searchTerm]="searchTerm" />
+    <app-navigation-section [searchTerm]="searchTerm" />
+    <app-lists-section [searchTerm]="searchTerm" />
+    <app-pagination-section [searchTerm]="searchTerm" />
+    <app-dialogs-section [searchTerm]="searchTerm" />
+    <app-info-section [searchTerm]="searchTerm" />
+  </div>
+</section>

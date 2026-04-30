@@ -1,0 +1,36 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.info | translate">
+    <div class="showcase-stack">
+      <app-info type="info">An informational message.</app-info>
+      <app-info type="primary">A primary-coloured message.</app-info>
+      <app-info type="success">Operation succeeded.</app-info>
+      <app-info type="warning">A warning the user should know about.</app-info>
+      <app-info type="error">Something went wrong.</app-info>
+      <app-info
+        type="info"
+        [hideIcon]="true"
+        >No icon variant.</app-info
+      >
+    </div>
+
+    <div class="showcase-grid">
+      <app-text-readonly
+        labelText="Project"
+        value="TimeTracker" />
+      <app-text-readonly
+        labelText="Status"
+        value="In progress" />
+      <app-text-readonly
+        labelText="Empty value"
+        [value]="null"
+        placeholder="—" />
+      <app-text-readonly
+        labelText="No label provided"
+        value="Just a value" />
+    </div>
+  </app-panel>
+}

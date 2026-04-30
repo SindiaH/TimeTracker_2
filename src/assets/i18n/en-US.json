@@ -9,6 +9,7 @@
     "calendar": "Calendar",
     "activities": "Activities",
     "settings": "Settings",
+    "showcase": "Components",
     "stubMessage": "{{moduleName}} module skeleton — feature implementation follows in a later phase."
   },
   "header": {
@@ -23,6 +24,23 @@
     "language": {
       "en-US": "English",
       "de-AT": "Deutsch"
+    }
+  },
+  "showcase": {
+    "pageTitle": "Component Showcase",
+    "pageSubtitle": "All shared components in their variants — for design review and quick reference.",
+    "searchPlaceholder": "Filter components…",
+    "sections": {
+      "buttons": "Buttons, Links & Icons",
+      "inputs": "Text inputs & Selects",
+      "toggles": "Checkboxes, Toggles, Radios & Chips",
+      "date": "Date pickers",
+      "containers": "Panels & Accordions",
+      "navigation": "Tabs & Menus",
+      "lists": "Lists",
+      "pagination": "Pagination & Progress",
+      "dialogs": "Dialogs & Sheets",
+      "info": "Info & Read-only text"
     }
   }
 }

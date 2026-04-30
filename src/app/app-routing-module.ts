@@ -34,6 +34,10 @@ const routes: ExtendedRoutes = [
     loadChildren: () => import('@modules/settings/settings-module').then((m) => m.SettingsModule),
   },
   {
+    path: ROUTE_SEGMENTS.showcase,
+    loadChildren: () => import('@modules/showcase/showcase-module').then((m) => m.ShowcaseModule),
+  },
+  {
     path: ROUTE_SEGMENTS.wildcard,
     redirectTo: DEFAULT_ROUTE_SEGMENT,
   },

@@ -1,0 +1,59 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.dialogs | translate">
+    <div class="showcase-row">
+      <app-button
+        variant="raised"
+        (clicked)="openBasic()"
+        >Open dialog</app-button
+      >
+      <app-button
+        variant="raised"
+        (clicked)="openFullScreen()"
+        >Open full-screen dialog</app-button
+      >
+      <app-button
+        variant="raised"
+        (clicked)="openBottom()"
+        >Open bottom sheet</app-button
+      >
+      <app-button
+        variant="raised"
+        (clicked)="openSide()"
+        >Open side sheet</app-button
+      >
+    </div>
+
+    <app-dialog
+      #basicDialog
+      titleText="Basic dialog"
+      submitButtonText="Apply"
+      cancelButtonText="Close">
+      <p>This is the body of a basic dialog. It supports cancel/submit actions and a close button.</p>
+    </app-dialog>
+
+    <app-dialog
+      #fullScreenDialog
+      titleText="Full-screen dialog"
+      [showMiniCloseButton]="true"
+      [hideFooter]="true">
+      <p>Full-screen dialogs span the entire viewport with rounded corners and a mini close button.</p>
+    </app-dialog>
+
+    <app-bottom-sheet #bottomSheet>
+      <div class="bottom-sheet-content">
+        <h3>Bottom sheet</h3>
+        <p>Slides in from the bottom. Tap the backdrop to close.</p>
+      </div>
+    </app-bottom-sheet>
+
+    <app-side-sheet
+      #sideSheet
+      titleText="Side sheet">
+      <p>Slides in from the right. Closes via the icon in the header or the backdrop.</p>
+    </app-side-sheet>
+  </app-panel>
+}

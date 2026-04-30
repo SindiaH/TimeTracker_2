@@ -1,0 +1,42 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+@let listItems = this.listItems;
+@let selectableItems = this.selectableItems;
+@let singleSelectionControl = this.singleSelectionControl;
+@let multiSelectionControl = this.multiSelectionControl;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.lists | translate">
+    <div class="showcase-grid">
+      <app-list>
+        @for (item of listItems; track item.title) {
+          <app-list-item
+            [titleText]="item.title"
+            [additionalLines]="item.lines"
+            [icon]="item.icon" />
+        }
+      </app-list>
+
+      <app-list [styleItemsClickable]="true">
+        @for (item of listItems; track item.title) {
+          <app-list-item
+            [titleText]="item.title"
+            [icon]="item.icon"
+            [showRemoveButton]="true"
+            removeTooltipText="Remove" />
+        }
+      </app-list>
+    </div>
+
+    <div class="showcase-grid">
+      <app-list-selectable
+        [list]="selectableItems"
+        [control]="singleSelectionControl" />
+      <app-list-selectable
+        [list]="selectableItems"
+        [control]="multiSelectionControl"
+        [multiple]="true" />
+    </div>
+  </app-panel>
+}

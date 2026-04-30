@@ -1,0 +1,72 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@let textControl = this.textControl;
+@let numberControl = this.numberControl;
+@let passwordControl = this.passwordControl;
+@let textareaControl = this.textareaControl;
+@let disabledControl = this.disabledControl;
+@let readonlyControl = this.readonlyControl;
+@let selectItems = this.selectItems;
+@let singleSelectControl = this.singleSelectControl;
+@let multiSelectControl = this.multiSelectControl;
+@let autocompleteControl = this.autocompleteControl;
+@let searchControl = this.searchControl;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.inputs | translate">
+    <div class="showcase-grid">
+      <app-input
+        labelText="Text"
+        [control]="textControl"
+        [showClearButton]="true" />
+      <app-input
+        labelText="Number"
+        type="number"
+        [control]="numberControl" />
+      <app-input
+        labelText="Password"
+        type="password"
+        [control]="passwordControl" />
+      <app-input
+        labelText="Email"
+        type="email"
+        [control]="textControl"
+        prefixIcon="alternate_email" />
+      <app-input
+        labelText="Textarea"
+        type="text-area"
+        [control]="textareaControl"
+        [rows]="4" />
+      <app-input
+        labelText="Disabled"
+        [control]="disabledControl" />
+      <app-input
+        labelText="Read-only"
+        [control]="readonlyControl"
+        [displayOnly]="true" />
+    </div>
+    <div class="showcase-grid">
+      <app-input-select
+        labelText="Single select"
+        [control]="singleSelectControl"
+        [items]="selectItems" />
+      <app-input-select
+        labelText="Multi select"
+        [control]="multiSelectControl"
+        [items]="selectItems"
+        [multiple]="true" />
+      <app-input-select-search
+        labelText="Autocomplete"
+        [control]="autocompleteControl"
+        [items]="selectItems" />
+    </div>
+    <div class="showcase-row">
+      <app-search
+        class="showcase-search"
+        placeholderText="Search…"
+        [control]="searchControl" />
+    </div>
+  </app-panel>
+}

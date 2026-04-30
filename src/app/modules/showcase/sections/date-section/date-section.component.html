@@ -1,0 +1,29 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@let singleDateControl = this.singleDateControl;
+@let disabledDateControl = this.disabledDateControl;
+@let rangeStartControl = this.rangeStartControl;
+@let rangeEndControl = this.rangeEndControl;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.date | translate">
+    <div class="showcase-grid">
+      <app-date-picker
+        labelText="Single date"
+        [control]="singleDateControl" />
+      <app-date-picker
+        labelText="Filled"
+        appearance="fill"
+        [control]="singleDateControl" />
+      <app-date-picker
+        labelText="Disabled"
+        [control]="disabledDateControl" />
+      <app-date-range-picker
+        labelText="Date range"
+        [startControl]="rangeStartControl"
+        [endControl]="rangeEndControl" />
+    </div>
+  </app-panel>
+}

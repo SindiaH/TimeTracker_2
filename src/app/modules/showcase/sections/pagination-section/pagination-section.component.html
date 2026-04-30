@@ -1,0 +1,47 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.pagination | translate">
+    <app-paginator
+      [pageSize]="10"
+      [pageIndex]="0"
+      [fullLength]="125" />
+
+    <div class="showcase-row">
+      <app-load-more
+        [count]="20"
+        [totalCount]="100"
+        buttonTitle="Load more"
+        counterLabel="20 of 100" />
+      <app-load-more
+        [count]="100"
+        [totalCount]="100"
+        buttonTitle="Load more"
+        counterLabel="All loaded" />
+      <app-load-more
+        [count]="20"
+        [totalCount]="100"
+        [loading]="true"
+        buttonTitle="Loading…" />
+    </div>
+
+    <div class="showcase-row showcase-row--centered">
+      <app-progress-indicator type="spinner" />
+      <app-progress-indicator
+        type="spinner"
+        mode="determinate"
+        [value]="65" />
+      <div class="showcase-bar">
+        <app-progress-indicator type="bar" />
+      </div>
+      <div class="showcase-bar">
+        <app-progress-indicator
+          type="bar"
+          mode="determinate"
+          [value]="40" />
+      </div>
+    </div>
+  </app-panel>
+}

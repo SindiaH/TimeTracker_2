@@ -1,0 +1,56 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+@let tabs = this.tabs;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.navigation | translate">
+    <app-tab-group [tabs]="tabs" />
+
+    <div class="showcase-row">
+      <app-menu icon="more_vert">
+        <app-menu-item icon="edit">Edit</app-menu-item>
+        <app-menu-item icon="content_copy">Duplicate</app-menu-item>
+        <app-menu-item
+          icon="delete"
+          tooltip="Removes the item"
+          >Delete</app-menu-item
+        >
+        <app-menu-item
+          icon="block"
+          [disabled]="true"
+          >Disabled</app-menu-item
+        >
+      </app-menu>
+
+      <app-menu
+        labelText="Labelled menu"
+        icon="settings">
+        <app-menu-item icon="palette">Theme</app-menu-item>
+        <app-menu-item icon="translate">Language</app-menu-item>
+      </app-menu>
+
+      <app-menu
+        labelText="Filled"
+        appearance="filled">
+        <app-menu-item>Option A</app-menu-item>
+        <app-menu-item>Option B</app-menu-item>
+      </app-menu>
+
+      <app-menu labelText="Links">
+        <app-menu-link
+          href="/tasks"
+          icon="check_circle"
+          >Tasks</app-menu-link
+        >
+        <app-menu-link
+          href="https://anthropic.com"
+          icon="open_in_new"
+          [externalLink]="true"
+          target="_blank">
+          External
+        </app-menu-link>
+      </app-menu>
+    </div>
+  </app-panel>
+}

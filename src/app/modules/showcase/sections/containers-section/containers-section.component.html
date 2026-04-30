@@ -1,0 +1,65 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+@let editingState = this.editingState();
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.containers | translate">
+    <div class="showcase-grid">
+      <app-panel
+        titleText="Raised panel"
+        subTitleText="Default appearance">
+        <p>Default raised card body content.</p>
+      </app-panel>
+      <app-panel
+        titleText="Outlined panel"
+        appearance="outlined">
+        <p>Outlined card body content.</p>
+      </app-panel>
+      <app-panel
+        titleText="Filled panel"
+        appearance="filled">
+        <p>Filled card body content.</p>
+      </app-panel>
+      <app-panel
+        titleText="Custom outlined"
+        appearance="custom-outlined">
+        <p>Custom outlined panel body.</p>
+      </app-panel>
+    </div>
+
+    <app-panel-editable
+      titleText="Editable panel"
+      subTitleText="Toggle between read and edit"
+      [editing]="editingState"
+      (editAction)="this.editingState.set(true)"
+      (saveAction)="this.editingState.set(false)"
+      (discardAction)="this.editingState.set(false)">
+      <ng-container readModeContent>
+        <p>Read-only state.</p>
+      </ng-container>
+      <ng-container editModeContent>
+        <p>Edit-mode content visible only while editing.</p>
+      </ng-container>
+    </app-panel-editable>
+
+    <app-accordion>
+      <app-expansion-panel
+        titleText="First panel"
+        descriptionText="Always expanded by default"
+        [expanded]="true">
+        <p>First panel content.</p>
+      </app-expansion-panel>
+      <app-expansion-panel
+        titleText="Second panel"
+        descriptionText="Click to expand">
+        <p>Second panel content.</p>
+      </app-expansion-panel>
+      <app-expansion-panel
+        titleText="Disabled panel"
+        [disabled]="true">
+        <p>Cannot be opened.</p>
+      </app-expansion-panel>
+    </app-accordion>
+  </app-panel>
+}

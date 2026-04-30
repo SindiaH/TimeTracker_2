@@ -9,6 +9,7 @@ export const APP_ICONS = {
   navActivities: 'analytics',
   navSettings: 'settings',
   navAuth: 'lock',
+  navShowcase: 'palette',
   menuOpen: 'menu',
   menuClose: 'close',
 } as const;

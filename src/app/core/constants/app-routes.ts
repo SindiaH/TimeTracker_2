@@ -7,6 +7,7 @@ export const ROUTE_SEGMENTS = {
   calendar: 'calendar',
   activities: 'activities',
   settings: 'settings',
+  showcase: 'showcase',
 } as const;
 
 export type RouteSegment = (typeof ROUTE_SEGMENTS)[keyof typeof ROUTE_SEGMENTS];
@@ -18,6 +19,7 @@ export const ROUTE_PATHS = {
   calendar: `/${ROUTE_SEGMENTS.calendar}`,
   activities: `/${ROUTE_SEGMENTS.activities}`,
   settings: `/${ROUTE_SEGMENTS.settings}`,
+  showcase: `/${ROUTE_SEGMENTS.showcase}`,
 } as const;
 
 export type RoutePath = (typeof ROUTE_PATHS)[keyof typeof ROUTE_PATHS];

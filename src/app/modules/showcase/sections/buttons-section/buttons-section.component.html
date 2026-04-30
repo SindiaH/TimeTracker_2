@@ -1,0 +1,61 @@
+@let translationKeys = this.translationKeys;
+@let searchTerm = this.searchTerm();
+@let keywords = this.keywords;
+
+@if (searchTerm | searchFilter: keywords) {
+  <app-panel [titleText]="translationKeys.showcase.sections.buttons | translate">
+    <div class="showcase-row">
+      <app-button variant="basic">Basic</app-button>
+      <app-button variant="raised">Raised</app-button>
+      <app-button variant="flat">Flat</app-button>
+      <app-button variant="stroked">Stroked</app-button>
+      <app-button
+        variant="icon"
+        icon="favorite" />
+      <app-button
+        variant="fab"
+        icon="add" />
+      <app-button
+        variant="extended-fab"
+        icon="edit"
+        >Extended FAB</app-button
+      >
+      <app-button [disabled]="true">Disabled</app-button>
+      <app-button [loading]="true">Loading</app-button>
+    </div>
+    <div class="showcase-row">
+      <app-link
+        variant="basic"
+        href="#"
+        >Basic link</app-link
+      >
+      <app-link
+        variant="flat"
+        href="#"
+        >Flat link</app-link
+      >
+      <app-link
+        variant="stroked"
+        href="#"
+        >Stroked link</app-link
+      >
+      <app-link
+        variant="icon"
+        icon="open_in_new"
+        href="#" />
+      <app-link
+        href="#"
+        target="_blank"
+        >External</app-link
+      >
+    </div>
+    <div class="showcase-row">
+      <app-icon>info</app-icon>
+      <app-icon backgroundColor="icon-info">info</app-icon>
+      <app-icon backgroundColor="icon-success">check_circle</app-icon>
+      <app-icon backgroundColor="icon-warning">warning</app-icon>
+      <app-icon backgroundColor="icon-error">error</app-icon>
+      <app-icon iconSize="icon-header-size">schedule</app-icon>
+    </div>
+  </app-panel>
+}

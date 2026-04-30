@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.showcase-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.showcase-grid + .showcase-grid,
+.showcase-grid + .showcase-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}
+
+.showcase-search {
+  display: block;
+  max-width: 320px;
+}

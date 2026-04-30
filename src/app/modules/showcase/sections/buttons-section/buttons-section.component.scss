@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.showcase-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.showcase-row + .showcase-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+}

@@ -23,7 +23,25 @@ export const TRANSLATION_KEYS = {
     calendar: 'modules.calendar',
     activities: 'modules.activities',
     settings: 'modules.settings',
+    showcase: 'modules.showcase',
     stubMessage: 'modules.stubMessage',
+  },
+  showcase: {
+    pageTitle: 'showcase.pageTitle',
+    pageSubtitle: 'showcase.pageSubtitle',
+    searchPlaceholder: 'showcase.searchPlaceholder',
+    sections: {
+      buttons: 'showcase.sections.buttons',
+      inputs: 'showcase.sections.inputs',
+      toggles: 'showcase.sections.toggles',
+      date: 'showcase.sections.date',
+      containers: 'showcase.sections.containers',
+      navigation: 'showcase.sections.navigation',
+      lists: 'showcase.sections.lists',
+      pagination: 'showcase.sections.pagination',
+      dialogs: 'showcase.sections.dialogs',
+      info: 'showcase.sections.info',
+    },
   },
 } as const;
 
