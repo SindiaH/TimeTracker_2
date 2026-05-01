@@ -3,16 +3,16 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 2rem;
-  color: var(--mat-sys-on-surface);
+  color: var(--app-color-on-surface);
 }
 
 .module-stub__title {
   margin: 0;
-  font: var(--mat-sys-headline-medium);
+  font: var(--app-typography-headline-medium);
 }
 
 .module-stub__hint {
   margin: 0;
-  font: var(--mat-sys-body-medium);
-  color: var(--mat-sys-on-surface-variant);
+  font: var(--app-typography-body-medium);
+  color: var(--app-color-on-surface-variant);
 }

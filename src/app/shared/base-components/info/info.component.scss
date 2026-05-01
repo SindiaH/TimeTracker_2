@@ -16,26 +16,26 @@
 }
 
 .info-container-error {
-  background-color: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
+  background-color: var(--app-color-error-container);
+  color: var(--app-color-on-error-container);
 }
 
 .info-container-info {
-  background-color: var(--mat-sys-surface-container-high);
-  color: var(--mat-sys-on-surface);
+  background-color: var(--app-color-surface-container-high);
+  color: var(--app-color-on-surface);
 }
 
 .info-container-primary {
-  background-color: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
+  background-color: var(--app-color-primary-container);
+  color: var(--app-color-on-primary-container);
 }
 
 .info-container-success {
-  background-color: var(--mat-sys-tertiary-container);
-  color: var(--mat-sys-on-tertiary-container);
+  background-color: var(--app-color-tertiary-container);
+  color: var(--app-color-on-tertiary-container);
 }
 
 .info-container-warning {
-  background-color: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
+  background-color: var(--app-color-error-container);
+  color: var(--app-color-on-error-container);
 }

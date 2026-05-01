@@ -6,7 +6,7 @@
 }
 
 .material-symbols-outlined {
-  font-size: var(--mat-sys-body-large-size, 24px);
+  font-size: var(--app-typography-body-large-size, 24px);
   line-height: 1;
 }
 
@@ -23,23 +23,23 @@
 }
 
 .icon-info {
-  background-color: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
+  background-color: var(--app-color-secondary-container);
+  color: var(--app-color-on-secondary-container);
 }
 
 .icon-success {
-  background-color: var(--mat-sys-tertiary-container);
-  color: var(--mat-sys-on-tertiary-container);
+  background-color: var(--app-color-tertiary-container);
+  color: var(--app-color-on-tertiary-container);
 }
 
 .icon-warning {
-  background-color: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
+  background-color: var(--app-color-error-container);
+  color: var(--app-color-on-error-container);
 }
 
 .icon-error {
-  background-color: var(--mat-sys-error-container);
-  color: var(--mat-sys-on-error-container);
+  background-color: var(--app-color-error-container);
+  color: var(--app-color-on-error-container);
 }
 
 $icon-header-size: 64px;

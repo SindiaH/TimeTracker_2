@@ -19,14 +19,14 @@
 
 .showcase-page__title {
   margin: 0;
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-headline-medium);
+  color: var(--app-color-on-surface);
+  font: var(--app-typography-headline-medium);
 }
 
 .showcase-page__subtitle {
   margin: 0;
-  color: var(--mat-sys-on-surface-variant);
-  font: var(--mat-sys-body-medium);
+  color: var(--app-color-on-surface-variant);
+  font: var(--app-typography-body-medium);
 }
 
 .showcase-page__search {

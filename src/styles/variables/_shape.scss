@@ -1,0 +1,5 @@
+// Application shape tokens (border-radius scale). See ADR-10015.
+
+:root {
+  --app-shape-corner-medium: var(--mat-sys-corner-medium);
+}

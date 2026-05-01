@@ -31,7 +31,7 @@ Theming is implemented on top of Angular Material's M3 theming API with a runtim
 - A single `src/styles/_theme.scss` partial emits both themes scoped by selector:
   - `:root, .theme-light { @include mat.all-component-themes($light-theme); }`
   - `.theme-dark { @include mat.all-component-themes($dark-theme); }`
-- All custom component styles read Material's CSS custom properties (`var(--mat-sys-surface)`, `var(--mat-sys-on-surface)`, etc.) — never hard-coded hex values. A small set of project-specific tokens (e.g., `--app-tracker-running`, `--app-day-grid-line`) is defined per theme in the same partial.
+- All custom component styles read project `--app-*` tokens — never hard-coded hex values, and never `--mat-sys-*` directly. Material's M3 system tokens are abstracted into `--app-color-*`, `--app-typography-*`, and `--app-shape-*` in `src/styles/variables/` (see ADR-10015 for the abstraction rationale and rules). A small set of project-specific tokens (e.g., `--app-tracker-running`, `--app-day-grid-line`) is defined per theme in the same theme partial because they need different hex values per theme rather than tracking a Material role.
 
 ### Runtime switcher
 

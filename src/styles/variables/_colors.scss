@@ -1,0 +1,23 @@
+// Application colour tokens. Components and pages only reference `--app-color-*`;
+// the mapping to Material's `--mat-sys-*` lives here so that re-theming or replacing
+// Material does not ripple through every component file. See ADR-10015.
+
+:root {
+  --app-color-surface: var(--mat-sys-surface);
+  --app-color-on-surface: var(--mat-sys-on-surface);
+  --app-color-on-surface-variant: var(--mat-sys-on-surface-variant);
+  --app-color-surface-container: var(--mat-sys-surface-container);
+  --app-color-surface-container-high: var(--mat-sys-surface-container-high);
+  --app-color-outline-variant: var(--mat-sys-outline-variant);
+  --app-color-primary: var(--mat-sys-primary);
+  --app-color-on-primary: var(--mat-sys-on-primary);
+  --app-color-primary-container: var(--mat-sys-primary-container);
+  --app-color-on-primary-container: var(--mat-sys-on-primary-container);
+  --app-color-secondary-container: var(--mat-sys-secondary-container);
+  --app-color-on-secondary-container: var(--mat-sys-on-secondary-container);
+  --app-color-tertiary-container: var(--mat-sys-tertiary-container);
+  --app-color-on-tertiary-container: var(--mat-sys-on-tertiary-container);
+  --app-color-error: var(--mat-sys-error);
+  --app-color-error-container: var(--mat-sys-error-container);
+  --app-color-on-error-container: var(--mat-sys-on-error-container);
+}

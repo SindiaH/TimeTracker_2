@@ -1,0 +1,8 @@
+// Application typography tokens. See ADR-10015.
+
+:root {
+  --app-typography-body-medium: var(--mat-sys-body-medium);
+  --app-typography-body-large-size: var(--mat-sys-body-large-size);
+  --app-typography-title-medium: var(--mat-sys-title-medium);
+  --app-typography-headline-medium: var(--mat-sys-headline-medium);
+}

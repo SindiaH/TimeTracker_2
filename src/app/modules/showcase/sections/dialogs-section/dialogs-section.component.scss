@@ -11,7 +11,7 @@
 
 p {
   margin: 0;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--app-color-on-surface-variant);
 }
 
 .bottom-sheet-content {
@@ -19,6 +19,6 @@ p {
 
   h3 {
     margin: 0 0 0.5rem;
-    color: var(--mat-sys-on-surface);
+    color: var(--app-color-on-surface);
   }
 }

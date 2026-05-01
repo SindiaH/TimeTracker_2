@@ -18,6 +18,7 @@
 | [ADR-10012](./1-frontend/ADR-10012-onpush-change-detection.md) | OnPush Change Detection as Default | proposed |
 | [ADR-10013](./1-frontend/ADR-10013-supabase-auth.md) | Supabase Auth as Authentication Provider | proposed |
 | [ADR-10014](./1-frontend/ADR-10014-theming-and-dark-mode.md) | Theming and Dark/Light Mode | proposed |
+| [ADR-10015](./1-frontend/ADR-10015-design-token-abstraction.md) | Design Token Abstraction over Material System Tokens | accepted |
 
 ## Backend Integration
 

@@ -1,6 +1,9 @@
 @use '@angular/material' as mat;
 @use './themes/light-theme' as light;
 @use './themes/dark-theme' as dark;
+@use './variables/colors';
+@use './variables/typography';
+@use './variables/shape';
 @include mat.core;
 
 :root,

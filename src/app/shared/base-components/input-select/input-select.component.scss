@@ -22,12 +22,12 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(--mat-sys-primary);
-  color: var(--mat-sys-on-primary);
+  background-color: var(--app-color-primary);
+  color: var(--app-color-on-primary);
 }
 
 .select-icon-warning {
-  color: var(--mat-sys-error);
+  color: var(--app-color-error);
 }
 
 .select-name {

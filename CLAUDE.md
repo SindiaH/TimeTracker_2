@@ -180,7 +180,7 @@ Supabase Auth, wrapped by `SessionProvider` (signal-based session state) and `IA
 
 ### Theming (ADR-10014)
 
-Angular Material M3 theming with two themes (`light`, `dark`) emitted as scoped classes (`.theme-light`, `.theme-dark`) on `document.documentElement`. `ThemeService` owns a `theme` signal with three states: `'light' | 'dark' | 'system'`, default `'system'`. Custom SCSS reads Material's CSS custom properties (`var(--mat-sys-surface)`, `var(--mat-sys-on-surface)`, …) plus project tokens (`--app-tracker-running`, `--app-day-grid-line`, …). **Hard-coded hex values in SCSS are forbidden** — they break dark mode.
+Angular Material M3 theming with two themes (`light`, `dark`) emitted as scoped classes (`.theme-light`, `.theme-dark`) on `document.documentElement`. `ThemeService` owns a `theme` signal with three states: `'light' | 'dark' | 'system'`, default `'system'`. Custom SCSS reads project tokens only (`--app-color-*`, `--app-typography-*`, `--app-shape-*`, plus theme-scoped tokens such as `--app-tracker-running`, `--app-day-grid-line`, …). The mapping from Material's `--mat-sys-*` system tokens to `--app-*` lives exclusively in `src/styles/variables/_colors.scss`, `_typography.scss`, and `_shape.scss` — see ADR-10015. **Hard-coded hex values in SCSS are forbidden** — they break dark mode. **Direct `--mat-sys-*` references outside the token-mapping partials are forbidden** — they bypass the abstraction layer.
 
 Persistence: `localStorage` key `time-tracker-theme`; mirrored into the Tauri store on the desktop target (read priority on launch: Tauri store → localStorage → `'system'`).
 
@@ -252,9 +252,10 @@ These rules MUST always be followed when writing code.
 - **`computed()` for derived state.** Never compute the same value in two places.
 - **`effect()` for side effects only.** Do not use `effect()` to set other signals — that's what `computed()` is for.
 
-### Styling Rules (ADR-10004 / 10014)
+### Styling Rules (ADR-10004 / 10014 / 10015)
 
-- **No raw colour values** in component or shared SCSS. Use Material M3 tokens (`var(--mat-sys-surface)`, `var(--mat-sys-on-surface)`, …) and project tokens (`--app-*`).
+- **No raw colour values** in component or shared SCSS. Use project `--app-*` tokens.
+- **No direct `--mat-*` references** outside `src/styles/variables/_colors.scss`, `_typography.scss`, and `_shape.scss`. Components and pages MUST consume only `--app-color-*`, `--app-typography-*`, `--app-shape-*` (and the theme-scoped `--app-*` tokens defined in `_theme.scss`). If a component needs a Material design token that has no `--app-*` mapping yet, add the mapping to the appropriate partial in `src/styles/variables/` first, then consume the new `--app-*` token. This is the only allowed direction; never import a `--mat-*` token ad-hoc into a component.
 - **Stylelint** must pass before commit.
 - **Component-scoped styles** by default (`ViewEncapsulation.Emulated`). Global styles only in `src/styles/`.
 

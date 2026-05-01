@@ -6,9 +6,9 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 1.5rem;
-  background-color: var(--mat-sys-surface-container);
-  color: var(--mat-sys-on-surface);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--app-color-surface-container);
+  color: var(--app-color-on-surface);
+  border-bottom: 1px solid var(--app-color-outline-variant);
 }
 
 .shared-header__brand {
@@ -19,7 +19,7 @@
 }
 
 .shared-header__title {
-  font: var(--mat-sys-title-medium);
+  font: var(--app-typography-title-medium);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -30,7 +30,7 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -39,12 +39,13 @@
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  padding: 0.2rem 0.5rem;
   gap: 0.25rem;
 }
 
 .shared-header__nav-link--active {
-  background-color: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
+  color: var(--app-color-on-secondary-container);
+  border-bottom: 1px solid var(--app-color-on-secondary-container);
 }
 
 .shared-header__actions {

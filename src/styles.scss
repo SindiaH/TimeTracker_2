@@ -5,9 +5,9 @@ html {
 }
 
 body {
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
+  background-color: var(--app-color-surface);
+  color: var(--app-color-on-surface);
+  font: var(--app-typography-body-medium);
   margin: 0;
   height: 100%;
 }

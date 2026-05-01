@@ -2,6 +2,7 @@
   display: flex;
   flex: 1;
   min-height: 0;
+  height: 100%;
 }
 
 .side-menu {
@@ -17,8 +18,8 @@
 }
 
 .side-menu__link--active {
-  background-color: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
+  background-color: var(--app-color-secondary-container);
+  color: var(--app-color-on-secondary-container);
 }
 
 .side-menu__footer {
@@ -27,7 +28,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  border-top: 1px solid var(--mat-sys-outline-variant);
+  border-top: 1px solid var(--app-color-outline-variant);
 }
 
 .side-menu__toggle {

@@ -19,9 +19,9 @@
   gap: 8px;
   padding: 8px;
   cursor: pointer;
-  color: var(--mat-sys-primary);
+  color: var(--app-color-primary);
 }
 
 .is-active-option {
-  background-color: var(--mat-sys-surface-container-high);
+  background-color: var(--app-color-surface-container-high);
 }
