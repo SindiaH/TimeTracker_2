@@ -11,8 +11,8 @@
   class="side-menu"
   [attr.aria-label]="navAriaLabelKey | translate">
   <mat-nav-list class="side-menu__list">
+    <a href="#"></a>
     @if (isMobile) {
-      <a href="#"></a>
       @for (link of primaryNavLinks; track link.path) {
         <a
           mat-list-item

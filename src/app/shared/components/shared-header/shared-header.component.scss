@@ -1,11 +1,11 @@
-@use '../../../../styles/layout' as layout;
+@use 'layout' as layout;
 
 .shared-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.5rem 0.5rem;
   background-color: var(--app-color-surface-container);
   color: var(--app-color-on-surface);
   border-bottom: 1px solid var(--app-color-outline-variant);
