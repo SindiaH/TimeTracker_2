@@ -18,6 +18,8 @@ export class LinkComponent {
   readonly disabled = input<boolean>(false);
   readonly routerLinkUrl = input<string | undefined>(undefined);
   readonly queryParams = input<StringDictionary | undefined>(undefined);
+  readonly routerLinkActiveClass = input<string | string[]>('');
+  readonly routerLinkActiveExact = input<boolean>(false);
   readonly href = input<string | null>(null);
   readonly target = input<LinkTarget>('_self');
   readonly outlined = input<boolean>(true);

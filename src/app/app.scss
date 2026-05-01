@@ -15,15 +15,6 @@
   border-left: 1px solid var(--mat-sys-outline-variant);
 }
 
-.app-root__drawer-nav {
-  padding: 0.5rem 0;
-}
-
-.app-root__drawer-link--active {
-  background-color: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
-}
-
 .app-root__content {
   display: flex;
   flex-direction: column;

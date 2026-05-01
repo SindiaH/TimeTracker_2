@@ -8,7 +8,7 @@ export type NavLink = {
   icon: AppIcon;
 };
 
-export const NAV_LINKS: ReadonlyArray<NavLink> = [
+export const PRIMARY_NAV_LINKS: ReadonlyArray<NavLink> = [
   { path: ROUTE_PATHS.tasks, translationKey: TRANSLATION_KEYS.modules.tasks, icon: APP_ICONS.navTasks },
   {
     path: ROUTE_PATHS.timeEntries,
@@ -21,7 +21,12 @@ export const NAV_LINKS: ReadonlyArray<NavLink> = [
     translationKey: TRANSLATION_KEYS.modules.activities,
     icon: APP_ICONS.navActivities,
   },
-  { path: ROUTE_PATHS.settings, translationKey: TRANSLATION_KEYS.modules.settings, icon: APP_ICONS.navSettings },
-  { path: ROUTE_PATHS.showcase, translationKey: TRANSLATION_KEYS.modules.showcase, icon: APP_ICONS.navShowcase },
-  { path: ROUTE_PATHS.auth, translationKey: TRANSLATION_KEYS.modules.auth, icon: APP_ICONS.navAuth },
 ];
+
+export const SECONDARY_NAV_LINKS: ReadonlyArray<NavLink> = [
+  { path: ROUTE_PATHS.settings, translationKey: TRANSLATION_KEYS.modules.settings, icon: APP_ICONS.navSettings },
+  { path: ROUTE_PATHS.auth, translationKey: TRANSLATION_KEYS.modules.auth, icon: APP_ICONS.navAuth },
+  { path: ROUTE_PATHS.showcase, translationKey: TRANSLATION_KEYS.modules.showcase, icon: APP_ICONS.navShowcase },
+];
+
+export const NAV_LINKS: ReadonlyArray<NavLink> = [...PRIMARY_NAV_LINKS, ...SECONDARY_NAV_LINKS];

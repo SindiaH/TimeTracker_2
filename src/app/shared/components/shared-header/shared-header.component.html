@@ -1,11 +1,7 @@
 @let brandIcon = this.brandIcon;
 @let brandTitleKey = this.brandTitleKey;
 @let navAriaLabelKey = this.navAriaLabelKey;
-@let themeControl = this.themeControl;
-@let themeOptions = this.themeOptions();
-@let languageControl = this.languageControl;
-@let languageOptions = this.languageOptions();
-@let navLinks = this.navLinks;
+@let primaryNavLinks = this.primaryNavLinks;
 @let isMobile = this.isMobile();
 @let menuButtonIcon = this.menuButtonIcon();
 @let menuButtonAriaKey = this.menuButtonAriaKey();
@@ -20,7 +16,7 @@
     <nav
       class="shared-header__nav"
       [attr.aria-label]="navAriaLabelKey | translate">
-      @for (link of navLinks; track link.path) {
+      @for (link of primaryNavLinks; track link.path) {
         <a
           mat-button
           class="shared-header__nav-link"
@@ -34,26 +30,11 @@
   }
 
   <div class="shared-header__actions">
-    <app-button-toggle
-      class="shared-header__toggle"
-      [control]="languageControl"
-      [options]="languageOptions"
-      [hideIndicator]="true"
-      (optionChanged)="onLanguageChanged($event)" />
-    <app-button-toggle
-      class="shared-header__toggle"
-      [control]="themeControl"
-      [options]="themeOptions"
-      [hideIndicator]="true"
-      (optionChanged)="onThemeChanged($event)" />
-
-    @if (isMobile) {
-      <app-button
-        class="shared-header__menu-button"
-        variant="icon"
-        [icon]="menuButtonIcon"
-        [tooltip]="menuButtonAriaKey | translate"
-        (clicked)="onMenuToggle()" />
-    }
+    <app-button
+      class="shared-header__menu-button"
+      variant="icon"
+      [icon]="menuButtonIcon"
+      [tooltip]="menuButtonAriaKey | translate"
+      (clicked)="onMenuToggle()" />
   </div>
 </header>

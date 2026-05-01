@@ -1,0 +1,55 @@
+@let primaryNavLinks = this.primaryNavLinks;
+@let secondaryNavLinks = this.secondaryNavLinks;
+@let isMobile = this.isMobile();
+@let navAriaLabelKey = this.navAriaLabelKey;
+@let themeControl = this.themeControl;
+@let themeOptions = this.themeOptions();
+@let languageControl = this.languageControl;
+@let languageOptions = this.languageOptions();
+
+<nav
+  class="side-menu"
+  [attr.aria-label]="navAriaLabelKey | translate">
+  <mat-nav-list class="side-menu__list">
+    @if (isMobile) {
+      @for (link of primaryNavLinks; track link.path) {
+        <a
+          mat-list-item
+          class="side-menu__link"
+          [routerLink]="link.path"
+          routerLinkActive="side-menu__link--active"
+          (click)="onLinkClicked()">
+          <app-icon matListItemIcon>{{ link.icon }}</app-icon>
+          <span matListItemTitle>{{ link.translationKey | translate }}</span>
+        </a>
+      }
+    }
+
+    @for (link of secondaryNavLinks; track link.path) {
+      <a
+        mat-list-item
+        class="side-menu__link"
+        [routerLink]="link.path"
+        routerLinkActive="side-menu__link--active"
+        (click)="onLinkClicked()">
+        <app-icon matListItemIcon>{{ link.icon }}</app-icon>
+        <span matListItemTitle>{{ link.translationKey | translate }}</span>
+      </a>
+    }
+  </mat-nav-list>
+
+  <div class="side-menu__footer">
+    <app-button-toggle
+      class="side-menu__toggle"
+      [control]="themeControl"
+      [options]="themeOptions"
+      [hideIndicator]="true"
+      (optionChanged)="onThemeChanged($event)" />
+    <app-button-toggle
+      class="side-menu__toggle"
+      [control]="languageControl"
+      [options]="languageOptions"
+      [hideIndicator]="true"
+      (optionChanged)="onLanguageChanged($event)" />
+  </div>
+</nav>

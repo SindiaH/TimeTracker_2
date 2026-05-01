@@ -4,6 +4,8 @@
 @let disabled = this.disabled();
 @let routerLinkUrl = this.routerLinkUrl();
 @let queryParams = this.queryParams();
+@let routerLinkActiveClass = this.routerLinkActiveClass();
+@let routerLinkActiveExact = this.routerLinkActiveExact();
 @let href = this.href();
 @let target = this.target();
 @let outlined = this.outlined();
@@ -16,6 +18,8 @@
         [disabled]="disabled"
         [routerLink]="routerLinkUrl"
         [queryParams]="queryParams"
+        [routerLinkActive]="routerLinkActiveClass"
+        [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
         [target]="target"
         [matTooltip]="tooltip">
         <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
@@ -38,6 +42,8 @@
         [disabled]="disabled"
         [routerLink]="routerLinkUrl"
         [queryParams]="queryParams"
+        [routerLinkActive]="routerLinkActiveClass"
+        [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
         [target]="target"
         [matTooltip]="tooltip">
         <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
@@ -60,6 +66,8 @@
         [disabled]="disabled"
         [routerLink]="routerLinkUrl"
         [queryParams]="queryParams"
+        [routerLinkActive]="routerLinkActiveClass"
+        [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
         [target]="target"
         [matTooltip]="tooltip">
         <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
@@ -82,6 +90,8 @@
         [disabled]="disabled"
         [routerLink]="routerLinkUrl"
         [queryParams]="queryParams"
+        [routerLinkActive]="routerLinkActiveClass"
+        [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
         [target]="target"
         [matTooltip]="tooltip">
         <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
@@ -104,6 +114,8 @@
         [disabled]="disabled"
         [routerLink]="routerLinkUrl"
         [queryParams]="queryParams"
+        [routerLinkActive]="routerLinkActiveClass"
+        [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
         [target]="target"
         [matTooltip]="tooltip">
         <app-icon [outlined]="outlined">
@@ -129,6 +141,8 @@
       [disabled]="disabled"
       [routerLink]="routerLinkUrl"
       [queryParams]="queryParams"
+      [routerLinkActive]="routerLinkActiveClass"
+      [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
       [target]="target"
       [matTooltip]="tooltip">
       <app-icon [outlined]="outlined">
@@ -143,6 +157,8 @@
       [disabled]="disabled"
       [routerLink]="routerLinkUrl"
       [queryParams]="queryParams"
+      [routerLinkActive]="routerLinkActiveClass"
+      [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
       [target]="target"
       [matTooltip]="tooltip">
       @if (icon) {

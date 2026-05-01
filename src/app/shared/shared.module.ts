@@ -6,9 +6,10 @@ import { BaseComponentsModule } from '@shared/base-components/base-components.mo
 import { MaterialComponentsModule } from '@shared/material-components/material-components.module';
 import { SharedHeaderComponent } from '@shared/components/shared-header/shared-header.component';
 import { ModuleStubComponent } from '@shared/components/module-stub/module-stub.component';
+import { SideMenuComponent } from '@shared/components/side-menu/side-menu.component';
 import { SearchFilterPipe } from '@shared/pipes/search-filter.pipe';
 
-const COMPONENTS = [SharedHeaderComponent, ModuleStubComponent];
+const COMPONENTS = [SharedHeaderComponent, ModuleStubComponent, SideMenuComponent];
 const PIPES = [SearchFilterPipe];
 
 @NgModule({
