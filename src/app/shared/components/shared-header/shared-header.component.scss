@@ -36,7 +36,9 @@
 
 .shared-header__nav-link {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
+  text-decoration: none;
   gap: 0.25rem;
 }
 

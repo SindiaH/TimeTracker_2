@@ -18,7 +18,6 @@
       [attr.aria-label]="navAriaLabelKey | translate">
       @for (link of primaryNavLinks; track link.path) {
         <a
-          mat-button
           class="shared-header__nav-link"
           [routerLink]="link.path"
           routerLinkActive="shared-header__nav-link--active">
