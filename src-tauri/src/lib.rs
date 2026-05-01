@@ -65,6 +65,9 @@ pub fn run() {
                 let handle_for_deep_link = handle.clone();
                 deep_link.on_open_url(move |event| {
                     for url in event.urls() {
+                        if url.scheme() != "timesapp2" {
+                            continue;
+                        }
                         let _ = handle_for_deep_link
                             .emit("app:deep-link", normalize_deep_link(url.as_str()));
                     }
