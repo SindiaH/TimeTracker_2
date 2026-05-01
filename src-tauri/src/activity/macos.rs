@@ -1,104 +1,137 @@
-use serde_json::Value;
+use active_win_pos_rs::get_active_window as get_window;
+use std::path::{Path, PathBuf};
+use std::process::Command;
 use tauri::AppHandle;
-use tauri_plugin_shell::process::CommandEvent;
-use tauri_plugin_shell::ShellExt;
 
 use crate::contract::{ActiveWindowInfo, Bounds, Owner, Platform};
 
-pub async fn get_active_window(app: AppHandle) -> Result<Option<ActiveWindowInfo>, String> {
-    let sidecar = app
-        .shell()
-        .sidecar("timesapp-mac-active-win")
-        .map_err(|e| format!("sidecar lookup failed: {e}"))?;
+pub async fn get_active_window(_app: AppHandle) -> Result<Option<ActiveWindowInfo>, String> {
+    let win_opt = tauri::async_runtime::spawn_blocking(|| get_window().ok())
+        .await
+        .map_err(|e| format!("active-win join error: {e}"))?;
 
-    let (mut rx, _child) = sidecar
-        .spawn()
-        .map_err(|e| format!("sidecar spawn failed: {e}"))?;
+    let win = match win_opt {
+        Some(w) => w,
+        None => return Ok(None),
+    };
 
-    let mut stdout = String::new();
-    let mut stderr = String::new();
-    let mut exit_code: Option<i32> = None;
-    while let Some(event) = rx.recv().await {
-        match event {
-            CommandEvent::Stdout(line) => stdout.push_str(&String::from_utf8_lossy(&line)),
-            CommandEvent::Stderr(line) => stderr.push_str(&String::from_utf8_lossy(&line)),
-            CommandEvent::Terminated(payload) => {
-                exit_code = payload.code;
-                break;
-            }
-            _ => {}
-        }
-    }
+    let process_path = win.process_path.clone();
+    let bundle_path = app_bundle_path(&process_path);
+    let bundle_id = bundle_path
+        .as_deref()
+        .and_then(read_bundle_identifier)
+        .unwrap_or_default();
+    let owner_path = bundle_path
+        .as_ref()
+        .map(|p| p.to_string_lossy().into_owned())
+        .unwrap_or_else(|| process_path.to_string_lossy().into_owned());
 
-    let trimmed = stdout.trim();
-    if trimmed.is_empty() || trimmed == "null" {
-        if exit_code.unwrap_or(0) != 0 || !stderr.trim().is_empty() {
-            return Err(format!(
-                "sidecar exited with code {:?}; stderr={:?}",
-                exit_code,
-                stderr.trim()
-            ));
-        }
-        return Ok(None);
-    }
+    let url = match applescript_for_browser(&win.app_name, &bundle_id) {
+        Some(script) => tauri::async_runtime::spawn_blocking(move || run_osascript(script))
+            .await
+            .ok()
+            .flatten()
+            .unwrap_or_default(),
+        None => String::new(),
+    };
 
-    let v: Value = serde_json::from_str(trimmed).map_err(|e| {
-        format!(
-            "sidecar JSON invalid: {e}; exit={:?}; stdout={:?}; stderr={:?}",
-            exit_code,
-            trimmed,
-            stderr.trim()
-        )
-    })?;
-    parse_value(&v).map(Some)
-}
-
-fn parse_value(v: &Value) -> Result<ActiveWindowInfo, String> {
-    let bounds = v
-        .get("bounds")
-        .ok_or_else(|| "missing bounds".to_string())?;
-    let owner = v.get("owner").ok_or_else(|| "missing owner".to_string())?;
-
-    Ok(ActiveWindowInfo {
-        title: v
-            .get("title")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .to_string(),
-        id: v.get("id").and_then(Value::as_i64).unwrap_or(0),
+    Ok(Some(ActiveWindowInfo {
+        title: win.title,
+        id: win.window_id.parse().unwrap_or(0),
         bounds: Bounds {
-            x: bounds.get("x").and_then(Value::as_f64).unwrap_or(0.0),
-            y: bounds.get("y").and_then(Value::as_f64).unwrap_or(0.0),
-            width: bounds.get("width").and_then(Value::as_f64).unwrap_or(0.0),
-            height: bounds.get("height").and_then(Value::as_f64).unwrap_or(0.0),
+            x: win.position.x,
+            y: win.position.y,
+            width: win.position.width,
+            height: win.position.height,
         },
         owner: Owner {
-            name: owner
-                .get("name")
-                .and_then(Value::as_str)
-                .unwrap_or("")
-                .to_string(),
-            process_id: owner.get("processId").and_then(Value::as_i64).unwrap_or(0),
-            bundle_id: owner
-                .get("bundleId")
-                .and_then(Value::as_str)
-                .unwrap_or("")
-                .to_string(),
-            path: owner
-                .get("path")
-                .and_then(Value::as_str)
-                .unwrap_or("")
-                .to_string(),
+            name: win.app_name,
+            process_id: win.process_id as i64,
+            bundle_id,
+            path: owner_path,
         },
-        url: v
-            .get("url")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .to_string(),
-        memory_usage: v
-            .get("memoryUsage")
-            .and_then(Value::as_u64)
-            .unwrap_or(0),
+        url,
+        memory_usage: 0,
         platform: Platform::Macos,
-    })
+    }))
+}
+
+fn app_bundle_path(process_path: &Path) -> Option<PathBuf> {
+    for ancestor in process_path.ancestors() {
+        if ancestor
+            .extension()
+            .and_then(|e| e.to_str())
+            .map(|e| e.eq_ignore_ascii_case("app"))
+            .unwrap_or(false)
+        {
+            return Some(ancestor.to_path_buf());
+        }
+    }
+    None
+}
+
+fn read_bundle_identifier(bundle_path: &Path) -> Option<String> {
+    let info_plist = bundle_path.join("Contents").join("Info.plist");
+    let content = std::fs::read_to_string(&info_plist).ok()?;
+    extract_plist_string(&content, "CFBundleIdentifier")
+}
+
+fn extract_plist_string(plist_xml: &str, key: &str) -> Option<String> {
+    let key_marker = format!("<key>{key}</key>");
+    let after_key = plist_xml.find(&key_marker)? + key_marker.len();
+    let value_start = plist_xml[after_key..].find("<string>")? + after_key + "<string>".len();
+    let value_end = plist_xml[value_start..].find("</string>")? + value_start;
+    Some(plist_xml[value_start..value_end].trim().to_string())
+}
+
+fn applescript_for_browser(app_name: &str, bundle_id: &str) -> Option<&'static str> {
+    let name = app_name.to_lowercase();
+    let bundle = bundle_id.to_lowercase();
+
+    if bundle == "com.apple.safari" || bundle == "com.apple.safaritechnologypreview" {
+        return Some("tell application \"Safari\" to return URL of front document");
+    }
+    if bundle.starts_with("com.google.chrome") || name == "google chrome" {
+        return Some(
+            "tell application \"Google Chrome\" to return URL of active tab of front window",
+        );
+    }
+    if bundle.starts_with("com.brave.browser") || name.contains("brave") {
+        return Some(
+            "tell application \"Brave Browser\" to return URL of active tab of front window",
+        );
+    }
+    if bundle.starts_with("com.microsoft.edgemac") || name.contains("microsoft edge") {
+        return Some(
+            "tell application \"Microsoft Edge\" to return URL of active tab of front window",
+        );
+    }
+    if bundle.starts_with("com.vivaldi.vivaldi") || name.contains("vivaldi") {
+        return Some("tell application \"Vivaldi\" to return URL of active tab of front window");
+    }
+    if bundle.starts_with("com.operasoftware.opera") || name == "opera" {
+        return Some("tell application \"Opera\" to return URL of active tab of front window");
+    }
+    if bundle == "company.thebrowser.browser" || name == "arc" {
+        return Some("tell application \"Arc\" to return URL of active tab of front window");
+    }
+
+    None
+}
+
+fn run_osascript(script: &'static str) -> Option<String> {
+    let output = Command::new("/usr/bin/osascript")
+        .arg("-e")
+        .arg(script)
+        .output()
+        .ok()?;
+    if !output.status.success() {
+        return None;
+    }
+    let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if stdout.is_empty() {
+        None
+    } else {
+        Some(stdout)
+    }
 }

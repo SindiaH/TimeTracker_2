@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "main-capability",
-  "description": "Main window capabilities (ADR-30002): custom commands + scoped sidecar exec + plugin permissions for store, dialog, window-state, deep-link and autostart.",
+  "description": "Main window capabilities (ADR-30002): custom commands + scoped sidecar exec (Windows browser-url only) + plugin permissions for store, dialog, window-state, deep-link and autostart.",
   "windows": ["main"],
   "permissions": [
     "core:default",
@@ -13,11 +13,6 @@
     {
       "identifier": "shell:allow-execute",
       "allow": [
-        {
-          "name": "binaries/timesapp-mac-active-win",
-          "sidecar": true,
-          "args": false
-        },
         {
           "name": "binaries/timesapp-win-browser-url",
           "sidecar": true,
