@@ -5,7 +5,29 @@ use tauri::AppHandle;
 
 use crate::contract::{ActiveWindowInfo, Bounds, Owner, Platform};
 
+#[link(name = "CoreGraphics", kind = "framework")]
+extern "C" {
+    fn CGPreflightScreenCaptureAccess() -> bool;
+    fn CGRequestScreenCaptureAccess() -> bool;
+}
+
+fn ensure_screen_recording_permission() -> bool {
+    unsafe {
+        if CGPreflightScreenCaptureAccess() {
+            return true;
+        }
+        CGRequestScreenCaptureAccess()
+    }
+}
+
 pub async fn get_active_window(_app: AppHandle) -> Result<Option<ActiveWindowInfo>, String> {
+    if !ensure_screen_recording_permission() {
+        log::warn!(
+            "Screen Recording permission not granted - window titles will be empty. \
+             Grant permission in System Settings > Privacy & Security > Screen Recording."
+        );
+    }
+
     let win_opt = tauri::async_runtime::spawn_blocking(|| get_window().ok())
         .await
         .map_err(|e| format!("active-win join error: {e}"))?;
