@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "TimeTrack",
+  "productName": "TimeTrack2",
   "version": "0.1.0",
-  "identifier": "com.electron.timetrack",
+  "identifier": "com.electron.timetrack2",
   "build": {
     "frontendDist": "../dist/TimeTracker_2/browser",
     "devUrl": "http://localhost:4200",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "TimeTrack",
+        "title": "TimeTrack2",
         "width": 1280,
         "height": 800,
         "minWidth": 480,
@@ -45,7 +45,7 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["timesapp"]
+        "schemes": ["timesapp2"]
       }
     }
   }

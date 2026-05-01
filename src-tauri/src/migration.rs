@@ -7,21 +7,31 @@ use tauri_plugin_store::StoreExt;
 
 const STORE_FILE: &str = "appSettings.json";
 const STORE_KEY: &str = "app-settings";
-const BACKUP_SUFFIX: &str = ".bak";
+const MIGRATION_MARKER_KEY: &str = "legacy-migrated";
 
 pub fn run_legacy_migration(app: &AppHandle) {
+    let store = match app.store(STORE_FILE) {
+        Ok(s) => s,
+        Err(e) => {
+            log::warn!("legacy migration: store init failed: {e}");
+            return;
+        }
+    };
+
+    if store.has(MIGRATION_MARKER_KEY) {
+        log::info!("legacy migration: already done (marker present)");
+        return;
+    }
+
     let legacy_path = match legacy_settings_path() {
         Some(p) => p,
         None => return,
     };
 
-    let backup_path = legacy_path.with_extension("json.bak");
-    if backup_path.exists() {
-        log::info!("legacy migration: already done (backup exists at {:?})", backup_path);
-        return;
-    }
     if !legacy_path.exists() {
         log::info!("legacy migration: no legacy file at {:?}, skipping", legacy_path);
+        store.set(MIGRATION_MARKER_KEY, Value::Bool(true));
+        let _ = store.save();
         return;
     }
 
@@ -50,35 +60,17 @@ pub fn run_legacy_migration(app: &AppHandle) {
         obj.remove("windowPosition");
     }
 
-    let store = match app.store(STORE_FILE) {
-        Ok(s) => s,
-        Err(e) => {
-            log::warn!("legacy migration: store init failed: {e}");
-            return;
-        }
-    };
-
     store.set(STORE_KEY, value);
+    store.set(MIGRATION_MARKER_KEY, Value::Bool(true));
     if let Err(e) = store.save() {
         log::warn!("legacy migration: store save failed: {e}");
         return;
     }
 
-    let bak_name = format!(
-        "{}{}",
+    log::info!(
+        "legacy migration: copied legacy settings into store; legacy file at {:?} left untouched",
         legacy_path
-            .file_name()
-            .and_then(|n| n.to_str())
-            .unwrap_or("appSettings.json"),
-        BACKUP_SUFFIX
     );
-    let bak = legacy_path.with_file_name(bak_name);
-    if let Err(e) = fs::rename(&legacy_path, &bak) {
-        log::warn!("legacy migration: rename to backup failed: {e}");
-        return;
-    }
-
-    log::info!("legacy migration: completed, backup at {:?}", bak);
 }
 
 fn validate_shape(v: &Value) -> bool {

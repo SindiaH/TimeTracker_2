@@ -16,21 +16,40 @@ pub async fn get_active_window(app: AppHandle) -> Result<Option<ActiveWindowInfo
         .map_err(|e| format!("sidecar spawn failed: {e}"))?;
 
     let mut stdout = String::new();
+    let mut stderr = String::new();
+    let mut exit_code: Option<i32> = None;
     while let Some(event) = rx.recv().await {
         match event {
             CommandEvent::Stdout(line) => stdout.push_str(&String::from_utf8_lossy(&line)),
-            CommandEvent::Terminated(_) => break,
+            CommandEvent::Stderr(line) => stderr.push_str(&String::from_utf8_lossy(&line)),
+            CommandEvent::Terminated(payload) => {
+                exit_code = payload.code;
+                break;
+            }
             _ => {}
         }
     }
 
     let trimmed = stdout.trim();
     if trimmed.is_empty() || trimmed == "null" {
+        if exit_code.unwrap_or(0) != 0 || !stderr.trim().is_empty() {
+            return Err(format!(
+                "sidecar exited with code {:?}; stderr={:?}",
+                exit_code,
+                stderr.trim()
+            ));
+        }
         return Ok(None);
     }
 
-    let v: Value =
-        serde_json::from_str(trimmed).map_err(|e| format!("sidecar JSON invalid: {e}"))?;
+    let v: Value = serde_json::from_str(trimmed).map_err(|e| {
+        format!(
+            "sidecar JSON invalid: {e}; exit={:?}; stdout={:?}; stderr={:?}",
+            exit_code,
+            trimmed,
+            stderr.trim()
+        )
+    })?;
     parse_value(&v).map(Some)
 }
 

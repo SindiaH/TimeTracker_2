@@ -25,7 +25,7 @@ pub fn run() {
                 let _ = app.emit("app:second-instance", payload);
 
                 for arg in argv.iter().skip(1) {
-                    if arg.starts_with("timesapp://") {
+                    if arg.starts_with("timesapp2://") {
                         let _ = app.emit("app:deep-link", normalize_deep_link(arg));
                     }
                 }

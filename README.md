@@ -105,6 +105,6 @@ The web-only build (`npm run build`) does not require Rust.
 
 See [`adrs/README.md`](./adrs/README.md) for the full list with status.
 
-## Drop-in Replacement of the Legacy App
+## Side-by-Side with the Legacy App
 
-The desktop bundle reuses the legacy `CFBundleIdentifier` (`com.electron.timetrack`) and product name (`TimeTrack`) so the new build installs in place over an existing legacy install — preserving macOS permission grants (Accessibility, AppleEvents) and the Windows install location. A first-run hook in `src-tauri/src/migration.rs` migrates the legacy `appSettings.json` into `tauri-plugin-store` (see ADR-30006).
+While the new build is stabilising it ships under a separate identity so it can run alongside the legacy Electron app: `CFBundleIdentifier` `com.electron.timetrack2`, product name `TimeTrack2`, deep-link scheme `timesapp2://`. macOS permission grants (Accessibility, AppleEvents) therefore have to be re-issued for the new bundle. A first-run hook in `src-tauri/src/migration.rs` copies the legacy `appSettings.json` into `tauri-plugin-store` non-destructively — the legacy file is read but never moved or renamed, so the original install keeps working (see ADR-30006).
