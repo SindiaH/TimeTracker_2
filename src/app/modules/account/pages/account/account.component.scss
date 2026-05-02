@@ -1,0 +1,58 @@
+.account {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  min-height: 100%;
+  background: var(--app-color-surface);
+}
+
+.account__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 32rem;
+  padding: 2rem;
+  background: var(--app-color-surface-container);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+}
+
+.account__title {
+  margin: 0;
+  font: var(--app-typography-headline-medium);
+  color: var(--app-color-on-surface);
+}
+
+.account__description {
+  margin: 0;
+  font: var(--app-typography-body-medium);
+  color: var(--app-color-on-surface-variant);
+}
+
+.account__fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+}
+
+.account__field-label {
+  margin: 0;
+  font: var(--app-typography-label-large);
+  color: var(--app-color-on-surface-variant);
+}
+
+.account__field-value {
+  margin: 0;
+  font: var(--app-typography-body-medium);
+  color: var(--app-color-on-surface);
+  word-break: break-all;
+}
+
+.account__sign-out {
+  display: flex;
+  justify-content: flex-start;
+}

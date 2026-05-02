@@ -1,0 +1,52 @@
+@let translationKeys = this.translationKeys;
+@let loginLink = this.loginLink;
+@let isSubmitting = this.isSubmitting();
+@let feedback = this.feedback();
+@let emailError = this.getEmailError(emailControl);
+@let passwordError = this.getPasswordError(passwordControl);
+@let confirmPasswordError = this.getConfirmPasswordError(confirmPasswordControl);
+
+<app-auth-layout
+  [titleKey]="translationKeys.register.title"
+  [descriptionKey]="translationKeys.register.description">
+  <form
+    class="register-form"
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()">
+    <app-input
+      [control]="emailControl"
+      [type]="'email'"
+      [labelText]="translationKeys.fields.email | translate"
+      [errorText]="emailError"
+      [showClearButton]="true" />
+    <app-input
+      [control]="passwordControl"
+      [type]="'password'"
+      [labelText]="translationKeys.fields.password | translate"
+      [errorText]="passwordError" />
+    <app-input
+      [control]="confirmPasswordControl"
+      [type]="'password'"
+      [labelText]="translationKeys.fields.confirmPassword | translate"
+      [errorText]="confirmPasswordError" />
+
+    <app-button
+      [variant]="'flat'"
+      [loading]="isSubmitting"
+      [disabled]="isSubmitting"
+      (clicked)="onSubmit()">
+      {{ translationKeys.register.submit | translate }}
+    </app-button>
+
+    @if (feedback) {
+      <app-info [type]="feedback.kind">
+        {{ feedback.message }}
+      </app-info>
+    }
+  </form>
+
+  <p class="register-form__footer">
+    {{ translationKeys.register.haveAccount | translate }}
+    <a [routerLink]="loginLink">{{ translationKeys.register.goToLogin | translate }}</a>
+  </p>
+</app-auth-layout>

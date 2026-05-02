@@ -8,10 +8,11 @@ export const APP_ICONS = {
   navCalendar: 'calendar_month',
   navActivities: 'analytics',
   navSettings: 'settings',
-  navAuth: 'lock',
+  navAccount: 'account_circle',
   navShowcase: 'palette',
   menuOpen: 'menu',
   menuClose: 'close',
+  signOut: 'logout',
 } as const;
 
 export type AppIcon = (typeof APP_ICONS)[keyof typeof APP_ICONS];

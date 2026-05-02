@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ComponentBase } from '@core/base/component-base';
-import { APP_ICONS } from '@core/constants/app-icons';
+import { AppIcon, APP_ICONS } from '@core/constants/app-icons';
+import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { LANGUAGE_IDS, LanguageId } from '@core/constants/language.constants';
 import { NavLink, PRIMARY_NAV_LINKS, SECONDARY_NAV_LINKS } from '@core/constants/nav-links';
 import { THEME_PREFERENCES, ThemePreference } from '@core/constants/theme.constants';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
+import { SessionProvider } from '@core/providers/session.provider';
 import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 import { ThemeService } from '@core/services/theme/theme.service';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
@@ -23,13 +26,19 @@ export class SideMenuComponent extends ComponentBase {
   private readonly themeService = inject(ThemeService);
   private readonly translationService = inject(TranslationService);
   private readonly menuStateService = inject(MenuStateService);
+  private readonly sessionProvider = inject(SessionProvider);
+  private readonly router = inject(Router);
 
   protected readonly navAriaLabelKey: TranslationKey = TRANSLATION_KEYS.header.navigation;
+  protected readonly signOutLabelKey: TranslationKey = TRANSLATION_KEYS.auth.signOut;
+  protected readonly signOutIcon: AppIcon = APP_ICONS.signOut;
 
   protected readonly primaryNavLinks: ReadonlyArray<NavLink> = PRIMARY_NAV_LINKS;
   protected readonly secondaryNavLinks: ReadonlyArray<NavLink> = SECONDARY_NAV_LINKS;
 
   protected readonly isMobile: Signal<boolean> = this.menuStateService.isMobile;
+  protected readonly isAuthenticated: Signal<boolean> = this.sessionProvider.isAuthenticated;
+  protected readonly isSigningOut: Signal<boolean> = this.sessionProvider.isLoading;
 
   protected readonly theme: Signal<ThemePreference> = this.themeService.theme;
   protected readonly language: Signal<LanguageId> = this.translationService.selectedLanguageId$;
@@ -75,6 +84,14 @@ export class SideMenuComponent extends ComponentBase {
     if (this.isMobile()) {
       this.menuStateService.close();
     }
+  }
+
+  protected async onSignOut(): Promise<void> {
+    await this.sessionProvider.signOut();
+    if (this.isMobile()) {
+      this.menuStateService.close();
+    }
+    void this.router.navigateByUrl(ROUTE_PATHS.authLogin);
   }
 
   protected onThemeChanged(value: ButtonToggleValue): void {

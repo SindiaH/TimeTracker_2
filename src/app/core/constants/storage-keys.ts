@@ -1,6 +1,7 @@
 export const LOCAL_STORAGE_KEYS = {
   language: 'time-tracker-language',
   theme: 'time-tracker-theme',
+  auth: 'time-tracker-auth',
 } as const;
 
 export type LocalStorageKey = (typeof LOCAL_STORAGE_KEYS)[keyof typeof LOCAL_STORAGE_KEYS];

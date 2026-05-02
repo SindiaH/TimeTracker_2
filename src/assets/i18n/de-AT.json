@@ -8,12 +8,12 @@
     "close": "Schließen"
   },
   "modules": {
-    "auth": "Anmeldung",
     "tasks": "Aufgaben",
     "timeEntries": "Zeiteinträge",
     "calendar": "Kalender",
     "activities": "Aktivitäten",
     "settings": "Einstellungen",
+    "account": "Account",
     "showcase": "Komponenten",
     "stubMessage": "Modul-Skelett für {{moduleName}} — die Feature-Implementierung folgt in einer späteren Phase."
   },
@@ -29,6 +29,62 @@
     "language": {
       "en-US": "English",
       "de-AT": "Deutsch"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "description": "Details zu deinem angemeldeten Benutzerkonto.",
+    "fields": {
+      "email": "E-Mail",
+      "userId": "Benutzer-ID"
+    }
+  },
+  "auth": {
+    "signOut": "Abmelden",
+    "fields": {
+      "email": "E-Mail",
+      "password": "Passwort",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Passwort bestätigen"
+    },
+    "login": {
+      "title": "Willkommen zurück",
+      "description": "Melde dich an, um deine Zeit weiter zu tracken.",
+      "submit": "Anmelden",
+      "forgotPassword": "Passwort vergessen?",
+      "orMagicLink": "oder",
+      "magicLinkButton": "Magic Link senden",
+      "noAccount": "Noch kein Konto?",
+      "goToRegister": "Jetzt registrieren"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "description": "Registriere dich, um deine Zeit zu tracken.",
+      "submit": "Konto erstellen",
+      "haveAccount": "Du hast bereits ein Konto?",
+      "goToLogin": "Zur Anmeldung"
+    },
+    "passwordReset": {
+      "title": "Neues Passwort setzen",
+      "description": "Wähle ein neues Passwort für dein Konto.",
+      "submit": "Passwort aktualisieren",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "feedback": {
+      "magicLinkSent": "Wir haben dir einen Magic Link geschickt. Prüfe dein Postfach.",
+      "passwordResetSent": "Wir haben dir einen Link zum Zurücksetzen geschickt. Prüfe dein Postfach.",
+      "signupSuccess": "Konto erstellt. Bitte bestätige deine E-Mail-Adresse.",
+      "passwordUpdated": "Dein Passwort wurde aktualisiert."
+    },
+    "errors": {
+      "emailRequired": "Bitte gib deine E-Mail-Adresse ein.",
+      "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+      "passwordRequired": "Bitte gib dein Passwort ein.",
+      "passwordMinLength": "Passwort muss mindestens 6 Zeichen haben.",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+      "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
+      "recoveryLinkInvalid": "Dieser Reset-Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.",
+      "unexpected": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
     }
   },
   "showcase": {

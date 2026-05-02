@@ -1,0 +1,29 @@
+@let translationKeys = this.translationKeys;
+@let fields = this.fields();
+@let isSigningOut = this.isSigningOut();
+@let signOutIcon = this.signOutIcon;
+@let signOutLabelKey = this.signOutLabelKey;
+
+<section class="account">
+  <div class="account__card">
+    <h1 class="account__title">{{ translationKeys.title | translate }}</h1>
+    <p class="account__description">{{ translationKeys.description | translate }}</p>
+
+    <dl class="account__fields">
+      @for (field of fields; track field.labelKey) {
+        <dt class="account__field-label">{{ field.labelKey | translate }}</dt>
+        <dd class="account__field-value">{{ field.value }}</dd>
+      }
+    </dl>
+
+    <app-button
+      class="account__sign-out"
+      [variant]="'stroked'"
+      [icon]="signOutIcon"
+      [loading]="isSigningOut"
+      [disabled]="isSigningOut"
+      (clicked)="onSignOut()">
+      {{ signOutLabelKey | translate }}
+    </app-button>
+  </div>
+</section>

@@ -32,8 +32,8 @@ const SHOWCASE_NAV_LINK: NavLink = {
 
 export const SECONDARY_NAV_LINKS: ReadonlyArray<NavLink> = [
   { path: ROUTE_PATHS.settings, translationKey: TRANSLATION_KEYS.modules.settings, icon: APP_ICONS.navSettings },
-  { path: ROUTE_PATHS.auth, translationKey: TRANSLATION_KEYS.modules.auth, icon: APP_ICONS.navAuth },
   ...(environment.production ? [] : [SHOWCASE_NAV_LINK]),
+  { path: ROUTE_PATHS.account, translationKey: TRANSLATION_KEYS.modules.account, icon: APP_ICONS.navAccount },
 ];
 
 export const NAV_LINKS: ReadonlyArray<NavLink> = [...PRIMARY_NAV_LINKS, ...SECONDARY_NAV_LINKS];

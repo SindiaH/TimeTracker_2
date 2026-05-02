@@ -6,6 +6,10 @@
 @let themeOptions = this.themeOptions();
 @let languageControl = this.languageControl;
 @let languageOptions = this.languageOptions();
+@let isAuthenticated = this.isAuthenticated();
+@let isSigningOut = this.isSigningOut();
+@let signOutIcon = this.signOutIcon;
+@let signOutLabelKey = this.signOutLabelKey;
 
 <nav
   class="side-menu"
@@ -52,5 +56,16 @@
       [options]="languageOptions"
       [hideIndicator]="true"
       (optionChanged)="onLanguageChanged($event)" />
+    @if (isAuthenticated) {
+      <app-button
+        class="side-menu__sign-out"
+        [variant]="'stroked'"
+        [icon]="signOutIcon"
+        [loading]="isSigningOut"
+        [disabled]="isSigningOut"
+        (clicked)="onSignOut()">
+        {{ signOutLabelKey | translate }}
+      </app-button>
+    }
   </div>
 </nav>

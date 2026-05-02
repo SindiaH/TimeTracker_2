@@ -8,12 +8,12 @@
     "close": "Close"
   },
   "modules": {
-    "auth": "Auth",
     "tasks": "Tasks",
     "timeEntries": "Time Entries",
     "calendar": "Calendar",
     "activities": "Activities",
     "settings": "Settings",
+    "account": "Account",
     "showcase": "Components",
     "stubMessage": "{{moduleName}} module skeleton — feature implementation follows in a later phase."
   },
@@ -29,6 +29,62 @@
     "language": {
       "en-US": "English",
       "de-AT": "Deutsch"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "description": "Details for the account you're currently signed in with.",
+    "fields": {
+      "email": "Email",
+      "userId": "User ID"
+    }
+  },
+  "auth": {
+    "signOut": "Sign out",
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to keep tracking your time.",
+      "submit": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "orMagicLink": "or",
+      "magicLinkButton": "Send magic link",
+      "noAccount": "No account yet?",
+      "goToRegister": "Create one"
+    },
+    "register": {
+      "title": "Create your account",
+      "description": "Sign up to start tracking your time.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "goToLogin": "Sign in"
+    },
+    "passwordReset": {
+      "title": "Set a new password",
+      "description": "Choose a new password to access your account.",
+      "submit": "Update password",
+      "backToLogin": "Back to sign in"
+    },
+    "feedback": {
+      "magicLinkSent": "We sent you a magic link. Check your inbox.",
+      "passwordResetSent": "We sent you a password reset link. Check your inbox.",
+      "signupSuccess": "Account created. Please check your email to confirm.",
+      "passwordUpdated": "Your password has been updated."
+    },
+    "errors": {
+      "emailRequired": "Please enter your email address.",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordRequired": "Please enter your password.",
+      "passwordMinLength": "Password must be at least 6 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "invalidCredentials": "Invalid email or password.",
+      "recoveryLinkInvalid": "This recovery link is invalid or has expired. Please request a new one.",
+      "unexpected": "Something went wrong. Please try again."
     }
   },
   "showcase": {

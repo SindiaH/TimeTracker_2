@@ -1,0 +1,16 @@
+@let titleKey = this.titleKey();
+@let descriptionKey = this.descriptionKey();
+
+<section class="auth-layout">
+  <div class="auth-layout__card">
+    @if (titleKey) {
+      <h1 class="auth-layout__title">{{ titleKey | translate }}</h1>
+    }
+    @if (descriptionKey) {
+      <p class="auth-layout__description">{{ descriptionKey | translate }}</p>
+    }
+    <div class="auth-layout__content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</section>
