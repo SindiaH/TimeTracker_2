@@ -38,7 +38,7 @@ export class SideMenuComponent extends ComponentBase {
 
   protected readonly isMobile: Signal<boolean> = this.menuStateService.isMobile;
   protected readonly isAuthenticated: Signal<boolean> = this.sessionProvider.isAuthenticated;
-  protected readonly isSigningOut: Signal<boolean> = this.sessionProvider.isLoading;
+  protected readonly isSigningOut: Signal<boolean> = this.sessionProvider.isSigningOut;
 
   protected readonly theme: Signal<ThemePreference> = this.themeService.theme;
   protected readonly language: Signal<LanguageId> = this.translationService.selectedLanguageId$;

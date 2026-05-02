@@ -83,6 +83,14 @@
       "passwordMinLength": "Passwort muss mindestens 6 Zeichen haben.",
       "passwordMismatch": "Die Passwörter stimmen nicht überein.",
       "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
+      "emailNotConfirmed": "Bitte bestätige zuerst deine E-Mail-Adresse.",
+      "userAlreadyExists": "Ein Konto mit dieser E-Mail-Adresse existiert bereits.",
+      "userNotFound": "Für diese E-Mail-Adresse existiert kein Konto.",
+      "weakPassword": "Das Passwort erfüllt die Sicherheitsanforderungen nicht.",
+      "samePassword": "Das neue Passwort muss sich vom aktuellen unterscheiden.",
+      "rateLimit": "Zu viele Anfragen. Bitte versuche es gleich erneut.",
+      "otpDisabled": "Für diese E-Mail-Adresse existiert kein Konto. Bitte registriere dich zuerst.",
+      "signupDisabled": "Registrierungen sind derzeit deaktiviert.",
       "recoveryLinkInvalid": "Dieser Reset-Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.",
       "unexpected": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
     }

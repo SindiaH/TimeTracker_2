@@ -28,7 +28,7 @@ export class AccountComponent extends ComponentBase {
   protected readonly signOutIcon: AppIcon = APP_ICONS.signOut;
 
   protected readonly user: Signal<SessionUser | null> = this.sessionProvider.user;
-  protected readonly isSigningOut: Signal<boolean> = this.sessionProvider.isLoading;
+  protected readonly isSigningOut: Signal<boolean> = this.sessionProvider.isSigningOut;
 
   protected readonly fields: Signal<AccountField[]> = computed<AccountField[]>(() => {
     const user = this.user();

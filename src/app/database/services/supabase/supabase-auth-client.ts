@@ -16,7 +16,7 @@ export class SupabaseAuthClient {
         detectSessionInUrl: true,
         storageKey: LOCAL_STORAGE_KEYS.auth,
         storage: window.localStorage,
-        flowType: 'implicit',
+        flowType: 'pkce',
       },
     });
   }

@@ -83,6 +83,14 @@
       "passwordMinLength": "Password must be at least 6 characters.",
       "passwordMismatch": "Passwords do not match.",
       "invalidCredentials": "Invalid email or password.",
+      "emailNotConfirmed": "Please confirm your email address before signing in.",
+      "userAlreadyExists": "An account with this email already exists.",
+      "userNotFound": "No account found for this email address.",
+      "weakPassword": "Password does not meet the security requirements.",
+      "samePassword": "Your new password must be different from the current one.",
+      "rateLimit": "Too many requests. Please try again in a moment.",
+      "otpDisabled": "No account found for this email. Please register first.",
+      "signupDisabled": "Sign-ups are currently disabled.",
       "recoveryLinkInvalid": "This recovery link is invalid or has expired. Please request a new one.",
       "unexpected": "Something went wrong. Please try again."
     }

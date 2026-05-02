@@ -40,9 +40,10 @@ export class LoginComponent extends AuthFormBase {
 
   protected readonly isSubmitting = signal<boolean>(false);
   protected readonly isMagicLinkLoading = signal<boolean>(false);
+  protected readonly isResettingPassword = signal<boolean>(false);
 
   protected readonly isLoading: Signal<boolean> = computed<boolean>(
-    () => this.isSubmitting() || this.isMagicLinkLoading(),
+    () => this.isSubmitting() || this.isMagicLinkLoading() || this.isResettingPassword(),
   );
 
   protected async onSubmit(): Promise<void> {
@@ -98,6 +99,9 @@ export class LoginComponent extends AuthFormBase {
   }
 
   protected async onResetPassword(): Promise<void> {
+    if (this.isResettingPassword()) {
+      return;
+    }
     const email = this.emailControl.value.trim();
     if (this.emailControl.invalid || email.length === 0) {
       this.emailControl.markAsTouched();
@@ -107,6 +111,7 @@ export class LoginComponent extends AuthFormBase {
       });
       return;
     }
+    this.isResettingPassword.set(true);
     this.feedback.set(null);
     try {
       const redirectTo = `${window.location.origin}${ROUTE_PATHS.authPasswordReset}`;
@@ -120,6 +125,8 @@ export class LoginComponent extends AuthFormBase {
         kind: 'error',
         message: this.resolveErrorMessage(error, this.translationKeys.errors.unexpected),
       });
+    } finally {
+      this.isResettingPassword.set(false);
     }
   }
 }

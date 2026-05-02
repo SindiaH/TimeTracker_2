@@ -16,7 +16,6 @@ export interface IAuthService {
   sendPasswordResetEmail(email: string, redirectTo?: string): Promise<void>;
   updatePassword(newPassword: string): Promise<void>;
   signOut(): Promise<void>;
-  setSessionFromTokens(accessToken: string, refreshToken: string): Promise<AuthSession>;
 }
 
 export const AUTH_SERVICE_TOKEN = new InjectionToken<IAuthService>('AUTH_SERVICE_TOKEN');

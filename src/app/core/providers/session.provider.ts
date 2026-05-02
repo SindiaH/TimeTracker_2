@@ -15,11 +15,13 @@ export class SessionProvider extends ServiceBase {
 
   private readonly _session = signal<Session | null>(null);
   private readonly _isLoading = signal<boolean>(true);
+  private readonly _isSigningOut = signal<boolean>(false);
   private readonly _isPasswordRecovery = signal<boolean>(false);
   private readonly _lastError = signal<Error | null>(null);
 
   readonly session: Signal<Session | null> = this._session.asReadonly();
   readonly isLoading: Signal<boolean> = this._isLoading.asReadonly();
+  readonly isSigningOut: Signal<boolean> = this._isSigningOut.asReadonly();
   readonly isPasswordRecovery: Signal<boolean> = this._isPasswordRecovery.asReadonly();
   readonly lastError: Signal<Error | null> = this._lastError.asReadonly();
 
@@ -110,28 +112,19 @@ export class SessionProvider extends ServiceBase {
     }
   }
 
-  async setSessionFromTokens(accessToken: string, refreshToken: string): Promise<void> {
+  async signOut(): Promise<void> {
+    this._isSigningOut.set(true);
     this._isLoading.set(true);
     this._lastError.set(null);
     try {
-      const session = await this.authService.setSessionFromTokens(accessToken, refreshToken);
-      this._session.set(session);
+      await this.authService.signOut();
     } catch (error) {
       this._lastError.set(this.toError(error));
-      throw error;
     } finally {
-      this._isLoading.set(false);
-    }
-  }
-
-  async signOut(): Promise<void> {
-    this._isLoading.set(true);
-    try {
-      await this.authService.signOut();
       this._session.set(null);
       this._isPasswordRecovery.set(false);
-    } finally {
       this._isLoading.set(false);
+      this._isSigningOut.set(false);
     }
   }
 

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
@@ -9,11 +10,6 @@ import { matchControlValidator } from '@modules/auth/utils/match-control.validat
 type PasswordResetForm = {
   password: FormControl<string>;
   confirmPassword: FormControl<string>;
-};
-
-type RecoveryTokens = {
-  accessToken: string;
-  refreshToken: string;
 };
 
 @Component({
@@ -26,7 +22,7 @@ type RecoveryTokens = {
 export class PasswordResetComponent extends AuthFormBase {
   private readonly sessionProvider = inject(SessionProvider);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+  private readonly document = inject(DOCUMENT);
 
   protected readonly loginLink: string = ROUTE_PATHS.authLogin;
 
@@ -46,10 +42,10 @@ export class PasswordResetComponent extends AuthFormBase {
   });
 
   protected readonly isSubmitting = signal<boolean>(false);
-  protected readonly isInitializing = signal<boolean>(true);
+  protected readonly isInitializing = signal<boolean>(this.sessionProvider.isLoading());
 
-  protected readonly canResetPassword: Signal<boolean> = computed<boolean>(
-    () => this.sessionProvider.isPasswordRecovery() || this.sessionProvider.isAuthenticated(),
+  protected readonly canResetPassword: Signal<boolean> = computed<boolean>(() =>
+    this.sessionProvider.isPasswordRecovery(),
   );
 
   constructor() {
@@ -57,7 +53,12 @@ export class PasswordResetComponent extends AuthFormBase {
     this.passwordControl.valueChanges.pipe(this.takeUntilDestroyed()).subscribe(() => {
       this.confirmPasswordControl.updateValueAndValidity();
     });
-    void this.consumeRecoveryTokens();
+
+    effect(() => {
+      if (!this.sessionProvider.isLoading()) {
+        this.isInitializing.set(false);
+      }
+    });
   }
 
   protected async onSubmit(): Promise<void> {
@@ -81,6 +82,7 @@ export class PasswordResetComponent extends AuthFormBase {
         message: this.translationService.instant(this.translationKeys.feedback.passwordUpdated),
       });
       this.resetForm.reset();
+      this.stripRecoveryTokensFromUrl();
       void this.router.navigate([`/${DEFAULT_ROUTE_SEGMENT}`]);
     } catch (error) {
       this.feedback.set({
@@ -92,44 +94,12 @@ export class PasswordResetComponent extends AuthFormBase {
     }
   }
 
-  private async consumeRecoveryTokens(): Promise<void> {
-    const fragment = await this.firstValueFromFragment();
-    const tokens = this.parseTokenFragment(fragment);
-    if (!tokens) {
-      this.isInitializing.set(false);
+  private stripRecoveryTokensFromUrl(): void {
+    const view = this.document.defaultView;
+    if (!view) {
       return;
     }
-    try {
-      await this.sessionProvider.setSessionFromTokens(tokens.accessToken, tokens.refreshToken);
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.recoveryLinkInvalid),
-      });
-    } finally {
-      this.isInitializing.set(false);
-    }
-  }
-
-  private firstValueFromFragment(): Promise<string | null> {
-    return new Promise<string | null>((resolve) => {
-      const subscription = this.route.fragment.pipe(this.takeUntilDestroyed()).subscribe((fragment) => {
-        subscription.unsubscribe();
-        resolve(fragment);
-      });
-    });
-  }
-
-  private parseTokenFragment(fragment: string | null): RecoveryTokens | null {
-    if (!fragment) {
-      return null;
-    }
-    const params = new URLSearchParams(fragment);
-    const accessToken = params.get('access_token');
-    const refreshToken = params.get('refresh_token');
-    if (!accessToken || !refreshToken) {
-      return null;
-    }
-    return { accessToken, refreshToken };
+    const { pathname, search } = view.location;
+    view.history.replaceState({}, this.document.title, `${pathname}${search}`);
   }
 }
