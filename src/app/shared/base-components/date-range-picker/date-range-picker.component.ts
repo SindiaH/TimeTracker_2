@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { ComponentBase } from '@core/base/component-base';
+import { controlErrorKeys } from '@core/utils/control-error-keys';
 
 export type DateRangePickerAppearance = 'fill' | 'outline';
 
@@ -41,6 +42,7 @@ export class DateRangePickerComponent extends ComponentBase implements OnDestroy
 
   protected readonly useTouchUi = signal<boolean>(false);
   protected readonly formGroup = signal<FormGroup<DateRangeFormGroup> | null>(null);
+  protected readonly startErrorKeys = controlErrorKeys(this.startControl);
   private formGroupSubscription: Subscription | undefined;
 
   constructor(breakpointObserver: BreakpointObserver) {

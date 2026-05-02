@@ -1,29 +1,33 @@
-import { signal } from '@angular/core';
+import { Signal, signal } from '@angular/core';
 
 export class StepperService {
-  readonly step = signal<number>(0);
-  readonly minStep = signal<number>(0);
-  readonly maxStep = signal<number>(0);
+  private readonly _step = signal<number>(0);
+  private readonly _minStep = signal<number>(0);
+  private readonly _maxStep = signal<number>(0);
+
+  readonly step: Signal<number> = this._step.asReadonly();
+  readonly minStep: Signal<number> = this._minStep.asReadonly();
+  readonly maxStep: Signal<number> = this._maxStep.asReadonly();
 
   constructor(minStep: number, maxStep: number, firstOpened: number = 0) {
-    this.step.set(firstOpened);
-    this.minStep.set(minStep);
-    this.maxStep.set(maxStep);
+    this._minStep.set(minStep);
+    this._maxStep.set(maxStep);
+    this._step.set(firstOpened);
   }
 
   setStep(index: number): void {
-    this.step.set(index);
+    this._step.set(index);
   }
 
   nextStep(): void {
-    this.step.update((value) => value + 1);
+    this._step.update((value) => value + 1);
   }
 
   prevStep(): void {
-    this.step.update((value) => value - 1);
+    this._step.update((value) => value - 1);
   }
 
   close(): void {
-    this.step.set(this.minStep() - 1);
+    this._step.set(this._minStep() - 1);
   }
 }

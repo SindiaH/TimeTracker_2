@@ -8,6 +8,7 @@
 @let errorText = this.errorText();
 @let errorRequiredText = this.errorRequiredText();
 @let selectedItemsText = this.selectedItemsText();
+@let errorKeys = this.errorKeys();
 
 <mat-form-field
   [appearance]="appearance"
@@ -23,7 +24,7 @@
     </mat-select-trigger>
     @for (item of items; track item.id; let i = $index) {
       <mat-option [value]="item.id">
-        <div class="mat-option-content">
+        <div class="app-option-content">
           @if (item.icon) {
             <app-icon [class]="'select-icon select-icon-' + item.icon">{{ item.icon }}</app-icon>
           } @else if (showAsNumbered) {
@@ -34,7 +35,7 @@
       </mat-option>
     }
   </mat-select>
-  @if (control.invalid && control.hasError('required')) {
+  @if (control.invalid && errorKeys.has('required')) {
     <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
   }
   @if (errorText) {

@@ -5,9 +5,9 @@
 @let hideToggle = this.hideToggle();
 @let isExpanded = this.isExpanded();
 @let step = this.step();
-@let previousLabel = this.previousLabel();
-@let nextLabel = this.nextLabel();
-@let closeLabel = this.closeLabel();
+@let previousLabelKey = this.previousLabelKey();
+@let nextLabelKey = this.nextLabelKey();
+@let closeLabelKey = this.closeLabelKey();
 
 <mat-expansion-panel
   [disabled]="disabled"
@@ -30,21 +30,21 @@
         <app-button
           variant="stroked"
           (clicked)="stepperService.prevStep()">
-          {{ previousLabel }}
+          {{ previousLabelKey | translate }}
         </app-button>
       }
       @if (stepperService.maxStep() !== step) {
         <app-button
           variant="stroked"
           (clicked)="stepperService.nextStep()">
-          {{ nextLabel }}
+          {{ nextLabelKey | translate }}
         </app-button>
       }
       @if (stepperService.maxStep() === step) {
         <app-button
           variant="stroked"
           (clicked)="stepperService.close()">
-          {{ closeLabel }}
+          {{ closeLabelKey | translate }}
         </app-button>
       }
     </mat-action-row>

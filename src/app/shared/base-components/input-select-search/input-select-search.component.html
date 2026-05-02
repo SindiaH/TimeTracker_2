@@ -12,6 +12,7 @@
 @let errorRequiredText = this.errorRequiredText();
 @let selectedItem = this.selectedItem();
 @let required = this.required();
+@let errorKeys = this.errorKeys();
 
 <div class="input-select-search-container">
   <mat-form-field
@@ -73,7 +74,7 @@
       }
     </div>
 
-    @if (control.invalid && control.hasError('required')) {
+    @if (control.invalid && errorKeys.has('required')) {
       <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
     }
     @if (errorText) {

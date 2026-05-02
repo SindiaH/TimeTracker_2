@@ -2,6 +2,11 @@
   "app": {
     "title": "TimeTrack"
   },
+  "shared": {
+    "previous": "Back",
+    "next": "Next",
+    "close": "Close"
+  },
   "modules": {
     "auth": "Auth",
     "tasks": "Tasks",

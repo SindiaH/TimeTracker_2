@@ -48,7 +48,8 @@ $icon-header-size: 64px;
   height: $icon-header-size;
   width: $icon-header-size;
 
-  > * {
-    font-size: $icon-header-size !important;
+  > .material-symbols-outlined,
+  > mat-icon {
+    font-size: $icon-header-size;
   }
 }

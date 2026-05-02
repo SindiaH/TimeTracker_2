@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@core/base/component-base';
 import { ExtendedRoutesData } from '@core/routing/extended-routes';
@@ -13,14 +13,17 @@ import { ExtendedRoutesData } from '@core/routing/extended-routes';
 export class ModuleStubComponent extends ComponentBase {
   private readonly route = inject(ActivatedRoute);
 
-  protected readonly moduleName: WritableSignal<string> = signal<string>('');
-  protected readonly translationKey: WritableSignal<string> = signal<string>('');
+  private readonly _moduleName = signal<string>('');
+  private readonly _translationKey = signal<string>('');
+
+  protected readonly moduleName: Signal<string> = this._moduleName.asReadonly();
+  protected readonly translationKey: Signal<string> = this._translationKey.asReadonly();
 
   constructor() {
     super();
 
     const data = this.route.snapshot.data as ExtendedRoutesData;
-    this.moduleName.set(data.moduleName ?? '');
-    this.translationKey.set(data.translationKey ?? '');
+    this._moduleName.set(data.moduleName ?? '');
+    this._translationKey.set(data.translationKey ?? '');
   }
 }

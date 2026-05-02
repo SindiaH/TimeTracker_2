@@ -1,15 +1,16 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "main-capability",
-  "description": "Main window capabilities (ADR-30002): custom commands + scoped sidecar exec (Windows browser-url only) + plugin permissions for store, dialog, window-state, deep-link and autostart.",
+  "description": "Main window capabilities (ADR-30002): minimal allow-list. Custom commands are auto-permitted; renderer additionally needs core:event listen/unlisten (for app:deep-link / app:second-instance), scoped store/dialog access, and shell:allow-execute restricted to the Windows browser-url sidecar. macOS active-window data is read directly from Rust via active-win-pos-rs + osascript and does NOT need a sidecar.",
   "windows": ["main"],
   "permissions": [
-    "core:default",
-    "store:default",
-    "dialog:default",
-    "window-state:default",
-    "deep-link:default",
-    "autostart:default",
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
+    "store:allow-load",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-save",
+    "dialog:allow-open",
     {
       "identifier": "shell:allow-execute",
       "allow": [

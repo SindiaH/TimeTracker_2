@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal, Signal, signal } from '@angular/core';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 
 @Component({
@@ -26,5 +26,10 @@ export class ContainersSectionComponent {
     'app-expansion-panel',
   ];
 
-  protected readonly editingState: WritableSignal<boolean> = signal<boolean>(false);
+  private readonly _editingState = signal<boolean>(false);
+  protected readonly editingState: Signal<boolean> = this._editingState.asReadonly();
+
+  protected setEditing(editing: boolean): void {
+    this._editingState.set(editing);
+  }
 }

@@ -2,9 +2,8 @@
 @let icon = this.icon();
 @let tooltip = this.tooltip();
 @let loading = this.loading();
-@let disabled = this.disabled();
 @let outlined = this.outlined();
-@let isInteractionBlocked = disabled || loading;
+@let isInteractionBlocked = this.isInteractionBlocked();
 
 @switch (variant) {
   @case ('basic') {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, Signal } from '@angular/core';
 import { ComponentBase } from '@core/base/component-base';
 
 export type ButtonVariant = 'basic' | 'raised' | 'flat' | 'stroked' | 'icon' | 'fab' | 'extended-fab';
@@ -19,4 +19,6 @@ export class ButtonComponent extends ComponentBase {
   readonly outlined = input<boolean>(true);
 
   readonly clicked = output<void>();
+
+  readonly isInteractionBlocked: Signal<boolean> = computed<boolean>(() => this.disabled() || this.loading());
 }

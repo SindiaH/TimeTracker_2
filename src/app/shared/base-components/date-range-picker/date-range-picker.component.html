@@ -9,6 +9,7 @@
 @let fromLabel = this.fromLabel();
 @let toLabel = this.toLabel();
 @let minDateErrorText = this.minDateErrorText();
+@let startErrorKeys = this.startErrorKeys();
 
 @if (group) {
   <mat-form-field [appearance]="appearance">
@@ -35,7 +36,7 @@
     <mat-date-range-picker
       #picker
       [touchUi]="useTouchUi"></mat-date-range-picker>
-    @if (startControl.hasError('matDatepickerMin')) {
+    @if (startErrorKeys.has('matDatepickerMin')) {
       <mat-error [matTooltip]="minDateErrorText">{{ minDateErrorText }}</mat-error>
     }
   </mat-form-field>

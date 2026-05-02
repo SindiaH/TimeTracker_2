@@ -17,6 +17,7 @@
 @let step = this.step();
 @let rows = this.rows();
 @let readonlyValue = this.readonlyValue();
+@let errorKeys = this.errorKeys();
 
 @if (displayOnly) {
   <app-text-readonly
@@ -62,19 +63,19 @@
         <app-icon>close</app-icon>
       </button>
     }
-    @if (control.hasError('required')) {
+    @if (errorKeys.has('required')) {
       <mat-error>{{ errorRequiredText }}</mat-error>
     }
-    @if (control.hasError('maxlength') || control.hasError('max')) {
+    @if (errorKeys.has('maxlength') || errorKeys.has('max')) {
       <mat-error [matTooltip]="errorMaxLengthText">{{ errorMaxLengthText }}</mat-error>
     }
-    @if (control.hasError('minlength') || control.hasError('min')) {
+    @if (errorKeys.has('minlength') || errorKeys.has('min')) {
       <mat-error [matTooltip]="errorMinLengthText">{{ errorMinLengthText }}</mat-error>
     }
-    @if (control.hasError('pattern')) {
+    @if (errorKeys.has('pattern')) {
       <mat-error [matTooltip]="errorPatternText">{{ errorPatternText }}</mat-error>
     }
-    @if (control.hasError('email')) {
+    @if (errorKeys.has('email')) {
       <mat-error>E-Mail ungültig</mat-error>
     }
     @if (control.invalid && errorText) {

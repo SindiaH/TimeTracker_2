@@ -14,6 +14,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ComponentBase } from '@core/base/component-base';
+import { controlErrorKeys } from '@core/utils/control-error-keys';
 import { ISelectItem } from '@shared/base-components/input-select/input-select.type';
 
 export type InputSelectSearchAppearance = 'fill' | 'outline';
@@ -46,6 +47,8 @@ export class InputSelectSearchComponent extends ComponentBase implements OnInit,
 
   protected readonly selectedItem = signal<ISelectItem | null>(null);
   protected readonly searchControl = new FormControl<InputSelectSearchValue>(null);
+  private readonly searchControlSignal = signal<FormControl<InputSelectSearchValue>>(this.searchControl);
+  protected readonly errorKeys = controlErrorKeys(this.searchControlSignal);
   private readonly changeSubject = new Subject<InputSelectSearchValue>();
   private readonly searchTerm = signal<string | null>(null);
 

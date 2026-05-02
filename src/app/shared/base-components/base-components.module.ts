@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@core/i18n/translate.pipe';
 import { MaterialComponentsModule } from '@shared/material-components/material-components.module';
 import { ButtonComponent } from '@shared/base-components/button/button.component';
 import { IconComponent } from '@shared/base-components/icon/icon.component';
@@ -75,7 +76,7 @@ const COMPONENTS = [
 
 @NgModule({
   declarations: COMPONENTS,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterLinkActive, MaterialComponentsModule],
-  exports: [...COMPONENTS, ReactiveFormsModule, RouterLink, RouterLinkActive, MaterialComponentsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterLinkActive, TranslatePipe, MaterialComponentsModule],
+  exports: [...COMPONENTS, ReactiveFormsModule, RouterLink, RouterLinkActive, TranslatePipe, MaterialComponentsModule],
 })
 export class BaseComponentsModule {}

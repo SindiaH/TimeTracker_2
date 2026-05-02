@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
+import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { StepperService } from '@shared/base-components/accordion/stepper.service';
 
 @Component({
@@ -8,7 +10,7 @@ import { StepperService } from '@shared/base-components/accordion/stepper.servic
   styleUrl: './expansion-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpansionPanelComponent {
+export class ExpansionPanelComponent extends ComponentBase {
   readonly titleText = input.required<string>();
   readonly descriptionText = input<string | null>(null);
   readonly disabled = input<boolean>(false);
@@ -16,9 +18,9 @@ export class ExpansionPanelComponent {
   readonly hideToggle = input<boolean>(false);
   readonly stepperService = input<StepperService | null>(null);
   readonly step = input<number | null>(null);
-  readonly previousLabel = input<string>('Zurück');
-  readonly nextLabel = input<string>('Weiter');
-  readonly closeLabel = input<string>('Schließen');
+  readonly previousLabelKey = input<TranslationKey>(TRANSLATION_KEYS.shared.previous);
+  readonly nextLabelKey = input<TranslationKey>(TRANSLATION_KEYS.shared.next);
+  readonly closeLabelKey = input<TranslationKey>(TRANSLATION_KEYS.shared.close);
 
   readonly opened = output<void>();
 

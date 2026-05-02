@@ -32,9 +32,9 @@
       titleText="Editable panel"
       subTitleText="Toggle between read and edit"
       [editing]="editingState"
-      (editAction)="this.editingState.set(true)"
-      (saveAction)="this.editingState.set(false)"
-      (discardAction)="this.editingState.set(false)">
+      (editAction)="setEditing(true)"
+      (saveAction)="setEditing(false)"
+      (discardAction)="setEditing(false)">
       <ng-container readModeContent>
         <p>Read-only state.</p>
       </ng-container>

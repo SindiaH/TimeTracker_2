@@ -54,6 +54,22 @@ export class DesktopService extends ServiceBase {
     await store.save();
   }
 
+  async getStoredTheme(): Promise<string | null> {
+    if (!this.isDesktop) return null;
+    const { Store } = await import('@tauri-apps/plugin-store');
+    const store = await Store.load(TAURI_STORE_FILES.appSettings);
+    const value = await store.get<string>(TAURI_STORE_KEYS.theme);
+    return value ?? null;
+  }
+
+  async saveStoredTheme(theme: string): Promise<void> {
+    if (!this.isDesktop) return;
+    const { Store } = await import('@tauri-apps/plugin-store');
+    const store = await Store.load(TAURI_STORE_FILES.appSettings);
+    await store.set(TAURI_STORE_KEYS.theme, theme);
+    await store.save();
+  }
+
   async getSqliteFolder(): Promise<string | null> {
     if (!this.isDesktop) return null;
     const { open } = await import('@tauri-apps/plugin-dialog');

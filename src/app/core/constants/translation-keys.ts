@@ -2,6 +2,11 @@ export const TRANSLATION_KEYS = {
   app: {
     title: 'app.title',
   },
+  shared: {
+    previous: 'shared.previous',
+    next: 'shared.next',
+    close: 'shared.close',
+  },
   header: {
     navigation: 'header.navigation',
     menuOpen: 'header.menuOpen',

@@ -1,5 +1,8 @@
-// Application shape tokens (border-radius scale). See ADR-10015.
+// Application shape tokens (border-radius scale) plus Material shape overrides
+// that apply globally to the app shell. See ADR-10015. This is the only place
+// where `--mat-*` shape tokens may be referenced outside of components.
 
 :root {
   --app-shape-corner-medium: var(--mat-sys-corner-medium);
+  --mat-sidenav-container-shape: 0;
 }

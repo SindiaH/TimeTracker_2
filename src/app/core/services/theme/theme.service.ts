@@ -12,18 +12,21 @@ import {
   THEME_PREFERENCES,
   ThemePreference,
 } from '@core/constants/theme.constants';
+import { DesktopService } from '@core/services/desktop/desktop.service';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService extends ServiceBase {
   private readonly document = inject(DOCUMENT);
+  private readonly desktopService = inject(DesktopService);
   private readonly renderer: Renderer2 = inject(RendererFactory2).createRenderer(null, null);
 
   private readonly mediaQuery: MediaQueryList | null = this.document.defaultView?.matchMedia
     ? this.document.defaultView.matchMedia(PREFERS_DARK_MEDIA_QUERY)
     : null;
 
-  private readonly _theme = signal<ThemePreference>(this.readPersistedPreference());
+  private readonly _theme = signal<ThemePreference>(this.readLocalPreference());
   private readonly _systemPrefersDark = signal<boolean>(this.mediaQuery?.matches ?? false);
+  private hydratedFromDesktop = false;
 
   readonly theme: Signal<ThemePreference> = this._theme.asReadonly();
 
@@ -43,6 +46,7 @@ export class ThemeService extends ServiceBase {
     super();
 
     this.subscribeToSystemPreference();
+    void this.hydrateFromDesktopStore();
 
     effect(() => {
       const resolved = this.resolvedTheme();
@@ -80,7 +84,20 @@ export class ThemeService extends ServiceBase {
     this.destroyRef.onDestroy(() => this.mediaQuery?.removeEventListener('change', listener));
   }
 
-  private readPersistedPreference(): ThemePreference {
+  private async hydrateFromDesktopStore(): Promise<void> {
+    if (!this.desktopService.isDesktop) {
+      this.hydratedFromDesktop = true;
+      return;
+    }
+
+    const stored = await this.desktopService.getStoredTheme();
+    if (stored !== null && this.isValidPreference(stored)) {
+      this._theme.set(stored);
+    }
+    this.hydratedFromDesktop = true;
+  }
+
+  private readLocalPreference(): ThemePreference {
     const storage = this.document.defaultView?.localStorage;
     const stored = storage?.getItem(LOCAL_STORAGE_KEYS.theme);
 
@@ -94,6 +111,10 @@ export class ThemeService extends ServiceBase {
   private persistPreference(preference: ThemePreference): void {
     const storage = this.document.defaultView?.localStorage;
     storage?.setItem(LOCAL_STORAGE_KEYS.theme, preference);
+
+    if (this.hydratedFromDesktop && this.desktopService.isDesktop) {
+      void this.desktopService.saveStoredTheme(preference);
+    }
   }
 
   private isValidPreference(value: string): value is ThemePreference {

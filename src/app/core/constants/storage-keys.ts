@@ -13,6 +13,7 @@ export type TauriStoreFile = (typeof TAURI_STORE_FILES)[keyof typeof TAURI_STORE
 
 export const TAURI_STORE_KEYS = {
   appSettings: 'app-settings',
+  theme: 'theme',
 } as const;
 
 export type TauriStoreKey = (typeof TAURI_STORE_KEYS)[keyof typeof TAURI_STORE_KEYS];
