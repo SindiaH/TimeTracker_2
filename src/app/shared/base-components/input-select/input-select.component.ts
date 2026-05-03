@@ -13,6 +13,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { ComponentBase } from '@core/base/component-base';
+import { FORM_ERROR_CODES } from '@core/constants/form-error-codes';
 import { controlErrorKeys } from '@core/utils/control-error-keys';
 import { ISelectItem } from '@shared/base-components/input-select/input-select.type';
 
@@ -44,6 +45,7 @@ export class InputSelectComponent extends ComponentBase implements OnInit, OnDes
   protected readonly changeSubject = new Subject<InputSelectValue>();
   protected readonly selectedItems = signal<ISelectItem[]>([]);
   protected readonly errorKeys = controlErrorKeys(this.control);
+  protected readonly formErrorCodes = FORM_ERROR_CODES;
   protected readonly selectedItemsText = computed<string>(() => {
     return this.selectedItems()
       .map((item) => item.name ?? '')

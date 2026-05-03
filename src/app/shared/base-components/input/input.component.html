@@ -63,19 +63,19 @@
         <app-icon>close</app-icon>
       </button>
     }
-    @if (errorKeys.has('required')) {
+    @if (errorKeys.has(formErrorCodes.required)) {
       <mat-error>{{ errorRequiredText }}</mat-error>
     }
-    @if (errorKeys.has('maxlength') || errorKeys.has('max')) {
+    @if (errorKeys.has(formErrorCodes.maxLength) || errorKeys.has(formErrorCodes.max)) {
       <mat-error [matTooltip]="errorMaxLengthText">{{ errorMaxLengthText }}</mat-error>
     }
-    @if (errorKeys.has('minlength') || errorKeys.has('min')) {
+    @if (errorKeys.has(formErrorCodes.minLength) || errorKeys.has(formErrorCodes.min)) {
       <mat-error [matTooltip]="errorMinLengthText">{{ errorMinLengthText }}</mat-error>
     }
-    @if (errorKeys.has('pattern')) {
+    @if (errorKeys.has(formErrorCodes.pattern)) {
       <mat-error [matTooltip]="errorPatternText">{{ errorPatternText }}</mat-error>
     }
-    @if (errorKeys.has('email')) {
+    @if (errorKeys.has(formErrorCodes.email)) {
       <mat-error>E-Mail ungültig</mat-error>
     }
     @if (control.invalid && errorText) {

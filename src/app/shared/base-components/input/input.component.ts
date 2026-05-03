@@ -13,6 +13,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { ComponentBase } from '@core/base/component-base';
+import { FORM_ERROR_CODES } from '@core/constants/form-error-codes';
 import { controlErrorKeys } from '@core/utils/control-error-keys';
 
 export type InputAppearance = 'fill' | 'outline';
@@ -54,6 +55,7 @@ export class InputComponent extends ComponentBase implements OnInit, OnDestroy {
   protected readonly changeSubject = new Subject<InputValue>();
   private readonly currentValue = signal<InputValue>(undefined);
   protected readonly errorKeys = controlErrorKeys(this.control);
+  protected readonly formErrorCodes = FORM_ERROR_CODES;
 
   protected readonly readonlyValue = computed<string>(() => {
     const value = this.currentValue();

@@ -35,7 +35,7 @@
       </mat-option>
     }
   </mat-select>
-  @if (control.invalid && errorKeys.has('required')) {
+  @if (control.invalid && errorKeys.has(formErrorCodes.required)) {
     <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
   }
   @if (errorText) {

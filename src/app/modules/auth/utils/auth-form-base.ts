@@ -2,6 +2,7 @@ import { Directive, inject, signal, WritableSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
+import { FORM_ERROR_CODES } from '@core/constants/form-error-codes';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 import { AuthErrorCode, AuthOperationError } from '@database/services/interfaces/auth-error';
@@ -25,10 +26,10 @@ export abstract class AuthFormBase extends ComponentBase {
     if (!control.touched) {
       return null;
     }
-    if (control.hasError('required')) {
+    if (control.hasError(FORM_ERROR_CODES.required)) {
       return this.translationService.instant(this.translationKeys.errors.emailRequired);
     }
-    if (control.hasError('email')) {
+    if (control.hasError(FORM_ERROR_CODES.email)) {
       return this.translationService.instant(this.translationKeys.errors.emailInvalid);
     }
     return null;
@@ -38,10 +39,10 @@ export abstract class AuthFormBase extends ComponentBase {
     if (!control.touched) {
       return null;
     }
-    if (control.hasError('required')) {
+    if (control.hasError(FORM_ERROR_CODES.required)) {
       return this.translationService.instant(this.translationKeys.errors.passwordRequired);
     }
-    if (control.hasError('minlength')) {
+    if (control.hasError(FORM_ERROR_CODES.minLength)) {
       return this.translationService.instant(this.translationKeys.errors.passwordMinLength, {
         count: PASSWORD_MIN_LENGTH,
       });
@@ -53,10 +54,10 @@ export abstract class AuthFormBase extends ComponentBase {
     if (!control.touched) {
       return null;
     }
-    if (control.hasError('required')) {
+    if (control.hasError(FORM_ERROR_CODES.required)) {
       return this.translationService.instant(this.translationKeys.errors.passwordRequired);
     }
-    if (control.hasError('mismatch')) {
+    if (control.hasError(FORM_ERROR_CODES.mismatch)) {
       return this.translationService.instant(this.translationKeys.errors.passwordMismatch);
     }
     return null;
