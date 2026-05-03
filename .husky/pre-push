@@ -1,0 +1,25 @@
+# Make Node/npm visible to GUI Git clients (Fork, SourceTree, GitKraken, …)
+# whose login PATH does not include Homebrew or nvm by default.
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use
+  # shellcheck disable=SC1091
+  [ -s "$NVM_DIR/nvm.sh" ] && nvm use --silent default >/dev/null 2>&1 || true
+fi
+
+for candidate in /opt/homebrew/bin /usr/local/bin "$HOME/.volta/bin" "$HOME/.fnm" "$HOME/.bun/bin"; do
+  [ -d "$candidate" ] && case ":$PATH:" in
+    *":$candidate:"*) ;;
+    *) PATH="$candidate:$PATH" ;;
+  esac
+done
+export PATH
+
+if ! command -v npm >/dev/null 2>&1; then
+  echo "husky pre-push: 'npm' not found in PATH=$PATH" >&2
+  echo "  → install Node (https://nodejs.org) or expose your existing Node install to GUI Git clients." >&2
+  exit 1
+fi
+
+npm run test:silent

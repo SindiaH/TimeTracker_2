@@ -150,6 +150,33 @@
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"],
             "cache": true
           }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runner": "vitest",
+            "buildTarget": "TimeTracker_2:build:development",
+            "include": ["**/*.spec.ts"],
+            "coverageReporters": ["text", "text-summary", "html", "lcov"],
+            "coverageExclude": [
+              "src/main.ts",
+              "src/environments/**",
+              "src/styles/**",
+              "src/testing/**",
+              "src/app/**/*-module.ts",
+              "src/app/**/*-routing-module.ts",
+              "src/app/**/*.module.ts",
+              "src/app/**/*.routing.ts",
+              "src/app/database/entities/**",
+              "src/app/shared/base-components/**",
+              "src/app/shared/desktop/ipc-contract.ts"
+            ],
+            "coverageThresholds": {
+              "lines": 60,
+              "branches": 60
+            }
+          }
         }
       }
     }

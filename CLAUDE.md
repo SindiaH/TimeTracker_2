@@ -24,8 +24,9 @@ npm run tauri:dev            # Tauri shell pointing at the dev server
 npm run lint                 # ESLint
 npm run prettier:fix         # Prettier write
 npm run stylelint            # SCSS lint
-npm test                     # Karma watch
-npm run test:silent          # Karma single-run (CI)
+npm test                     # Vitest watch
+npm run test:silent          # Vitest single-run (CI)
+npm run test:coverage        # Vitest with coverage report
 npm run prepare:pr           # Lint + format + stylelint + tests
 ```
 
@@ -283,12 +284,14 @@ These rules MUST always be followed when writing code.
 
 ## Testing
 
-- Karma + Jasmine, watch mode for development, headless single-run for CI.
-- Component tests stub `DesktopService` with hard-coded return values.
-- Provider tests mock the injected `IXxxService` interface (no Supabase in unit tests).
+- **Vitest + jsdom** via Angular's `@angular/build:unit-test` builder (ADR-10016). No browser, no Karma. `vi.fn()` / `vi.spyOn()` for spies, vitest globals (`describe`/`it`/`expect`) auto-imported.
+- **Test infrastructure** lives under `src/testing/` (alias `@testing/*`):
+  - `TestingModule` — stubs for `DesktopService`, `ThemeService`, `TranslationService`, `Router`, `ActivatedRoute`, `ChangeDetectorRef`.
+  - `TestingComponentModule` — `TestingModule` + `TestingBackendModule` + `BaseComponentsModule` + `MaterialComponentsModule` + `NoopAnimationsModule` + project `TranslatePipe`. Use this in component specs.
+  - `TestingBackendModule` — auto-mocked `IXxxService` providers via `autoMockProvider(token, shape)`.
+- **Test scope policy**: providers, validators, `TranslationService`/`ThemeService`/`DesktopService` web-fallback, pipes with logic, read-model mappers. Trivial presentational components, `BaseEntity`, `*-module.ts`, `*-routing-module.ts`, `ipc-contract.ts`, and the Material wrappers in `BaseComponentsModule` are out of scope (and excluded from coverage in `vitest.config.ts`).
 - Rust contract parity is verified by `cargo test --test contract_parity` in CI.
-- Coverage exclusions configured in `angular.json` (generated entities, base components, utility functions, route resolvers, routing modules).
 
 ## Pre-Commit & PR Hooks
 
-Husky pre-commit runs `lint:fix`, `prettier:fix`, `stylelint:fix` via lint-staged on the staged file set. The CI pipeline runs the full lint check, unit tests, and (on the Rust side) `cargo fmt --check`, `cargo clippy`, and the contract-parity test.
+Husky `pre-commit` runs `lint:fix`, `prettier:fix`, `stylelint:fix` via lint-staged on the staged file set. Husky `pre-push` runs `npm run test:silent`. `npm run prepare:pr` runs lint + prettier + stylelint + tests end-to-end. The CI pipeline runs the full lint check, unit tests, and (on the Rust side) `cargo fmt --check`, `cargo clippy`, and the contract-parity test.

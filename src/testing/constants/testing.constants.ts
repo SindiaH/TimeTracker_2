@@ -1,0 +1,4 @@
+export const TESTING_TRANSLATE_PREFIX = 'translated:';
+
+export const TEST_USER_ID = '00000000-0000-4000-8000-000000000001';
+export const TEST_NOW_ISO = '2026-05-03T12:00:00.000Z';

@@ -57,9 +57,9 @@ The same Angular bundle runs in both targets. The `DesktopService` (see ADR-3000
 ### Testing
 
 ```bash
-npm test                     # Karma in watch mode
-npm run test:silent          # Headless run (CI/PR)
-npm run test:coverage        # Coverage report
+npm test                     # Vitest in watch mode (jsdom, no browser)
+npm run test:silent          # Vitest single-run (CI/PR)
+npm run test:coverage        # Vitest with coverage report
 ```
 
 ### Linting & Formatting
@@ -73,7 +73,7 @@ npm run stylelint            # Stylelint (SCSS)
 npm run stylelint:fix        # Stylelint auto-fix
 ```
 
-`husky` + `lint-staged` run `lint:fix`, `prettier:fix`, and `stylelint:fix` on staged files before each commit (see ADR-10008).
+`husky` + `lint-staged` run `lint:fix`, `prettier:fix`, and `stylelint:fix` on staged files before each commit (see ADR-10008). Husky `pre-push` runs `npm run test:silent` (see ADR-10016).
 
 ### Pre-PR
 

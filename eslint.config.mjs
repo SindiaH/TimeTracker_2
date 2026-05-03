@@ -53,6 +53,14 @@ export default [
       '@typescript-eslint/no-empty-function': 'off',
       'prefer-const': 'off',
       '@angular-eslint/prefer-inject': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
   },
   {
