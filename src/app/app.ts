@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { ComponentBase } from '@core/base/component-base';
+import { SessionProvider } from '@core/providers/session.provider';
 import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 
 @Component({
@@ -11,8 +12,10 @@ import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 })
 export class App extends ComponentBase {
   private readonly menuStateService = inject(MenuStateService);
+  private readonly sessionProvider = inject(SessionProvider);
 
   protected readonly isMenuOpen: Signal<boolean> = this.menuStateService.isOpen;
+  protected readonly isAuthenticated: Signal<boolean> = this.sessionProvider.isAuthenticated;
 
   protected onDrawerOpenedChange(open: boolean): void {
     this.menuStateService.setOpen(open);

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthChangeEvent, AuthError, Session as SupabaseSession, Subscription } from '@supabase/supabase-js';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ServiceBase } from '@core/base/service-base';
 import { AuthErrorCode, AuthOperationError } from '@database/services/interfaces/auth-error';
 import { AuthCredentials, IAuthService } from '@database/services/interfaces/auth-service.interface';
@@ -10,7 +10,7 @@ import { AuthChangeEventType, AuthChangePayload, AuthSession } from '@database/t
 @Injectable({ providedIn: 'root' })
 export class SupabaseAuthService extends ServiceBase implements IAuthService {
   private readonly client = inject(SupabaseAuthClient).client;
-  private readonly authChangesSubject = new Subject<AuthChangePayload>();
+  private readonly authChangesSubject = new ReplaySubject<AuthChangePayload>(1);
   private readonly subscription: Subscription;
 
   readonly authChanges$: Observable<AuthChangePayload> = this.authChangesSubject.asObservable();
@@ -31,14 +31,6 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
       this.subscription.unsubscribe();
       this.authChangesSubject.complete();
     });
-  }
-
-  async getCurrentSession(): Promise<AuthSession | null> {
-    const { data, error } = await this.client.auth.getSession();
-    if (error) {
-      throw this.mapError(error);
-    }
-    return this.toAuthSession(data.session);
   }
 
   async signInWithPassword(credentials: AuthCredentials): Promise<AuthSession> {
@@ -110,12 +102,14 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
 
   private mapAuthEvent(event: AuthChangeEvent): AuthChangeEventType | null {
     switch (event) {
-      case 'SIGNED_IN':
       case 'INITIAL_SESSION':
-      case 'USER_UPDATED':
+        return 'initial-session';
+      case 'SIGNED_IN':
         return 'signed-in';
       case 'SIGNED_OUT':
         return 'signed-out';
+      case 'USER_UPDATED':
+        return 'user-updated';
       case 'TOKEN_REFRESHED':
         return 'token-refreshed';
       case 'PASSWORD_RECOVERY':

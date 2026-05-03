@@ -14,10 +14,24 @@
 <nav
   class="side-menu"
   [attr.aria-label]="navAriaLabelKey | translate">
-  <mat-nav-list class="side-menu__list">
-    <a href="#"></a>
-    @if (isMobile) {
-      @for (link of primaryNavLinks; track link.path) {
+  @if (isAuthenticated) {
+    <mat-nav-list class="side-menu__list">
+      <a href="#"></a>
+      @if (isMobile) {
+        @for (link of primaryNavLinks; track link.path) {
+          <a
+            mat-list-item
+            class="side-menu__link"
+            [routerLink]="link.path"
+            routerLinkActive="side-menu__link--active"
+            (click)="onLinkClicked()">
+            <app-icon matListItemIcon>{{ link.icon }}</app-icon>
+            <span matListItemTitle>{{ link.translationKey | translate }}</span>
+          </a>
+        }
+      }
+
+      @for (link of secondaryNavLinks; track link.path) {
         <a
           mat-list-item
           class="side-menu__link"
@@ -28,20 +42,8 @@
           <span matListItemTitle>{{ link.translationKey | translate }}</span>
         </a>
       }
-    }
-
-    @for (link of secondaryNavLinks; track link.path) {
-      <a
-        mat-list-item
-        class="side-menu__link"
-        [routerLink]="link.path"
-        routerLinkActive="side-menu__link--active"
-        (click)="onLinkClicked()">
-        <app-icon matListItemIcon>{{ link.icon }}</app-icon>
-        <span matListItemTitle>{{ link.translationKey | translate }}</span>
-      </a>
-    }
-  </mat-nav-list>
+    </mat-nav-list>
+  }
 
   <div class="side-menu__footer">
     <app-button-toggle

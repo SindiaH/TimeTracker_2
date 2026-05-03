@@ -10,7 +10,13 @@ export type AuthSession = {
   expiresAt: number | null;
 };
 
-export type AuthChangeEventType = 'signed-in' | 'signed-out' | 'token-refreshed' | 'password-recovery';
+export type AuthChangeEventType =
+  | 'initial-session'
+  | 'signed-in'
+  | 'signed-out'
+  | 'user-updated'
+  | 'token-refreshed'
+  | 'password-recovery';
 
 export type AuthChangePayload = {
   event: AuthChangeEventType;

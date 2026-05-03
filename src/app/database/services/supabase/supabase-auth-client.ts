@@ -14,7 +14,7 @@ export class SupabaseAuthClient {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true,
-        storageKey: LOCAL_STORAGE_KEYS.auth,
+        storageKey: `${LOCAL_STORAGE_KEYS.auth}-${config.storageNamespace}`,
         storage: window.localStorage,
         flowType: 'pkce',
       },

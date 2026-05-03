@@ -43,16 +43,13 @@ export class SessionProvider extends ServiceBase {
         this._isPasswordRecovery.set(false);
       }
     });
-
-    void this.bootstrapSession();
   }
 
   async signInWithPassword(credentials: AuthCredentials): Promise<void> {
     this._isLoading.set(true);
     this._lastError.set(null);
     try {
-      const session = await this.authService.signInWithPassword(credentials);
-      this._session.set(session);
+      await this.authService.signInWithPassword(credentials);
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
@@ -78,8 +75,7 @@ export class SessionProvider extends ServiceBase {
     this._isLoading.set(true);
     this._lastError.set(null);
     try {
-      const session = await this.authService.signUpWithPassword(credentials);
-      this._session.set(session);
+      await this.authService.signUpWithPassword(credentials);
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
@@ -103,7 +99,6 @@ export class SessionProvider extends ServiceBase {
     this._lastError.set(null);
     try {
       await this.authService.updatePassword(newPassword);
-      this._isPasswordRecovery.set(false);
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
@@ -120,23 +115,11 @@ export class SessionProvider extends ServiceBase {
       await this.authService.signOut();
     } catch (error) {
       this._lastError.set(this.toError(error));
-    } finally {
       this._session.set(null);
       this._isPasswordRecovery.set(false);
-      this._isLoading.set(false);
-      this._isSigningOut.set(false);
-    }
-  }
-
-  private async bootstrapSession(): Promise<void> {
-    try {
-      const session = await this.authService.getCurrentSession();
-      this._session.set(session);
-    } catch (error) {
-      this._lastError.set(this.toError(error));
-      this._session.set(null);
     } finally {
       this._isLoading.set(false);
+      this._isSigningOut.set(false);
     }
   }
 

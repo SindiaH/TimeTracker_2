@@ -80,7 +80,7 @@
       "emailRequired": "Bitte gib deine E-Mail-Adresse ein.",
       "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
       "passwordRequired": "Bitte gib dein Passwort ein.",
-      "passwordMinLength": "Passwort muss mindestens 6 Zeichen haben.",
+      "passwordMinLength": "Passwort muss mindestens {{count}} Zeichen haben.",
       "passwordMismatch": "Die Passwörter stimmen nicht überein.",
       "invalidCredentials": "Ungültige E-Mail-Adresse oder ungültiges Passwort.",
       "emailNotConfirmed": "Bitte bestätige zuerst deine E-Mail-Adresse.",

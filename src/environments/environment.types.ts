@@ -4,6 +4,7 @@ export type AuthBackendConfig = {
   type: AuthBackend;
   url: string;
   anonKey: string;
+  storageNamespace: string;
 };
 
 export type DataBackendConfig = {

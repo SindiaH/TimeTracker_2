@@ -1,6 +1,7 @@
 import { Directive, inject, signal, WritableSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
+import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 import { AuthErrorCode, AuthOperationError } from '@database/services/interfaces/auth-error';
@@ -41,7 +42,9 @@ export abstract class AuthFormBase extends ComponentBase {
       return this.translationService.instant(this.translationKeys.errors.passwordRequired);
     }
     if (control.hasError('minlength')) {
-      return this.translationService.instant(this.translationKeys.errors.passwordMinLength);
+      return this.translationService.instant(this.translationKeys.errors.passwordMinLength, {
+        count: PASSWORD_MIN_LENGTH,
+      });
     }
     return null;
   }

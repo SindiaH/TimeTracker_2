@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
+import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
 import { matchControlValidator } from '@modules/auth/utils/match-control.validator';
@@ -28,7 +29,7 @@ export class PasswordResetComponent extends AuthFormBase {
 
   protected readonly passwordControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
-    validators: [Validators.required, Validators.minLength(6)],
+    validators: [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH)],
   });
 
   protected readonly confirmPasswordControl: FormControl<string> = new FormControl<string>('', {

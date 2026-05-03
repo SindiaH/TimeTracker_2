@@ -9,7 +9,6 @@ export type AuthCredentials = {
 
 export interface IAuthService {
   readonly authChanges$: Observable<AuthChangePayload>;
-  getCurrentSession(): Promise<AuthSession | null>;
   signInWithPassword(credentials: AuthCredentials): Promise<AuthSession>;
   signInWithMagicLink(email: string, redirectTo?: string): Promise<void>;
   signUpWithPassword(credentials: AuthCredentials): Promise<AuthSession | null>;

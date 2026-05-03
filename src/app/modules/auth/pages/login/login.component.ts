@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
+import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
 
@@ -30,7 +31,7 @@ export class LoginComponent extends AuthFormBase {
 
   protected readonly passwordControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
-    validators: [Validators.required, Validators.minLength(6)],
+    validators: [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH)],
   });
 
   protected readonly loginForm: FormGroup<LoginForm> = new FormGroup<LoginForm>({
