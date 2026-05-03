@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { ComponentBase } from '@core/base/component-base';
 import { AppIcon, APP_ICONS } from '@core/constants/app-icons';
-import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { SessionProvider } from '@core/providers/session.provider';
 import { SessionUser } from '@core/providers/session.type';
+import { AuthActionsService } from '@core/services/auth-actions/auth-actions.service';
 
 type AccountField = {
   labelKey: TranslationKey;
@@ -21,7 +20,7 @@ type AccountField = {
 })
 export class AccountComponent extends ComponentBase {
   private readonly sessionProvider = inject(SessionProvider);
-  private readonly router = inject(Router);
+  private readonly authActions = inject(AuthActionsService);
 
   protected readonly translationKeys = TRANSLATION_KEYS.account;
   protected readonly signOutLabelKey: TranslationKey = TRANSLATION_KEYS.auth.signOut;
@@ -42,7 +41,6 @@ export class AccountComponent extends ComponentBase {
   });
 
   protected async onSignOut(): Promise<void> {
-    await this.sessionProvider.signOut();
-    void this.router.navigateByUrl(ROUTE_PATHS.authLogin);
+    await this.authActions.signOutAndRedirect();
   }
 }
