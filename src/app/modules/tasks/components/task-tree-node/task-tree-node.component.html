@@ -1,0 +1,97 @@
+@let node = this.node();
+@let icons = this.icons;
+@let translationKeys = this.translationKeys;
+@let isFolder = this.isFolder();
+@let hasChildren = this.hasChildren();
+@let isExpanded = this.isExpanded();
+@let isSelected = this.isSelected();
+@let nodeColor = this.nodeColor();
+
+<div
+  class="task-tree-node"
+  [class.task-tree-node--selected]="isSelected"
+  [class.task-tree-node--archived]="node.isArchived">
+  <div
+    class="task-tree-node__row"
+    [style.padding-left.px]="node.depth * 20"
+    (click)="onSelect()">
+    @if (isFolder) {
+      <button
+        class="task-tree-node__chevron"
+        type="button"
+        [class.task-tree-node__chevron--invisible]="!hasChildren"
+        [attr.aria-label]="(isExpanded ? translationKeys.actions.collapse : translationKeys.actions.expand) | translate"
+        (click)="onToggle(); $event.stopPropagation()">
+        <app-icon>{{ isExpanded ? icons.expandMore : icons.expandLess }}</app-icon>
+      </button>
+    } @else {
+      <span class="task-tree-node__chevron task-tree-node__chevron--invisible"></span>
+    }
+
+    <span
+      class="task-tree-node__icon"
+      [style.color]="nodeColor">
+      <app-icon>{{ isFolder ? icons.taskFolder : icons.taskItem }}</app-icon>
+    </span>
+
+    <span class="task-tree-node__name">{{ node.name }}</span>
+
+    <span class="task-tree-node__spacer"></span>
+
+    @if (node.duration | formatDuration; as durationText) {
+      <span class="task-tree-node__duration">({{ durationText }})</span>
+    }
+
+    <span
+      class="task-tree-node__menu-trigger"
+      (click)="$event.stopPropagation()">
+      <app-menu [icon]="icons.more">
+        @if (isFolder) {
+          <app-menu-item
+            [icon]="icons.taskFolder"
+            (clicked)="onAddFolderHere()">
+            {{ translationKeys.actions.addSubfolder | translate }}
+          </app-menu-item>
+          <app-menu-item
+            [icon]="icons.taskItem"
+            (clicked)="onAddTaskHere()">
+            {{ translationKeys.actions.addChildTask | translate }}
+          </app-menu-item>
+        }
+        <app-menu-item
+          [icon]="icons.edit"
+          (clicked)="onEdit()">
+          {{ translationKeys.actions.edit | translate }}
+        </app-menu-item>
+        @if (node.isArchived) {
+          <app-menu-item
+            [icon]="icons.unarchive"
+            (clicked)="onUnarchive()">
+            {{ translationKeys.actions.unarchive | translate }}
+          </app-menu-item>
+        } @else {
+          <app-menu-item
+            [icon]="icons.archive"
+            (clicked)="onArchive()">
+            {{ translationKeys.actions.archive | translate }}
+          </app-menu-item>
+        }
+        <app-menu-item
+          [icon]="icons.delete"
+          (clicked)="onDelete()">
+          {{ translationKeys.actions.delete | translate }}
+        </app-menu-item>
+      </app-menu>
+    </span>
+  </div>
+
+  @if (isFolder && hasChildren && isExpanded) {
+    <div class="task-tree-node__children">
+      @for (child of node.children; track child.id) {
+        <app-task-tree-node
+          [node]="child"
+          (action)="onChildAction($event)" />
+      }
+    </div>
+  }
+</div>

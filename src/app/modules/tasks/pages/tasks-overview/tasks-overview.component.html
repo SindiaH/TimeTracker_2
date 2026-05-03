@@ -1,0 +1,126 @@
+@let translationKeys = this.translationKeys;
+@let icons = this.icons;
+@let filterOptions = this.filterOptions();
+@let filterControl = this.filterControl;
+@let tree = this.tree();
+@let hasNodes = this.hasNodes();
+@let isLoading = this.isLoading();
+@let isInitialized = this.isInitialized();
+@let selectedNode = this.selectedNode();
+@let feedback = this.feedback();
+@let pendingDelete = this.pendingDelete();
+@let isDeleting = this.isDeleting();
+@let deleteTitleKey = this.deleteTitleKey();
+@let deleteMessageKey = this.deleteMessageKey();
+
+<section class="tasks-overview">
+  <header class="tasks-overview__toolbar">
+    <app-button-toggle
+      [control]="filterControl"
+      [options]="filterOptions"
+      [hideIndicator]="true"
+      (optionChanged)="onFilterChanged($event)" />
+
+    <span class="tasks-overview__spacer"></span>
+
+    <app-menu
+      [icon]="icons.add"
+      [labelText]="translationKeys.addMenu.trigger | translate"
+      appearance="filled">
+      <app-menu-item
+        [icon]="icons.taskFolder"
+        (clicked)="onAddFolder()">
+        {{ translationKeys.addMenu.addFolder | translate }}
+      </app-menu-item>
+      <app-menu-item
+        [icon]="icons.taskItem"
+        (clicked)="onAddTask()">
+        {{ translationKeys.addMenu.addTask | translate }}
+      </app-menu-item>
+    </app-menu>
+  </header>
+
+  <div class="tasks-overview__content">
+    <aside class="tasks-overview__sidebar">
+      @if (feedback) {
+        <app-info [type]="feedback.kind">
+          {{ feedback.message }}
+        </app-info>
+      }
+
+      @if (!isInitialized && isLoading) {
+        <div class="tasks-overview__loading">
+          <app-progress-indicator />
+        </div>
+      } @else if (!hasNodes) {
+        <div class="tasks-overview__empty">
+          <app-icon class="tasks-overview__empty-icon">{{ icons.empty }}</app-icon>
+          <h3 class="tasks-overview__empty-title">{{ translationKeys.empty.title | translate }}</h3>
+          <p class="tasks-overview__empty-description">
+            {{ translationKeys.empty.description | translate }}
+          </p>
+        </div>
+      } @else {
+        <div class="tasks-overview__tree">
+          @for (node of tree; track node.id) {
+            <app-task-tree-node
+              [node]="node"
+              (action)="onTreeAction($event)" />
+          }
+        </div>
+      }
+    </aside>
+
+    <main class="tasks-overview__details">
+      @if (selectedNode) {
+        <header class="tasks-overview__details-header">
+          <app-icon class="tasks-overview__details-icon">
+            {{ selectedNode.kind === 'folder' ? icons.taskFolder : icons.taskItem }}
+          </app-icon>
+          <h2 class="tasks-overview__details-title">{{ selectedNode.name }}</h2>
+        </header>
+        <p class="tasks-overview__details-placeholder">
+          {{ translationKeys.selection.placeholderDescription | translate }}
+        </p>
+      } @else {
+        <div class="tasks-overview__details-empty">
+          <h3 class="tasks-overview__details-title">
+            {{ translationKeys.selection.placeholderTitle | translate }}
+          </h3>
+          <p class="tasks-overview__details-placeholder">
+            {{ translationKeys.selection.placeholderDescription | translate }}
+          </p>
+        </div>
+      }
+    </main>
+  </div>
+</section>
+
+<app-task-form #taskForm />
+
+<app-dialog
+  #deleteDialog
+  [titleText]="deleteTitleKey | translate"
+  [hidePredefinedActions]="true">
+  <p class="tasks-overview__delete-message">{{ deleteMessageKey | translate }}</p>
+  @if (pendingDelete) {
+    <p class="tasks-overview__delete-target">{{ pendingDelete.name }}</p>
+  }
+
+  <div custom-actions>
+    <app-button
+      variant="basic"
+      [disabled]="isDeleting"
+      (clicked)="cancelDelete()">
+      {{ translationKeys.delete.cancel | translate }}
+    </app-button>
+    <app-button
+      variant="flat"
+      [icon]="icons.delete"
+      [loading]="isDeleting"
+      [disabled]="isDeleting"
+      (clicked)="confirmDelete()">
+      {{ translationKeys.delete.confirm | translate }}
+    </app-button>
+  </div>
+</app-dialog>

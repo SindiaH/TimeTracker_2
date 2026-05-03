@@ -97,6 +97,72 @@ export const enUs: TranslationShape = {
       unexpected: 'Something went wrong. Please try again.',
     },
   },
+  tasks: {
+    pageTitle: 'Tasks',
+    addMenu: {
+      trigger: 'Add',
+      addFolder: 'Add folder',
+      addTask: 'Add task',
+    },
+    filter: {
+      all: 'All tasks',
+      archive: 'Archive',
+    },
+    empty: {
+      title: 'No tasks yet',
+      description: 'Create a folder or a task to get started.',
+    },
+    selection: {
+      placeholderTitle: 'Select a task',
+      placeholderDescription: 'Pick a task on the left to view its time entries.',
+    },
+    actions: {
+      addTask: 'Add task',
+      addFolder: 'Add folder',
+      addSubfolder: 'Add subfolder',
+      addChildTask: 'Add task here',
+      edit: 'Edit',
+      archive: 'Archive',
+      unarchive: 'Restore',
+      delete: 'Delete',
+      moreActions: 'More actions',
+      expand: 'Expand',
+      collapse: 'Collapse',
+    },
+    form: {
+      createFolderTitle: 'Create folder',
+      createTaskTitle: 'Create task',
+      editFolderTitle: 'Edit folder',
+      editTaskTitle: 'Edit task',
+      submit: 'Save',
+      cancel: 'Cancel',
+    },
+    fields: {
+      name: 'Name',
+      description: 'Description',
+      color: 'Color',
+      parentFolder: 'Parent folder',
+      noParentFolder: 'No parent — top level',
+    },
+    delete: {
+      folderTitle: 'Delete folder',
+      folderMessage:
+        'This folder, all of its subfolders, tasks and time entries will be permanently deleted. This cannot be undone.',
+      taskTitle: 'Delete task',
+      taskMessage: 'This task and all of its time entries will be permanently deleted. This cannot be undone.',
+      confirm: 'Delete',
+      cancel: 'Cancel',
+    },
+    feedback: {
+      loadFailed: 'Could not load tasks. Please try again.',
+      saveFailed: 'Could not save changes. Please try again.',
+      deleteFailed: 'Could not delete the item. Please try again.',
+    },
+    errors: {
+      nameRequired: 'Please enter a name.',
+      nameMaxLength: 'Name must be at most {{count}} characters.',
+    },
+  },
   showcase: {
     pageTitle: 'Component Showcase',
     pageSubtitle: 'All shared components in their variants — for design review and quick reference.',

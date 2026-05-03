@@ -97,6 +97,73 @@ export const deAt: TranslationShape = {
       unexpected: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
     },
   },
+  tasks: {
+    pageTitle: 'Aufgaben',
+    addMenu: {
+      trigger: 'Hinzufügen',
+      addFolder: 'Ordner hinzufügen',
+      addTask: 'Aufgabe hinzufügen',
+    },
+    filter: {
+      all: 'Alle Aufgaben',
+      archive: 'Archiv',
+    },
+    empty: {
+      title: 'Noch keine Aufgaben',
+      description: 'Lege einen Ordner oder eine Aufgabe an, um loszulegen.',
+    },
+    selection: {
+      placeholderTitle: 'Aufgabe auswählen',
+      placeholderDescription: 'Wähle links eine Aufgabe aus, um ihre Zeiteinträge anzuzeigen.',
+    },
+    actions: {
+      addTask: 'Aufgabe hinzufügen',
+      addFolder: 'Ordner hinzufügen',
+      addSubfolder: 'Unterordner hinzufügen',
+      addChildTask: 'Aufgabe hier hinzufügen',
+      edit: 'Bearbeiten',
+      archive: 'Archivieren',
+      unarchive: 'Wiederherstellen',
+      delete: 'Löschen',
+      moreActions: 'Weitere Aktionen',
+      expand: 'Aufklappen',
+      collapse: 'Einklappen',
+    },
+    form: {
+      createFolderTitle: 'Ordner anlegen',
+      createTaskTitle: 'Aufgabe anlegen',
+      editFolderTitle: 'Ordner bearbeiten',
+      editTaskTitle: 'Aufgabe bearbeiten',
+      submit: 'Speichern',
+      cancel: 'Abbrechen',
+    },
+    fields: {
+      name: 'Name',
+      description: 'Beschreibung',
+      color: 'Farbe',
+      parentFolder: 'Übergeordneter Ordner',
+      noParentFolder: 'Kein Ordner — oberste Ebene',
+    },
+    delete: {
+      folderTitle: 'Ordner löschen',
+      folderMessage:
+        'Dieser Ordner sowie alle Unterordner, Aufgaben und Zeiteinträge werden dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.',
+      taskTitle: 'Aufgabe löschen',
+      taskMessage:
+        'Diese Aufgabe und alle ihre Zeiteinträge werden dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden.',
+      confirm: 'Löschen',
+      cancel: 'Abbrechen',
+    },
+    feedback: {
+      loadFailed: 'Aufgaben konnten nicht geladen werden. Bitte erneut versuchen.',
+      saveFailed: 'Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.',
+      deleteFailed: 'Eintrag konnte nicht gelöscht werden. Bitte erneut versuchen.',
+    },
+    errors: {
+      nameRequired: 'Bitte einen Namen eingeben.',
+      nameMaxLength: 'Name darf maximal {{count}} Zeichen lang sein.',
+    },
+  },
   showcase: {
     pageTitle: 'Komponenten-Übersicht',
     pageSubtitle:

@@ -13,6 +13,17 @@ export const APP_ICONS = {
   menuOpen: 'menu',
   menuClose: 'close',
   signOut: 'logout',
+  taskFolder: 'folder',
+  taskItem: 'task_alt',
+  expandMore: 'expand_more',
+  expandLess: 'chevron_right',
+  add: 'add',
+  more: 'more_vert',
+  edit: 'edit',
+  archive: 'archive',
+  unarchive: 'unarchive',
+  delete: 'delete',
+  empty: 'inbox',
 } as const;
 
 export type AppIcon = (typeof APP_ICONS)[keyof typeof APP_ICONS];

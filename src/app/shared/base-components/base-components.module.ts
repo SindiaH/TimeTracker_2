@@ -17,6 +17,7 @@ import { ToggleComponent } from '@shared/base-components/toggle/toggle.component
 import { RadioButtonComponent } from '@shared/base-components/radio-button/radio-button.component';
 import { ButtonToggleComponent } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ChipComponent } from '@shared/base-components/chip/chip.component';
+import { ChipSetComponent } from '@shared/base-components/chip-set/chip-set.component';
 import { InputComponent } from '@shared/base-components/input/input.component';
 import { InputSelectComponent } from '@shared/base-components/input-select/input-select.component';
 import { InputSelectSearchComponent } from '@shared/base-components/input-select-search/input-select-search.component';
@@ -52,6 +53,7 @@ const COMPONENTS = [
   RadioButtonComponent,
   ButtonToggleComponent,
   ChipComponent,
+  ChipSetComponent,
   InputComponent,
   InputSelectComponent,
   InputSelectSearchComponent,
@@ -77,6 +79,6 @@ const COMPONENTS = [
 @NgModule({
   declarations: COMPONENTS,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, RouterLinkActive, TranslatePipe, MaterialComponentsModule],
-  exports: [...COMPONENTS, ReactiveFormsModule, RouterLink, RouterLinkActive, TranslatePipe, MaterialComponentsModule],
+  exports: [...COMPONENTS, ReactiveFormsModule, RouterLink, RouterLinkActive, TranslatePipe],
 })
 export class BaseComponentsModule {}

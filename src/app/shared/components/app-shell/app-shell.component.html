@@ -1,0 +1,19 @@
+@let isDrawerOpen = this.isDrawerOpen();
+
+<mat-sidenav-container class="app-shell-root">
+  <mat-sidenav
+    class="app-shell-root__drawer"
+    mode="over"
+    position="end"
+    [opened]="isDrawerOpen"
+    (openedChange)="drawerOpenedChange.emit($event)">
+    <ng-content select="[shell-drawer]"></ng-content>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-shell-root__content">
+    <ng-content select="[shell-header]"></ng-content>
+    <main class="app-shell-root__main">
+      <ng-content></ng-content>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

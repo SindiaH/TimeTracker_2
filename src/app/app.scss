@@ -2,25 +2,3 @@
   display: block;
   height: 100%;
 }
-
-.app-root {
-  height: 100%;
-  background-color: var(--app-color-surface);
-}
-
-.app-root__drawer {
-  width: min(320px, 85vw);
-  border-left: 1px solid var(--app-color-outline-variant);
-}
-
-.app-root__content {
-  display: flex;
-  flex-direction: column;
-}
-
-.app-shell {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}

@@ -1,22 +1,16 @@
 @let isMenuOpen = this.isMenuOpen();
 @let isAuthenticated = this.isAuthenticated();
 
-<mat-sidenav-container class="app-root">
-  <mat-sidenav
-    class="app-root__drawer"
-    mode="over"
-    position="end"
-    [opened]="isMenuOpen"
-    (openedChange)="onDrawerOpenedChange($event)">
-    <app-side-menu />
-  </mat-sidenav>
+<app-shell
+  [isDrawerOpen]="isMenuOpen"
+  (drawerOpenedChange)="onDrawerOpenedChange($event)">
+  <app-side-menu shell-drawer />
 
-  <mat-sidenav-content class="app-root__content">
+  <ng-container shell-header>
     @if (isAuthenticated) {
       <app-shared-header />
     }
-    <main class="app-shell">
-      <router-outlet />
-    </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </ng-container>
+
+  <router-outlet />
+</app-shell>

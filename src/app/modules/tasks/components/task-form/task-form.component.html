@@ -1,0 +1,54 @@
+@let translationKeys = this.translationKeys;
+@let titleKey = this.titleKey();
+@let showDescription = this.showDescription();
+@let isSubmitting = this.isSubmitting();
+@let errorMessage = this.errorMessage();
+@let nameError = this.nameError();
+
+<app-dialog
+  #dialog
+  [titleText]="titleKey | translate"
+  [hidePredefinedActions]="true"
+  [showMiniCloseButton]="true">
+  <form
+    class="task-form"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()">
+    <app-input
+      [control]="nameControl"
+      [labelText]="translationKeys.fields.name | translate"
+      [errorText]="nameError" />
+
+    @if (showDescription) {
+      <app-input
+        [control]="descriptionControl"
+        [type]="'text-area'"
+        [labelText]="translationKeys.fields.description | translate" />
+    }
+
+    <app-input
+      [control]="colorControl"
+      [labelText]="translationKeys.fields.color | translate"
+      [placeholder]="'#1976D2'" />
+
+    @if (errorMessage) {
+      <app-info type="error">{{ errorMessage }}</app-info>
+    }
+  </form>
+
+  <div custom-actions>
+    <app-button
+      variant="basic"
+      [disabled]="isSubmitting"
+      (clicked)="onCancel()">
+      {{ translationKeys.form.cancel | translate }}
+    </app-button>
+    <app-button
+      variant="flat"
+      [loading]="isSubmitting"
+      [disabled]="isSubmitting"
+      (clicked)="onSubmit()">
+      {{ translationKeys.form.submit | translate }}
+    </app-button>
+  </div>
+</app-dialog>
