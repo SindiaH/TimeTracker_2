@@ -1,4 +1,4 @@
-import { AuthBackend, DataBackend } from '@core/constants/backend.constants';
+import { AuthBackend, DataBackend } from '@environments/backend.constants';
 
 export type AuthBackendConfig = {
   type: AuthBackend;

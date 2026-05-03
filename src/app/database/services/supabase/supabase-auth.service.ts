@@ -22,7 +22,7 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
       if (mapped !== null) {
         this.authChangesSubject.next({
           event: mapped,
-          session: this.toAuthSession(session),
+          session: this.safeToAuthSession(session),
         });
       }
     });
@@ -33,12 +33,11 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
     });
   }
 
-  async signInWithPassword(credentials: AuthCredentials): Promise<AuthSession> {
-    const { data, error } = await this.client.auth.signInWithPassword(credentials);
-    if (error || !data.session) {
-      throw this.mapError(error ?? new Error('No session returned from signInWithPassword'));
+  async signInWithPassword(credentials: AuthCredentials): Promise<void> {
+    const { error } = await this.client.auth.signInWithPassword(credentials);
+    if (error) {
+      throw this.mapError(error);
     }
-    return this.toAuthSession(data.session)!;
   }
 
   async signInWithMagicLink(email: string, redirectTo?: string): Promise<void> {
@@ -54,12 +53,11 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
     }
   }
 
-  async signUpWithPassword(credentials: AuthCredentials): Promise<AuthSession | null> {
-    const { data, error } = await this.client.auth.signUp(credentials);
+  async signUpWithPassword(credentials: AuthCredentials): Promise<void> {
+    const { error } = await this.client.auth.signUp(credentials);
     if (error) {
       throw this.mapError(error);
     }
-    return this.toAuthSession(data.session);
   }
 
   async sendPasswordResetEmail(email: string, redirectTo?: string): Promise<void> {
@@ -85,9 +83,9 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
     }
   }
 
-  private toAuthSession(session: SupabaseSession | null): AuthSession | null {
-    if (!session || !session.user.email) {
-      return null;
+  private toAuthSession(session: SupabaseSession): AuthSession {
+    if (!session.user.email) {
+      throw new AuthOperationError('unknown', 'Session received without an email address');
     }
     return {
       user: {
@@ -98,6 +96,18 @@ export class SupabaseAuthService extends ServiceBase implements IAuthService {
       refreshToken: session.refresh_token,
       expiresAt: session.expires_at ?? null,
     };
+  }
+
+  private safeToAuthSession(session: SupabaseSession | null): AuthSession | null {
+    if (!session) {
+      return null;
+    }
+    try {
+      return this.toAuthSession(session);
+    } catch (error) {
+      console.error('[SupabaseAuthService] Failed to map session', error);
+      return null;
+    }
   }
 
   private mapAuthEvent(event: AuthChangeEvent): AuthChangeEventType | null {

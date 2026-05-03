@@ -11,7 +11,7 @@ type SessionGate = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class AutoLoginRoutesGuard implements CanActivate, CanActivateChild {
+export class AuthenticatedGuard implements CanActivate, CanActivateChild {
   private readonly sessionProvider = inject(SessionProvider);
   private readonly router = inject(Router);
 

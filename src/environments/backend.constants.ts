@@ -15,7 +15,7 @@ export const DEFAULT_AUTH_BACKEND: AuthBackend = AUTH_BACKENDS.supabase;
 export const DEFAULT_DATA_BACKEND: DataBackend = DATA_BACKENDS.supabase;
 
 export const SYNC_TARGETS = {
-  sqlite: 'sqllite',
+  sqlite: 'sqlite',
   supabase: 'supabase',
 } as const;
 

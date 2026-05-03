@@ -1,11 +1,6 @@
 import { Injectable, Signal, signal } from '@angular/core';
 import { ServiceBase } from '@core/base/service-base';
-import {
-  AuthBackend,
-  DataBackend,
-  DEFAULT_AUTH_BACKEND,
-  DEFAULT_DATA_BACKEND,
-} from '@core/constants/backend.constants';
+import { AuthBackend, DataBackend, DEFAULT_AUTH_BACKEND, DEFAULT_DATA_BACKEND } from '@environments/backend.constants';
 
 @Injectable({ providedIn: 'root' })
 export class BackendProvider extends ServiceBase {

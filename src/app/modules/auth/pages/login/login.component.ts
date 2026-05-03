@@ -48,12 +48,12 @@ export class LoginComponent extends AuthFormBase {
   );
 
   protected async onSubmit(): Promise<void> {
+    this.feedback.set(null);
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
     this.isSubmitting.set(true);
-    this.feedback.set(null);
     try {
       await this.sessionProvider.signInWithPassword({
         email: this.emailControl.value.trim(),

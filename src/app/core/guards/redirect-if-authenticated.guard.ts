@@ -2,7 +2,7 @@ import { computed, inject, Injectable, Signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { filter, map, Observable, take } from 'rxjs';
-import { DEFAULT_ROUTE_SEGMENT } from '@core/constants/app-routes';
+import { AUTH_ROUTE_SEGMENTS, DEFAULT_ROUTE_SEGMENT } from '@core/constants/app-routes';
 import { SessionProvider } from '@core/providers/session.provider';
 
 type SessionGate = {
@@ -25,7 +25,7 @@ export class RedirectIfAuthenticatedGuard implements CanActivate {
   private readonly gate$: Observable<SessionGate> = toObservable(this.gate);
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-    const isPasswordResetRoute = route.routeConfig?.path?.includes('password-reset') ?? false;
+    const isPasswordResetRoute = route.routeConfig?.path === AUTH_ROUTE_SEGMENTS.passwordReset;
     return this.gate$.pipe(
       filter((gate) => gate.isReady),
       take(1),

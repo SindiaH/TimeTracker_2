@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { ComponentBase } from '@core/base/component-base';
+import { TranslationKey } from '@core/constants/translation-keys';
 
 @Component({
   selector: 'app-auth-layout',
@@ -9,6 +10,6 @@ import { ComponentBase } from '@core/base/component-base';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthLayoutComponent extends ComponentBase {
-  readonly titleKey = input<string>('');
-  readonly descriptionKey = input<string>('');
+  readonly titleKey: InputSignal<TranslationKey | null> = input<TranslationKey | null>(null);
+  readonly descriptionKey: InputSignal<TranslationKey | null> = input<TranslationKey | null>(null);
 }

@@ -6,7 +6,7 @@ import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
-import { matchControlValidator } from '@modules/auth/utils/match-control.validator';
+import { matchControlsValidator } from '@modules/auth/utils/match-control.validator';
 
 type PasswordResetForm = {
   password: FormControl<string>;
@@ -34,13 +34,16 @@ export class PasswordResetComponent extends AuthFormBase {
 
   protected readonly confirmPasswordControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
-    validators: [Validators.required, matchControlValidator('password')],
+    validators: [Validators.required],
   });
 
-  protected readonly resetForm: FormGroup<PasswordResetForm> = new FormGroup<PasswordResetForm>({
-    password: this.passwordControl,
-    confirmPassword: this.confirmPasswordControl,
-  });
+  protected readonly resetForm: FormGroup<PasswordResetForm> = new FormGroup<PasswordResetForm>(
+    {
+      password: this.passwordControl,
+      confirmPassword: this.confirmPasswordControl,
+    },
+    { validators: [matchControlsValidator('password', 'confirmPassword')] },
+  );
 
   protected readonly isSubmitting = signal<boolean>(false);
   protected readonly isInitializing = signal<boolean>(this.sessionProvider.isLoading());
@@ -51,10 +54,6 @@ export class PasswordResetComponent extends AuthFormBase {
 
   constructor() {
     super();
-    this.passwordControl.valueChanges.pipe(this.takeUntilDestroyed()).subscribe(() => {
-      this.confirmPasswordControl.updateValueAndValidity();
-    });
-
     effect(() => {
       if (!this.sessionProvider.isLoading()) {
         this.isInitializing.set(false);
@@ -63,6 +62,7 @@ export class PasswordResetComponent extends AuthFormBase {
   }
 
   protected async onSubmit(): Promise<void> {
+    this.feedback.set(null);
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
       return;
@@ -75,7 +75,6 @@ export class PasswordResetComponent extends AuthFormBase {
       return;
     }
     this.isSubmitting.set(true);
-    this.feedback.set(null);
     try {
       await this.sessionProvider.updatePassword(this.passwordControl.value);
       this.feedback.set({

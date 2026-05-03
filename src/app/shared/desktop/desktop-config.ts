@@ -1,4 +1,4 @@
-import { SYNC_TARGETS, SyncTarget } from '@core/constants/backend.constants';
+import { SYNC_TARGETS, SyncTarget } from '@environments/backend.constants';
 
 export type { SyncTarget };
 

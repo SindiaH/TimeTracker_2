@@ -4,7 +4,7 @@ import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
-import { matchControlValidator } from '@modules/auth/utils/match-control.validator';
+import { matchControlsValidator } from '@modules/auth/utils/match-control.validator';
 
 type RegisterForm = {
   email: FormControl<string>;
@@ -36,31 +36,27 @@ export class RegisterComponent extends AuthFormBase {
 
   protected readonly confirmPasswordControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
-    validators: [Validators.required, matchControlValidator('password')],
+    validators: [Validators.required],
   });
 
-  protected readonly registerForm: FormGroup<RegisterForm> = new FormGroup<RegisterForm>({
-    email: this.emailControl,
-    password: this.passwordControl,
-    confirmPassword: this.confirmPasswordControl,
-  });
+  protected readonly registerForm: FormGroup<RegisterForm> = new FormGroup<RegisterForm>(
+    {
+      email: this.emailControl,
+      password: this.passwordControl,
+      confirmPassword: this.confirmPasswordControl,
+    },
+    { validators: [matchControlsValidator('password', 'confirmPassword')] },
+  );
 
   protected readonly isSubmitting = signal<boolean>(false);
 
-  constructor() {
-    super();
-    this.passwordControl.valueChanges.pipe(this.takeUntilDestroyed()).subscribe(() => {
-      this.confirmPasswordControl.updateValueAndValidity();
-    });
-  }
-
   protected async onSubmit(): Promise<void> {
+    this.feedback.set(null);
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
     this.isSubmitting.set(true);
-    this.feedback.set(null);
     try {
       await this.sessionProvider.signUpWithPassword({
         email: this.emailControl.value.trim(),

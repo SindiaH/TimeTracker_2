@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ComponentBase } from '@core/base/component-base';
 import { AppIcon, APP_ICONS } from '@core/constants/app-icons';
-import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { LANGUAGE_IDS, LanguageId } from '@core/constants/language.constants';
 import { NavLink, PRIMARY_NAV_LINKS, SECONDARY_NAV_LINKS } from '@core/constants/nav-links';
 import { THEME_PREFERENCES, ThemePreference } from '@core/constants/theme.constants';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 import { SessionProvider } from '@core/providers/session.provider';
+import { AuthActionsService } from '@core/services/auth-actions/auth-actions.service';
 import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 import { ThemeService } from '@core/services/theme/theme.service';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
@@ -27,7 +26,7 @@ export class SideMenuComponent extends ComponentBase {
   private readonly translationService = inject(TranslationService);
   private readonly menuStateService = inject(MenuStateService);
   private readonly sessionProvider = inject(SessionProvider);
-  private readonly router = inject(Router);
+  private readonly authActions = inject(AuthActionsService);
 
   protected readonly navAriaLabelKey: TranslationKey = TRANSLATION_KEYS.header.navigation;
   protected readonly signOutLabelKey: TranslationKey = TRANSLATION_KEYS.auth.signOut;
@@ -87,11 +86,10 @@ export class SideMenuComponent extends ComponentBase {
   }
 
   protected async onSignOut(): Promise<void> {
-    await this.sessionProvider.signOut();
     if (this.isMobile()) {
       this.menuStateService.close();
     }
-    void this.router.navigateByUrl(ROUTE_PATHS.authLogin);
+    await this.authActions.signOutAndRedirect();
   }
 
   protected onThemeChanged(value: ButtonToggleValue): void {
