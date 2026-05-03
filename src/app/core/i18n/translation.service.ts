@@ -12,7 +12,7 @@ import {
   LanguageId,
 } from '@core/constants/language.constants';
 import { LOCAL_STORAGE_KEYS } from '@core/constants/storage-keys';
-import { Locale } from '@core/i18n/translation.types';
+import { TranslationKey } from '@core/constants/translation-keys';
 
 type TranslateParams = Record<string, unknown>;
 
@@ -52,18 +52,16 @@ export class TranslationService extends ServiceBase {
     return this._selectedLanguageId();
   }
 
-  loadTranslations(...locales: Locale[]): void {
-    for (const locale of locales) {
-      this.transloco.setTranslation(locale.data, locale.langId, { merge: true });
-    }
-  }
-
-  instant(key: string | string[], params?: TranslateParams): string {
+  instant(key: TranslationKey | TranslationKey[], params?: TranslateParams): string {
     return this.transloco.translate<string>(key, params);
   }
 
-  selectTranslate(key: string, params?: TranslateParams): Observable<string> {
+  selectTranslate(key: TranslationKey, params?: TranslateParams): Observable<string> {
     return this.transloco.selectTranslate<string>(key, params);
+  }
+
+  instantUnchecked(value: string, params?: TranslateParams): string {
+    return this.transloco.translate<string>(value, params);
   }
 
   private isAvailableLanguage(value: string): value is LanguageId {

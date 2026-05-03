@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, inject, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 
 type TranslateParams = Record<string, unknown>;
@@ -14,11 +15,11 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
 
   private subscription: Subscription | null = null;
-  private lastKey: string | null = null;
+  private lastKey: TranslationKey | null = null;
   private lastParamsHash: string | null = null;
   private lastValue: string = '';
 
-  transform(key: string | null | undefined, params?: TranslateParams): string {
+  transform(key: TranslationKey | null | undefined, params?: TranslateParams): string {
     if (!key) {
       return '';
     }

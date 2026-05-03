@@ -114,6 +114,24 @@ export const TRANSLATION_KEYS = {
   },
 } as const;
 
-type Leaves<T> = T extends string ? T : T extends Record<string, unknown> ? Leaves<T[keyof T]> : never;
+type LeafValues<T> = T extends string
+  ? T
+  : T extends Record<string, unknown>
+    ? { [K in keyof T]: LeafValues<T[K]> }[keyof T]
+    : never;
 
-export type TranslationKey = Leaves<typeof TRANSLATION_KEYS>;
+type Split<S extends string> = S extends `${infer H}.${infer R}` ? [H, ...Split<R>] : [S];
+
+type Build<P, V> = P extends [infer H extends string, ...infer R extends string[]]
+  ? R extends []
+    ? { [K in H]: V }
+    : { [K in H]: Build<R, V> }
+  : never;
+
+type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+
+export type TranslationKey = LeafValues<typeof TRANSLATION_KEYS>;
+
+export type TranslationShape = UnionToIntersection<
+  TranslationKey extends infer K ? (K extends string ? Build<Split<K>, string> : never) : never
+>;

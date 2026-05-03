@@ -1,0 +1,118 @@
+import { TranslationShape } from '@core/constants/translation-keys';
+
+export const deAt: TranslationShape = {
+  app: {
+    title: 'TimeTrack',
+  },
+  shared: {
+    previous: 'Zurück',
+    next: 'Weiter',
+    close: 'Schließen',
+  },
+  modules: {
+    tasks: 'Aufgaben',
+    timeEntries: 'Zeiteinträge',
+    calendar: 'Kalender',
+    activities: 'Aktivitäten',
+    settings: 'Einstellungen',
+    account: 'Account',
+    showcase: 'Komponenten',
+    stubMessage: 'Modul-Skelett für {{moduleName}} — die Feature-Implementierung folgt in einer späteren Phase.',
+  },
+  header: {
+    navigation: 'Navigation',
+    menuOpen: 'Menü öffnen',
+    menuClose: 'Menü schließen',
+    theme: {
+      light: 'Hell',
+      dark: 'Dunkel',
+      system: 'System',
+    },
+    language: {
+      'en-US': 'English',
+      'de-AT': 'Deutsch',
+    },
+  },
+  account: {
+    title: 'Account',
+    description: 'Details zu deinem angemeldeten Benutzerkonto.',
+    fields: {
+      email: 'E-Mail',
+      userId: 'Benutzer-ID',
+    },
+  },
+  auth: {
+    signOut: 'Abmelden',
+    fields: {
+      email: 'E-Mail',
+      password: 'Passwort',
+      newPassword: 'Neues Passwort',
+      confirmPassword: 'Passwort bestätigen',
+    },
+    login: {
+      title: 'Willkommen zurück',
+      description: 'Melde dich an, um deine Zeit weiter zu tracken.',
+      submit: 'Anmelden',
+      forgotPassword: 'Passwort vergessen?',
+      orMagicLink: 'oder',
+      magicLinkButton: 'Magic Link senden',
+      noAccount: 'Noch kein Konto?',
+      goToRegister: 'Jetzt registrieren',
+    },
+    register: {
+      title: 'Konto erstellen',
+      description: 'Registriere dich, um deine Zeit zu tracken.',
+      submit: 'Konto erstellen',
+      haveAccount: 'Du hast bereits ein Konto?',
+      goToLogin: 'Zur Anmeldung',
+    },
+    passwordReset: {
+      title: 'Neues Passwort setzen',
+      description: 'Wähle ein neues Passwort für dein Konto.',
+      submit: 'Passwort aktualisieren',
+      backToLogin: 'Zurück zur Anmeldung',
+    },
+    feedback: {
+      magicLinkSent: 'Wir haben dir einen Magic Link geschickt. Prüfe dein Postfach.',
+      passwordResetSent: 'Wir haben dir einen Link zum Zurücksetzen geschickt. Prüfe dein Postfach.',
+      signupSuccess: 'Konto erstellt. Bitte bestätige deine E-Mail-Adresse.',
+      passwordUpdated: 'Dein Passwort wurde aktualisiert.',
+    },
+    errors: {
+      emailRequired: 'Bitte gib deine E-Mail-Adresse ein.',
+      emailInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+      passwordRequired: 'Bitte gib dein Passwort ein.',
+      passwordMinLength: 'Passwort muss mindestens {{count}} Zeichen haben.',
+      passwordMismatch: 'Die Passwörter stimmen nicht überein.',
+      invalidCredentials: 'Ungültige E-Mail-Adresse oder ungültiges Passwort.',
+      emailNotConfirmed: 'Bitte bestätige zuerst deine E-Mail-Adresse.',
+      userAlreadyExists: 'Ein Konto mit dieser E-Mail-Adresse existiert bereits.',
+      userNotFound: 'Für diese E-Mail-Adresse existiert kein Konto.',
+      weakPassword: 'Das Passwort erfüllt die Sicherheitsanforderungen nicht.',
+      samePassword: 'Das neue Passwort muss sich vom aktuellen unterscheiden.',
+      rateLimit: 'Zu viele Anfragen. Bitte versuche es gleich erneut.',
+      otpDisabled: 'Für diese E-Mail-Adresse existiert kein Konto. Bitte registriere dich zuerst.',
+      signupDisabled: 'Registrierungen sind derzeit deaktiviert.',
+      recoveryLinkInvalid: 'Dieser Reset-Link ist ungültig oder abgelaufen. Bitte fordere einen neuen an.',
+      unexpected: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
+    },
+  },
+  showcase: {
+    pageTitle: 'Komponenten-Übersicht',
+    pageSubtitle:
+      'Alle geteilten Komponenten in ihren Varianten — für Design-Reviews und als schnelles Nachschlagewerk.',
+    searchPlaceholder: 'Komponenten filtern…',
+    sections: {
+      buttons: 'Schaltflächen, Links & Icons',
+      inputs: 'Text-Eingaben & Auswahllisten',
+      toggles: 'Checkboxen, Schalter, Radios & Chips',
+      date: 'Datumsauswahl',
+      containers: 'Panels & Akkordeons',
+      navigation: 'Tabs & Menüs',
+      lists: 'Listen',
+      pagination: 'Seitennavigation & Fortschritt',
+      dialogs: 'Dialoge & Sheets',
+      info: 'Hinweise & Read-only-Text',
+    },
+  },
+};

@@ -17,7 +17,7 @@ export class SearchFilterPipe implements PipeTransform {
     if (keywords.length === 0) {
       return false;
     }
-    const haystack = keywords.map((keyword) => this.translationService.instant(keyword).toLowerCase());
+    const haystack = keywords.map((keyword) => this.translationService.instantUnchecked(keyword).toLowerCase());
     const terms = term.split(/\s+/);
     return terms.every((needle) => haystack.some((value) => value.includes(needle)));
   }
