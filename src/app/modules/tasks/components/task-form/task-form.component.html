@@ -2,7 +2,6 @@
 @let titleKey = this.titleKey();
 @let showDescription = this.showDescription();
 @let isSubmitting = this.isSubmitting();
-@let errorMessage = this.errorMessage();
 @let nameError = this.nameError();
 
 <app-dialog
@@ -30,10 +29,6 @@
       [control]="colorControl"
       [labelText]="translationKeys.fields.color | translate"
       [placeholder]="'#1976D2'" />
-
-    @if (errorMessage) {
-      <app-info type="error">{{ errorMessage }}</app-info>
-    }
   </form>
 
   <div custom-actions>

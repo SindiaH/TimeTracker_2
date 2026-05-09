@@ -64,7 +64,6 @@ export class TaskFormComponent extends ComponentBase {
   private readonly _mode: WritableSignal<TaskFormMode | null> = signal<TaskFormMode | null>(null);
   private readonly _editingId: WritableSignal<string | null> = signal<string | null>(null);
   private readonly _parentFolderId: WritableSignal<string | null> = signal<string | null>(null);
-  private readonly _errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
   private readonly nameControlEvents = toSignal(this.nameControl.events);
 
@@ -76,7 +75,6 @@ export class TaskFormComponent extends ComponentBase {
       this.folderProvider.isAdding() ||
       this.folderProvider.isUpdating(),
   );
-  protected readonly errorMessage: Signal<string | null> = this._errorMessage.asReadonly();
 
   protected readonly titleKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
     switch (this._mode()) {
@@ -160,12 +158,9 @@ export class TaskFormComponent extends ComponentBase {
       this.form.markAllAsTouched();
       return;
     }
-    this._errorMessage.set(null);
-    try {
-      await this.persist();
+    const succeeded = await this.persist();
+    if (succeeded) {
       this.dialog()?.close(true);
-    } catch (error) {
-      this._errorMessage.set(this.toErrorMessage(error));
     }
   }
 
@@ -174,7 +169,7 @@ export class TaskFormComponent extends ComponentBase {
     this.dialog()?.close(false);
   }
 
-  private async persist(): Promise<void> {
+  private async persist(): Promise<boolean> {
     const mode = this._mode();
     const name = this.nameControl.value.trim();
     const description = this.descriptionControl.value.trim();
@@ -183,39 +178,43 @@ export class TaskFormComponent extends ComponentBase {
     const editingId = this._editingId();
     switch (mode) {
       case 'create-folder':
-        await this.folderProvider.addFolder({
-          name,
-          parentFolderId: parentFolderId ?? undefined,
-          color: color === '' ? undefined : color,
-        });
-        return;
+        return (
+          (await this.folderProvider.addFolder({
+            name,
+            parentFolderId: parentFolderId ?? undefined,
+            color: color === '' ? undefined : color,
+          })) !== null
+        );
       case 'create-task':
-        await this.taskProvider.addTask({
-          name,
-          parentFolderId: parentFolderId ?? undefined,
-          description: description === '' ? undefined : description,
-          color: color === '' ? undefined : color,
-        });
-        return;
+        return (
+          (await this.taskProvider.addTask({
+            name,
+            parentFolderId: parentFolderId ?? undefined,
+            description: description === '' ? undefined : description,
+            color: color === '' ? undefined : color,
+          })) !== null
+        );
       case 'edit-folder':
-        if (editingId === null) throw new Error('Missing folder id for edit');
-        await this.folderProvider.updateFolder({
-          id: editingId,
-          name,
-          color: color === '' ? null : color,
-        });
-        return;
+        if (editingId === null) return false;
+        return (
+          (await this.folderProvider.updateFolder({
+            id: editingId,
+            name,
+            color: color === '' ? null : color,
+          })) !== null
+        );
       case 'edit-task':
-        if (editingId === null) throw new Error('Missing task id for edit');
-        await this.taskProvider.updateTask({
-          id: editingId,
-          name,
-          description: description === '' ? null : description,
-          color: color === '' ? null : color,
-        });
-        return;
+        if (editingId === null) return false;
+        return (
+          (await this.taskProvider.updateTask({
+            id: editingId,
+            name,
+            description: description === '' ? null : description,
+            color: color === '' ? null : color,
+          })) !== null
+        );
       default:
-        throw new Error('Form opened without a mode');
+        return false;
     }
   }
 
@@ -226,7 +225,6 @@ export class TaskFormComponent extends ComponentBase {
   private resetState(): void {
     this._editingId.set(null);
     this._parentFolderId.set(null);
-    this._errorMessage.set(null);
     this.nameControl.reset('');
     this.descriptionControl.reset('');
     this.colorControl.reset('');
@@ -247,12 +245,5 @@ export class TaskFormComponent extends ComponentBase {
       current = parent;
     }
     return current?.color ?? '';
-  }
-
-  private toErrorMessage(error: unknown): string {
-    if (error instanceof Error && error.message.length > 0) {
-      return error.message;
-    }
-    return this.translationService.instant(this.translationKeys.feedback.saveFailed);
   }
 }

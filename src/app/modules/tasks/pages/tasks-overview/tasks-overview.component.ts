@@ -28,13 +28,6 @@ const FILTER_ARCHIVE = 'archive';
 
 type FilterValue = typeof FILTER_ALL | typeof FILTER_ARCHIVE;
 
-type FeedbackKind = 'error' | 'info';
-
-type Feedback = {
-  kind: FeedbackKind;
-  message: string;
-};
-
 @Component({
   selector: 'app-tasks-overview',
   standalone: false,
@@ -77,9 +70,6 @@ export class TasksOverviewComponent extends ComponentBase {
     if (id === null) return null;
     return this.findNode(this.tree(), id);
   });
-
-  private readonly _feedback: WritableSignal<Feedback | null> = signal<Feedback | null>(null);
-  protected readonly feedback: Signal<Feedback | null> = this._feedback.asReadonly();
 
   private readonly _pendingDelete: WritableSignal<TaskTreeNode | null> = signal<TaskTreeNode | null>(null);
   protected readonly pendingDelete: Signal<TaskTreeNode | null> = this._pendingDelete.asReadonly();
@@ -153,24 +143,16 @@ export class TasksOverviewComponent extends ComponentBase {
   protected async confirmDelete(): Promise<void> {
     const node = this._pendingDelete();
     if (node === null || this.isDeleting()) return;
-    this._feedback.set(null);
-    try {
-      if (node.kind === 'folder') {
-        await this.folderProvider.removeFolder(node.id);
-      } else {
-        await this.taskProvider.removeTask(node.id);
-      }
-      if (this.selectedNodeId() === node.id) {
-        this.tasksTreeService.selectNode(null);
-      }
-      this.deleteDialog()?.close(true);
-      this._pendingDelete.set(null);
-    } catch {
-      this._feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.feedback.deleteFailed),
-      });
+    const succeeded =
+      node.kind === 'folder'
+        ? await this.folderProvider.removeFolder(node.id)
+        : await this.taskProvider.removeTask(node.id);
+    if (!succeeded) return;
+    if (this.selectedNodeId() === node.id) {
+      this.tasksTreeService.selectNode(null);
     }
+    this.deleteDialog()?.close(true);
+    this._pendingDelete.set(null);
   }
 
   protected cancelDelete(): void {
@@ -181,34 +163,15 @@ export class TasksOverviewComponent extends ComponentBase {
 
   private async applyFilter(filter: FilterValue): Promise<void> {
     const archivedOnly = filter === FILTER_ARCHIVE;
-    this._feedback.set(null);
-    try {
-      await Promise.all([
-        this.taskProvider.setFilter({ archivedOnly }),
-        this.folderProvider.setFilter({ archivedOnly }),
-      ]);
-    } catch {
-      this._feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.feedback.loadFailed),
-      });
-    }
+    await Promise.all([this.taskProvider.setFilter({ archivedOnly }), this.folderProvider.setFilter({ archivedOnly })]);
   }
 
   private async archive(node: TaskTreeNode, archive: boolean): Promise<void> {
     if (this.isUpdating()) return;
-    this._feedback.set(null);
-    try {
-      if (node.kind === 'folder') {
-        await this.folderProvider.archiveFolder(node.id, archive);
-      } else {
-        await this.taskProvider.archiveTask(node.id, archive);
-      }
-    } catch {
-      this._feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.feedback.saveFailed),
-      });
+    if (node.kind === 'folder') {
+      await this.folderProvider.archiveFolder(node.id, archive);
+    } else {
+      await this.taskProvider.archiveTask(node.id, archive);
     }
   }
 

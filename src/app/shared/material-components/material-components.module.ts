@@ -35,6 +35,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [],
@@ -78,6 +79,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatButtonToggleModule,
     MatPaginatorModule,
     MatBottomSheetModule,
+    MatSnackBarModule,
   ],
   exports: [
     MatTooltip,
@@ -120,6 +122,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatButtonToggleModule,
     MatPaginatorModule,
     MatBottomSheetModule,
+    MatSnackBarModule,
   ],
 })
 export class MaterialComponentsModule {}

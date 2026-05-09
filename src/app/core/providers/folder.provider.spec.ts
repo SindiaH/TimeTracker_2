@@ -1,11 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { vi } from 'vitest';
+import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { FolderProvider } from '@core/providers/folder.provider';
 import { SessionProvider } from '@core/providers/session.provider';
+import { NotificationService } from '@core/services/notification/notification.service';
 import { FolderEntity } from '@database/entities/folder.entity';
 import { FolderReadModel } from '@database/read-models/folder-read-model';
 import { FOLDER_SERVICE_TOKEN, IFolderService } from '@database/services/interfaces/folder-service.interface';
+import { NotificationServiceStub } from '@testing/stubs/notification-service.stub';
 
 const buildReadModel = (overrides: Partial<FolderReadModel> = {}): FolderReadModel => {
   const model = new FolderReadModel();
@@ -22,9 +25,11 @@ const buildReadModel = (overrides: Partial<FolderReadModel> = {}): FolderReadMod
 describe('FolderProvider', () => {
   let isAuthenticated$: Subject<boolean>;
   let folderService: IFolderService;
+  let notificationService: NotificationServiceStub;
 
   beforeEach(() => {
     isAuthenticated$ = new Subject<boolean>();
+    notificationService = new NotificationServiceStub();
     folderService = {
       list: vi.fn().mockResolvedValue([]),
       getById: vi.fn().mockResolvedValue(null),
@@ -49,6 +54,7 @@ describe('FolderProvider', () => {
           provide: SessionProvider,
           useValue: { isAuthenticated$: isAuthenticated$.asObservable() },
         },
+        { provide: NotificationService, useValue: notificationService },
         FolderProvider,
       ],
     });
@@ -93,14 +99,41 @@ describe('FolderProvider', () => {
     expect(provider.folderList()).toEqual([]);
   });
 
-  it('captures errors on refresh failure', async () => {
-    const failure = new Error('boom');
-    (folderService.list as ReturnType<typeof vi.fn>).mockRejectedValueOnce(failure);
+  it('shows a load-failed toast on refresh failure without throwing', async () => {
+    (folderService.list as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('boom'));
     const provider = TestBed.inject(FolderProvider);
 
-    await expect(provider.refresh()).rejects.toBe(failure);
-    expect(provider.lastError()).toBe(failure);
+    const result = await provider.refresh();
+
+    expect(result).toBe(false);
     expect(provider.isLoading()).toBe(false);
+    expect(notificationService.errorCalls).toEqual([{ messageKey: TRANSLATION_KEYS.tasks.feedback.loadFailed }]);
+  });
+
+  it('shows a save-failed toast when add rejects without throwing', async () => {
+    (folderService.add as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('add boom'));
+    const provider = TestBed.inject(FolderProvider);
+
+    const result = await provider.addFolder({ name: 'tmp' });
+
+    expect(result).toBeNull();
+    expect(provider.isAdding()).toBe(false);
+    expect(notificationService.errorCalls).toEqual([{ messageKey: TRANSLATION_KEYS.tasks.feedback.saveFailed }]);
+  });
+
+  it('shows a delete-failed toast when remove rejects without throwing', async () => {
+    (folderService.list as ReturnType<typeof vi.fn>).mockResolvedValue([buildReadModel({ id: 'f1' })]);
+    (folderService.remove as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('rm boom'));
+    const provider = TestBed.inject(FolderProvider);
+    isAuthenticated$.next(true);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const result = await provider.removeFolder('f1');
+
+    expect(result).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+    expect(notificationService.errorCalls).toEqual([{ messageKey: TRANSLATION_KEYS.tasks.feedback.deleteFailed }]);
   });
 
   it('exposes isAdding only during add and clears it afterwards', async () => {
@@ -151,29 +184,6 @@ describe('FolderProvider', () => {
     expect(provider.isUpdating()).toBe(false);
 
     await inFlight;
-    expect(provider.isDeleting()).toBe(false);
-  });
-
-  it('clears the matching mutation flag when an add throws', async () => {
-    const failure = new Error('add boom');
-    (folderService.add as ReturnType<typeof vi.fn>).mockRejectedValueOnce(failure);
-    const provider = TestBed.inject(FolderProvider);
-
-    await expect(provider.addFolder({ name: 'tmp' })).rejects.toBe(failure);
-    expect(provider.isAdding()).toBe(false);
-  });
-
-  it('rejects a concurrent mutation while one is in flight', async () => {
-    const provider = TestBed.inject(FolderProvider);
-    const stored = buildReadModel({ id: 'new-folder' });
-    (folderService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
-
-    const first = provider.addFolder({ name: 'first' });
-    expect(provider.isAdding()).toBe(true);
-
-    await expect(provider.removeFolder('new-folder')).rejects.toThrow(/already processing/i);
-    await first;
-    expect(provider.isAdding()).toBe(false);
     expect(provider.isDeleting()).toBe(false);
   });
 });

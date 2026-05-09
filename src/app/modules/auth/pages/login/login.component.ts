@@ -48,24 +48,19 @@ export class LoginComponent extends AuthFormBase {
   );
 
   protected async onSubmit(): Promise<void> {
-    this.feedback.set(null);
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
     this.isSubmitting.set(true);
     try {
-      await this.sessionProvider.signInWithPassword({
+      const succeeded = await this.sessionProvider.signInWithPassword({
         email: this.emailControl.value.trim(),
         password: this.passwordControl.value,
       });
+      if (!succeeded) return;
       this.passwordControl.reset();
       void this.router.navigate([`/${DEFAULT_ROUTE_SEGMENT}`]);
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.invalidCredentials),
-      });
     } finally {
       this.isSubmitting.set(false);
     }
@@ -75,25 +70,15 @@ export class LoginComponent extends AuthFormBase {
     const email = this.emailControl.value.trim();
     if (this.emailControl.invalid || email.length === 0) {
       this.emailControl.markAsTouched();
-      this.feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.errors.emailRequired),
-      });
+      this.notificationService.showError(this.translationKeys.errors.emailRequired);
       return;
     }
     this.isMagicLinkLoading.set(true);
-    this.feedback.set(null);
     try {
-      await this.sessionProvider.signInWithMagicLink(email, window.location.origin);
-      this.feedback.set({
-        kind: 'info',
-        message: this.translationService.instant(this.translationKeys.feedback.magicLinkSent),
-      });
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.unexpected),
-      });
+      const succeeded = await this.sessionProvider.signInWithMagicLink(email, window.location.origin);
+      if (succeeded) {
+        this.notificationService.showInfo(this.translationKeys.feedback.magicLinkSent);
+      }
     } finally {
       this.isMagicLinkLoading.set(false);
     }
@@ -106,26 +91,16 @@ export class LoginComponent extends AuthFormBase {
     const email = this.emailControl.value.trim();
     if (this.emailControl.invalid || email.length === 0) {
       this.emailControl.markAsTouched();
-      this.feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.errors.emailRequired),
-      });
+      this.notificationService.showError(this.translationKeys.errors.emailRequired);
       return;
     }
     this.isResettingPassword.set(true);
-    this.feedback.set(null);
     try {
       const redirectTo = `${window.location.origin}${ROUTE_PATHS.authPasswordReset}`;
-      await this.sessionProvider.sendPasswordResetEmail(email, redirectTo);
-      this.feedback.set({
-        kind: 'info',
-        message: this.translationService.instant(this.translationKeys.feedback.passwordResetSent),
-      });
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.unexpected),
-      });
+      const succeeded = await this.sessionProvider.sendPasswordResetEmail(email, redirectTo);
+      if (succeeded) {
+        this.notificationService.showInfo(this.translationKeys.feedback.passwordResetSent);
+      }
     } finally {
       this.isResettingPassword.set(false);
     }

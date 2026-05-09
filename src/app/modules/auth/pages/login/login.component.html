@@ -2,7 +2,6 @@
 @let isMagicLinkLoading = this.isMagicLinkLoading();
 @let isResettingPassword = this.isResettingPassword();
 @let isLoading = this.isLoading();
-@let feedback = this.feedback();
 @let emailError = this.getEmailError(emailControl);
 @let passwordError = this.getPasswordError(passwordControl);
 
@@ -54,12 +53,6 @@
       (clicked)="onMagicLink()">
       {{ translationKeys.login.magicLinkButton | translate }}
     </app-button>
-
-    @if (feedback) {
-      <app-info [type]="feedback.kind">
-        {{ feedback.message }}
-      </app-info>
-    }
   </form>
 
   <p class="login-form__footer">

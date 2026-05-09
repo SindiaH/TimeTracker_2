@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-basis: 12px;
   height: 36px;
   padding: 0 0.75rem;
   cursor: pointer;
@@ -14,6 +15,7 @@
   color: var(--app-color-on-surface);
   font: var(--app-typography-body-medium);
   transition: background-color 120ms ease;
+  justify-content: flex-start;
 }
 
 .task-tree-node__row:hover {
@@ -52,6 +54,7 @@
 .task-tree-node__chevron--invisible {
   pointer-events: none;
   visibility: hidden;
+  width: 12px;
 }
 
 .task-tree-node__icon {
@@ -60,7 +63,7 @@
 }
 
 .task-tree-node__name {
-  flex: 0 1 auto;
+  flex: 1 1 400px;
   min-width: 0;
   white-space: nowrap;
   overflow: hidden;

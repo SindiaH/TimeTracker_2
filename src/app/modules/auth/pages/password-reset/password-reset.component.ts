@@ -62,33 +62,22 @@ export class PasswordResetComponent extends AuthFormBase {
   }
 
   protected async onSubmit(): Promise<void> {
-    this.feedback.set(null);
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
       return;
     }
     if (!this.canResetPassword()) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.translationService.instant(this.translationKeys.errors.recoveryLinkInvalid),
-      });
+      this.notificationService.showError(this.translationKeys.errors.recoveryLinkInvalid);
       return;
     }
     this.isSubmitting.set(true);
     try {
-      await this.sessionProvider.updatePassword(this.passwordControl.value);
-      this.feedback.set({
-        kind: 'success',
-        message: this.translationService.instant(this.translationKeys.feedback.passwordUpdated),
-      });
+      const succeeded = await this.sessionProvider.updatePassword(this.passwordControl.value);
+      if (!succeeded) return;
+      this.notificationService.showSuccess(this.translationKeys.feedback.passwordUpdated);
       this.resetForm.reset();
       this.stripRecoveryTokensFromUrl();
       void this.router.navigate([`/${DEFAULT_ROUTE_SEGMENT}`]);
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.unexpected),
-      });
     } finally {
       this.isSubmitting.set(false);
     }

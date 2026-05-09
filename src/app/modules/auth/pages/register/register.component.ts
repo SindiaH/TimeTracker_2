@@ -51,27 +51,19 @@ export class RegisterComponent extends AuthFormBase {
   protected readonly isSubmitting = signal<boolean>(false);
 
   protected async onSubmit(): Promise<void> {
-    this.feedback.set(null);
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
     this.isSubmitting.set(true);
     try {
-      await this.sessionProvider.signUpWithPassword({
+      const succeeded = await this.sessionProvider.signUpWithPassword({
         email: this.emailControl.value.trim(),
         password: this.passwordControl.value,
       });
-      this.feedback.set({
-        kind: 'success',
-        message: this.translationService.instant(this.translationKeys.feedback.signupSuccess),
-      });
+      if (!succeeded) return;
+      this.notificationService.showSuccess(this.translationKeys.feedback.signupSuccess);
       this.registerForm.reset();
-    } catch (error) {
-      this.feedback.set({
-        kind: 'error',
-        message: this.resolveErrorMessage(error, this.translationKeys.errors.unexpected),
-      });
     } finally {
       this.isSubmitting.set(false);
     }

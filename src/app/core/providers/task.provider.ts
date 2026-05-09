@@ -1,6 +1,8 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import { inject, Injectable, Signal, signal } from '@angular/core';
 import { ServiceBase } from '@core/base/service-base';
+import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { SessionProvider } from '@core/providers/session.provider';
+import { NotificationService } from '@core/services/notification/notification.service';
 import { AddTaskCommand, UpdateTaskCommand } from '@database/entities/task.entity';
 import { TaskReadModel } from '@database/read-models/task-read-model';
 import { ITaskService, TASK_SERVICE_TOKEN, TaskListFilter } from '@database/services/interfaces/task-service.interface';
@@ -11,6 +13,7 @@ const DEFAULT_FILTER: TaskListFilter = { archivedOnly: false };
 export class TaskProvider extends ServiceBase {
   private readonly taskService: ITaskService = inject(TASK_SERVICE_TOKEN);
   private readonly sessionProvider = inject(SessionProvider);
+  private readonly notificationService = inject(NotificationService);
 
   private readonly _taskList = signal<TaskReadModel[]>([]);
   private readonly _filter = signal<TaskListFilter>(DEFAULT_FILTER);
@@ -19,7 +22,6 @@ export class TaskProvider extends ServiceBase {
   private readonly _isUpdating = signal<boolean>(false);
   private readonly _isDeleting = signal<boolean>(false);
   private readonly _isInitialized = signal<boolean>(false);
-  private readonly _lastError = signal<Error | null>(null);
 
   readonly taskList: Signal<TaskReadModel[]> = this._taskList.asReadonly();
   readonly filter: Signal<TaskListFilter> = this._filter.asReadonly();
@@ -28,7 +30,6 @@ export class TaskProvider extends ServiceBase {
   readonly isUpdating: Signal<boolean> = this._isUpdating.asReadonly();
   readonly isDeleting: Signal<boolean> = this._isDeleting.asReadonly();
   readonly isInitialized: Signal<boolean> = this._isInitialized.asReadonly();
-  readonly lastError: Signal<Error | null> = this._lastError.asReadonly();
 
   constructor() {
     super();
@@ -42,50 +43,47 @@ export class TaskProvider extends ServiceBase {
     });
   }
 
-  async refresh(): Promise<void> {
+  async refresh(): Promise<boolean> {
     this._isLoading.set(true);
-    this._lastError.set(null);
     try {
       const list = await this.taskService.list(this._filter());
       this._taskList.set(list);
       this._isInitialized.set(true);
-    } catch (error) {
-      this._lastError.set(this.toError(error));
-      throw error;
+      return true;
+    } catch {
+      this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.loadFailed);
+      return false;
     } finally {
       this._isLoading.set(false);
     }
   }
 
-  async setFilter(filter: TaskListFilter): Promise<void> {
+  async setFilter(filter: TaskListFilter): Promise<boolean> {
     this._filter.set(filter);
-    await this.refresh();
+    return this.refresh();
   }
 
-  async addTask(command: AddTaskCommand): Promise<TaskReadModel> {
-    this.assertNotMutating();
+  async addTask(command: AddTaskCommand): Promise<TaskReadModel | null> {
     this._isAdding.set(true);
-    this._lastError.set(null);
     try {
       const created = await this.taskService.add(command);
       if (!created.id) {
-        throw new Error('Created task is missing an id');
+        this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.saveFailed);
+        return null;
       }
       const enriched = (await this.taskService.getById(created.id)) ?? this.toReadModel(created);
       this._taskList.update((list) => [...list, enriched]);
       return enriched;
-    } catch (error) {
-      this._lastError.set(this.toError(error));
-      throw error;
+    } catch {
+      this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.saveFailed);
+      return null;
     } finally {
       this._isAdding.set(false);
     }
   }
 
-  async updateTask(command: UpdateTaskCommand): Promise<TaskReadModel> {
-    this.assertNotMutating();
+  async updateTask(command: UpdateTaskCommand): Promise<TaskReadModel | null> {
     this._isUpdating.set(true);
-    this._lastError.set(null);
     try {
       await this.taskService.update(command);
       const refreshed = await this.taskService.getById(command.id);
@@ -97,42 +95,38 @@ export class TaskProvider extends ServiceBase {
         return exists ? list.map((task) => (task.id === command.id ? refreshed : task)) : [...list, refreshed];
       });
       if (refreshed === null) {
-        throw new Error('Task disappeared after update');
+        this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.saveFailed);
+        return null;
       }
       return refreshed;
-    } catch (error) {
-      this._lastError.set(this.toError(error));
-      throw error;
+    } catch {
+      this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.saveFailed);
+      return null;
     } finally {
       this._isUpdating.set(false);
     }
   }
 
-  async archiveTask(id: string, archive: boolean): Promise<void> {
-    await this.updateTask({ id, isArchived: archive });
+  async archiveTask(id: string, archive: boolean): Promise<boolean> {
+    const updated = await this.updateTask({ id, isArchived: archive });
+    if (updated === null) return false;
     if (archive !== this._filter().archivedOnly) {
       this._taskList.update((list) => list.filter((task) => task.id !== id));
     }
+    return true;
   }
 
-  async removeTask(id: string): Promise<void> {
-    this.assertNotMutating();
+  async removeTask(id: string): Promise<boolean> {
     this._isDeleting.set(true);
-    this._lastError.set(null);
     try {
       await this.taskService.remove(id);
       this._taskList.update((list) => list.filter((task) => task.id !== id));
-    } catch (error) {
-      this._lastError.set(this.toError(error));
-      throw error;
+      return true;
+    } catch {
+      this.notificationService.showError(TRANSLATION_KEYS.tasks.feedback.deleteFailed);
+      return false;
     } finally {
       this._isDeleting.set(false);
-    }
-  }
-
-  private assertNotMutating(): void {
-    if (this._isAdding() || this._isUpdating() || this._isDeleting()) {
-      throw new Error('TaskProvider is already processing a mutation');
     }
   }
 
@@ -140,9 +134,5 @@ export class TaskProvider extends ServiceBase {
     const model = new TaskReadModel();
     Object.assign(model, entity);
     return model;
-  }
-
-  private toError(error: unknown): Error {
-    return error instanceof Error ? error : new Error(String(error));
   }
 }

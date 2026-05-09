@@ -8,7 +8,6 @@ export type SessionProviderSpy = {
   isLoading: WritableSignal<boolean>;
   isSigningOut: WritableSignal<boolean>;
   isPasswordRecovery: WritableSignal<boolean>;
-  lastError: WritableSignal<Error | null>;
   user: Signal<SessionUser | null>;
   isAuthenticated: Signal<boolean>;
   session$: Observable<Session | null>;
@@ -26,23 +25,21 @@ export const createSessionProviderSpy = (): SessionProviderSpy => {
   const isLoading = signal<boolean>(false);
   const isSigningOut = signal<boolean>(false);
   const isPasswordRecovery = signal<boolean>(false);
-  const lastError = signal<Error | null>(null);
 
   return {
     session,
     isLoading,
     isSigningOut,
     isPasswordRecovery,
-    lastError,
     user: computed<SessionUser | null>(() => session()?.user ?? null),
     isAuthenticated: computed<boolean>(() => session() !== null),
     session$: of<Session | null>(null),
     isAuthenticated$: of<boolean>(false),
-    signInWithPassword: vi.fn().mockResolvedValue(undefined),
-    signInWithMagicLink: vi.fn().mockResolvedValue(undefined),
-    signUpWithPassword: vi.fn().mockResolvedValue(undefined),
-    sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
-    updatePassword: vi.fn().mockResolvedValue(undefined),
-    signOut: vi.fn().mockResolvedValue(undefined),
+    signInWithPassword: vi.fn().mockResolvedValue(true),
+    signInWithMagicLink: vi.fn().mockResolvedValue(true),
+    signUpWithPassword: vi.fn().mockResolvedValue(true),
+    sendPasswordResetEmail: vi.fn().mockResolvedValue(true),
+    updatePassword: vi.fn().mockResolvedValue(true),
+    signOut: vi.fn().mockResolvedValue(true),
   };
 };

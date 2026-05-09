@@ -7,7 +7,6 @@
 @let isLoading = this.isLoading();
 @let isInitialized = this.isInitialized();
 @let selectedNode = this.selectedNode();
-@let feedback = this.feedback();
 @let pendingDelete = this.pendingDelete();
 @let isDeleting = this.isDeleting();
 @let deleteTitleKey = this.deleteTitleKey();
@@ -42,12 +41,6 @@
 
   <div class="tasks-overview__content">
     <aside class="tasks-overview__sidebar">
-      @if (feedback) {
-        <app-info [type]="feedback.kind">
-          {{ feedback.message }}
-        </app-info>
-      }
-
       @if (!isInitialized && isLoading) {
         <div class="tasks-overview__loading">
           <app-progress-indicator />

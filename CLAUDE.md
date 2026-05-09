@@ -161,6 +161,16 @@ Component
 
 Providers manage state, loading/error signals, derived read models, request deduplication, and side-effect orchestration. Components only read signals from providers and call provider methods.
 
+### Provider & Service Error Handling (ADR-10017)
+
+Providers and `@core/services/*` **must never throw to their callers**. Every error caught inside a provider or service is surfaced as a toast through `NotificationService` (`@core/services/notification/notification.service.ts`, a wrapper around `MatSnackBar`) and then swallowed.
+
+- Providers expose loading/mutation flags only — there is no `lastError` signal.
+- Methods return `Promise<boolean>` (or `Promise<T | null>`) when the caller acts on success/failure (close a dialog, navigate, reset a form). Methods whose result no caller consumes return `Promise<void>` or — when the provider triggers itself internally — are declared `void` and started with `void this.method()`.
+- Domain-specific error mapping (e.g. `AuthOperationError` → translation key) lives **inside** the provider so the toast text is consistent regardless of the caller. Components never inspect the underlying `Error`.
+- Components do **not** wrap provider calls in `try/catch`; they branch on the returned boolean / non-null value.
+- Only `NotificationService` may inject `MatSnackBar`. Components must never use `MatSnackBar` directly.
+
 ### Backend Abstraction (ADR-20001 / 20002 / 20003)
 
 Each data domain has a TypeScript interface (`ITaskService`, `ITimeEntryService`, …). Concrete implementations are bound via `InjectionToken`. The active backend is selected via environment configuration. **Components and providers depend on the interface, never on `SupabaseTaskService` or `@supabase/supabase-js` directly.**
@@ -252,6 +262,14 @@ These rules MUST always be followed when writing code.
 - **No `Subject`/`BehaviorSubject` for state.** Use signals. RxJS is reserved for HTTP, guards, interceptors, and event streams (`DesktopService.deepLink$`).
 - **`computed()` for derived state.** Never compute the same value in two places.
 - **`effect()` for side effects only.** Do not use `effect()` to set other signals — that's what `computed()` is for.
+
+### Error-Handling Rules (ADR-10017)
+
+- **No `throw` from providers or `@core/services/*`.** Catch the error, call `NotificationService.showError(messageKey, params?)`, and return `false` / `null` to the caller.
+- **No `lastError` signal on providers.** Templates never bind to it; the toast is the error surface.
+- **Provider methods return `Promise<boolean>` or `Promise<T | null>`** when the caller acts on the outcome. They return `Promise<void>` (or `void`) when no caller does.
+- **Components do not `try/catch` around provider calls.** Branch on the returned value: success path runs on `true` / non-null; the toast already covers failure.
+- **`NotificationService` is the only allowed `MatSnackBar` consumer.** Components must not inject `MatSnackBar` directly.
 
 ### Styling Rules (ADR-10004 / 10014 / 10015)
 
