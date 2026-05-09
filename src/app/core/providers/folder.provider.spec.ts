@@ -102,4 +102,78 @@ describe('FolderProvider', () => {
     expect(provider.lastError()).toBe(failure);
     expect(provider.isLoading()).toBe(false);
   });
+
+  it('exposes isAdding only during add and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 'new-folder' });
+    (folderService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+    const provider = TestBed.inject(FolderProvider);
+
+    expect(provider.isAdding()).toBe(false);
+
+    const inFlight = provider.addFolder({ name: 'tmp' });
+    expect(provider.isAdding()).toBe(true);
+    expect(provider.isUpdating()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+
+    await inFlight;
+    expect(provider.isAdding()).toBe(false);
+  });
+
+  it('exposes isUpdating only during update and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 'f1' });
+    (folderService.list as ReturnType<typeof vi.fn>).mockResolvedValue([stored]);
+    (folderService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+    const provider = TestBed.inject(FolderProvider);
+    isAuthenticated$.next(true);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const inFlight = provider.updateFolder({ id: 'f1', name: 'renamed' });
+    expect(provider.isUpdating()).toBe(true);
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+
+    await inFlight;
+    expect(provider.isUpdating()).toBe(false);
+  });
+
+  it('exposes isDeleting only during remove and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 'f1' });
+    (folderService.list as ReturnType<typeof vi.fn>).mockResolvedValue([stored]);
+    const provider = TestBed.inject(FolderProvider);
+    isAuthenticated$.next(true);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const inFlight = provider.removeFolder('f1');
+    expect(provider.isDeleting()).toBe(true);
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isUpdating()).toBe(false);
+
+    await inFlight;
+    expect(provider.isDeleting()).toBe(false);
+  });
+
+  it('clears the matching mutation flag when an add throws', async () => {
+    const failure = new Error('add boom');
+    (folderService.add as ReturnType<typeof vi.fn>).mockRejectedValueOnce(failure);
+    const provider = TestBed.inject(FolderProvider);
+
+    await expect(provider.addFolder({ name: 'tmp' })).rejects.toBe(failure);
+    expect(provider.isAdding()).toBe(false);
+  });
+
+  it('rejects a concurrent mutation while one is in flight', async () => {
+    const provider = TestBed.inject(FolderProvider);
+    const stored = buildReadModel({ id: 'new-folder' });
+    (folderService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+
+    const first = provider.addFolder({ name: 'first' });
+    expect(provider.isAdding()).toBe(true);
+
+    await expect(provider.removeFolder('new-folder')).rejects.toThrow(/already processing/i);
+    await first;
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+  });
 });

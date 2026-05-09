@@ -82,9 +82,13 @@ export class TasksOverviewComponent extends ComponentBase {
   protected readonly feedback: Signal<Feedback | null> = this._feedback.asReadonly();
 
   private readonly _pendingDelete: WritableSignal<TaskTreeNode | null> = signal<TaskTreeNode | null>(null);
-  private readonly _isDeleting: WritableSignal<boolean> = signal<boolean>(false);
   protected readonly pendingDelete: Signal<TaskTreeNode | null> = this._pendingDelete.asReadonly();
-  protected readonly isDeleting: Signal<boolean> = this._isDeleting.asReadonly();
+  protected readonly isUpdating: Signal<boolean> = computed<boolean>(
+    () => this.taskProvider.isUpdating() || this.folderProvider.isUpdating(),
+  );
+  protected readonly isDeleting: Signal<boolean> = computed<boolean>(
+    () => this.taskProvider.isDeleting() || this.folderProvider.isDeleting(),
+  );
 
   protected readonly deleteTitleKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
     const node = this._pendingDelete();
@@ -100,13 +104,6 @@ export class TasksOverviewComponent extends ComponentBase {
 
   private readonly taskForm = viewChild<TaskFormComponent>('taskForm');
   private readonly deleteDialog = viewChild<DialogComponent>('deleteDialog');
-
-  constructor() {
-    super();
-    this.filterControl.valueChanges.pipe(this.takeUntilDestroyed()).subscribe((value) => {
-      void this.applyFilter(value === FILTER_ARCHIVE ? 'archive' : 'all');
-    });
-  }
 
   protected onFilterChanged(value: ButtonToggleValue): void {
     void this.applyFilter(value === FILTER_ARCHIVE ? 'archive' : 'all');
@@ -155,8 +152,7 @@ export class TasksOverviewComponent extends ComponentBase {
 
   protected async confirmDelete(): Promise<void> {
     const node = this._pendingDelete();
-    if (node === null || this._isDeleting()) return;
-    this._isDeleting.set(true);
+    if (node === null || this.isDeleting()) return;
     this._feedback.set(null);
     try {
       if (node.kind === 'folder') {
@@ -174,13 +170,11 @@ export class TasksOverviewComponent extends ComponentBase {
         kind: 'error',
         message: this.translationService.instant(this.translationKeys.feedback.deleteFailed),
       });
-    } finally {
-      this._isDeleting.set(false);
     }
   }
 
   protected cancelDelete(): void {
-    if (this._isDeleting()) return;
+    if (this.isDeleting()) return;
     this.deleteDialog()?.close(false);
     this._pendingDelete.set(null);
   }
@@ -202,6 +196,7 @@ export class TasksOverviewComponent extends ComponentBase {
   }
 
   private async archive(node: TaskTreeNode, archive: boolean): Promise<void> {
+    if (this.isUpdating()) return;
     this._feedback.set(null);
     try {
       if (node.kind === 'folder') {

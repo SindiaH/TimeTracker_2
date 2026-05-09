@@ -139,4 +139,78 @@ describe('TaskProvider', () => {
     expect(provider.lastError()).toBe(failure);
     expect(provider.isLoading()).toBe(false);
   });
+
+  it('exposes isAdding only during add and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 'new-task' });
+    (taskService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+    const provider = TestBed.inject(TaskProvider);
+
+    expect(provider.isAdding()).toBe(false);
+
+    const inFlight = provider.addTask({ name: 'tmp' });
+    expect(provider.isAdding()).toBe(true);
+    expect(provider.isUpdating()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+
+    await inFlight;
+    expect(provider.isAdding()).toBe(false);
+  });
+
+  it('exposes isUpdating only during update and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 't1' });
+    (taskService.list as ReturnType<typeof vi.fn>).mockResolvedValue([stored]);
+    (taskService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+    const provider = TestBed.inject(TaskProvider);
+    isAuthenticated$.next(true);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const inFlight = provider.updateTask({ id: 't1', name: 'renamed' });
+    expect(provider.isUpdating()).toBe(true);
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+
+    await inFlight;
+    expect(provider.isUpdating()).toBe(false);
+  });
+
+  it('exposes isDeleting only during remove and clears it afterwards', async () => {
+    const stored = buildReadModel({ id: 't1' });
+    (taskService.list as ReturnType<typeof vi.fn>).mockResolvedValue([stored]);
+    const provider = TestBed.inject(TaskProvider);
+    isAuthenticated$.next(true);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const inFlight = provider.removeTask('t1');
+    expect(provider.isDeleting()).toBe(true);
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isUpdating()).toBe(false);
+
+    await inFlight;
+    expect(provider.isDeleting()).toBe(false);
+  });
+
+  it('clears the matching mutation flag when an add throws', async () => {
+    const failure = new Error('add boom');
+    (taskService.add as ReturnType<typeof vi.fn>).mockRejectedValueOnce(failure);
+    const provider = TestBed.inject(TaskProvider);
+
+    await expect(provider.addTask({ name: 'tmp' })).rejects.toBe(failure);
+    expect(provider.isAdding()).toBe(false);
+  });
+
+  it('rejects a concurrent mutation while one is in flight', async () => {
+    const provider = TestBed.inject(TaskProvider);
+    const stored = buildReadModel({ id: 'new-task' });
+    (taskService.getById as ReturnType<typeof vi.fn>).mockResolvedValue(stored);
+
+    const first = provider.addTask({ name: 'first' });
+    expect(provider.isAdding()).toBe(true);
+
+    await expect(provider.removeTask('new-task')).rejects.toThrow(/already processing/i);
+    await first;
+    expect(provider.isAdding()).toBe(false);
+    expect(provider.isDeleting()).toBe(false);
+  });
 });

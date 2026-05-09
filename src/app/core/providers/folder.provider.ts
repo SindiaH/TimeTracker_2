@@ -19,12 +19,18 @@ export class FolderProvider extends ServiceBase {
   private readonly _folderList = signal<FolderReadModel[]>([]);
   private readonly _filter = signal<FolderListFilter>(DEFAULT_FILTER);
   private readonly _isLoading = signal<boolean>(false);
+  private readonly _isAdding = signal<boolean>(false);
+  private readonly _isUpdating = signal<boolean>(false);
+  private readonly _isDeleting = signal<boolean>(false);
   private readonly _isInitialized = signal<boolean>(false);
   private readonly _lastError = signal<Error | null>(null);
 
   readonly folderList: Signal<FolderReadModel[]> = this._folderList.asReadonly();
   readonly filter: Signal<FolderListFilter> = this._filter.asReadonly();
   readonly isLoading: Signal<boolean> = this._isLoading.asReadonly();
+  readonly isAdding: Signal<boolean> = this._isAdding.asReadonly();
+  readonly isUpdating: Signal<boolean> = this._isUpdating.asReadonly();
+  readonly isDeleting: Signal<boolean> = this._isDeleting.asReadonly();
   readonly isInitialized: Signal<boolean> = this._isInitialized.asReadonly();
   readonly lastError: Signal<Error | null> = this._lastError.asReadonly();
 
@@ -78,6 +84,8 @@ export class FolderProvider extends ServiceBase {
   }
 
   async addFolder(command: AddFolderCommand): Promise<FolderReadModel> {
+    this.assertNotMutating();
+    this._isAdding.set(true);
     this._lastError.set(null);
     try {
       const created = await this.folderService.add(command);
@@ -90,10 +98,14 @@ export class FolderProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isAdding.set(false);
     }
   }
 
   async updateFolder(command: UpdateFolderCommand): Promise<FolderReadModel> {
+    this.assertNotMutating();
+    this._isUpdating.set(true);
     this._lastError.set(null);
     try {
       await this.folderService.update(command);
@@ -112,6 +124,8 @@ export class FolderProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isUpdating.set(false);
     }
   }
 
@@ -123,6 +137,8 @@ export class FolderProvider extends ServiceBase {
   }
 
   async removeFolder(id: string): Promise<void> {
+    this.assertNotMutating();
+    this._isDeleting.set(true);
     this._lastError.set(null);
     try {
       await this.folderService.remove(id);
@@ -130,6 +146,14 @@ export class FolderProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isDeleting.set(false);
+    }
+  }
+
+  private assertNotMutating(): void {
+    if (this._isAdding() || this._isUpdating() || this._isDeleting()) {
+      throw new Error('FolderProvider is already processing a mutation');
     }
   }
 

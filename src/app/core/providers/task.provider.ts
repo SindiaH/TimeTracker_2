@@ -15,31 +15,20 @@ export class TaskProvider extends ServiceBase {
   private readonly _taskList = signal<TaskReadModel[]>([]);
   private readonly _filter = signal<TaskListFilter>(DEFAULT_FILTER);
   private readonly _isLoading = signal<boolean>(false);
+  private readonly _isAdding = signal<boolean>(false);
+  private readonly _isUpdating = signal<boolean>(false);
+  private readonly _isDeleting = signal<boolean>(false);
   private readonly _isInitialized = signal<boolean>(false);
   private readonly _lastError = signal<Error | null>(null);
 
   readonly taskList: Signal<TaskReadModel[]> = this._taskList.asReadonly();
   readonly filter: Signal<TaskListFilter> = this._filter.asReadonly();
   readonly isLoading: Signal<boolean> = this._isLoading.asReadonly();
+  readonly isAdding: Signal<boolean> = this._isAdding.asReadonly();
+  readonly isUpdating: Signal<boolean> = this._isUpdating.asReadonly();
+  readonly isDeleting: Signal<boolean> = this._isDeleting.asReadonly();
   readonly isInitialized: Signal<boolean> = this._isInitialized.asReadonly();
   readonly lastError: Signal<Error | null> = this._lastError.asReadonly();
-
-  readonly tasksByFolderId: Signal<Map<string | null, TaskReadModel[]>> = computed<Map<string | null, TaskReadModel[]>>(
-    () => {
-      const tasks = this._taskList();
-      const grouped = new Map<string | null, TaskReadModel[]>();
-      for (const task of tasks) {
-        const key = task.parentFolderId ?? null;
-        const bucket = grouped.get(key);
-        if (bucket === undefined) {
-          grouped.set(key, [task]);
-        } else {
-          bucket.push(task);
-        }
-      }
-      return grouped;
-    },
-  );
 
   constructor() {
     super();
@@ -74,6 +63,8 @@ export class TaskProvider extends ServiceBase {
   }
 
   async addTask(command: AddTaskCommand): Promise<TaskReadModel> {
+    this.assertNotMutating();
+    this._isAdding.set(true);
     this._lastError.set(null);
     try {
       const created = await this.taskService.add(command);
@@ -86,10 +77,14 @@ export class TaskProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isAdding.set(false);
     }
   }
 
   async updateTask(command: UpdateTaskCommand): Promise<TaskReadModel> {
+    this.assertNotMutating();
+    this._isUpdating.set(true);
     this._lastError.set(null);
     try {
       await this.taskService.update(command);
@@ -108,6 +103,8 @@ export class TaskProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isUpdating.set(false);
     }
   }
 
@@ -119,6 +116,8 @@ export class TaskProvider extends ServiceBase {
   }
 
   async removeTask(id: string): Promise<void> {
+    this.assertNotMutating();
+    this._isDeleting.set(true);
     this._lastError.set(null);
     try {
       await this.taskService.remove(id);
@@ -126,6 +125,14 @@ export class TaskProvider extends ServiceBase {
     } catch (error) {
       this._lastError.set(this.toError(error));
       throw error;
+    } finally {
+      this._isDeleting.set(false);
+    }
+  }
+
+  private assertNotMutating(): void {
+    if (this._isAdding() || this._isUpdating() || this._isDeleting()) {
+      throw new Error('TaskProvider is already processing a mutation');
     }
   }
 

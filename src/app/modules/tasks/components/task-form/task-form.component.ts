@@ -8,6 +8,7 @@ import {
   viewChild,
   WritableSignal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
@@ -63,11 +64,18 @@ export class TaskFormComponent extends ComponentBase {
   private readonly _mode: WritableSignal<TaskFormMode | null> = signal<TaskFormMode | null>(null);
   private readonly _editingId: WritableSignal<string | null> = signal<string | null>(null);
   private readonly _parentFolderId: WritableSignal<string | null> = signal<string | null>(null);
-  private readonly _isSubmitting: WritableSignal<boolean> = signal<boolean>(false);
   private readonly _errorMessage: WritableSignal<string | null> = signal<string | null>(null);
 
+  private readonly nameControlEvents = toSignal(this.nameControl.events);
+
   protected readonly mode: Signal<TaskFormMode | null> = this._mode.asReadonly();
-  protected readonly isSubmitting: Signal<boolean> = this._isSubmitting.asReadonly();
+  protected readonly isSubmitting: Signal<boolean> = computed<boolean>(
+    () =>
+      this.taskProvider.isAdding() ||
+      this.taskProvider.isUpdating() ||
+      this.folderProvider.isAdding() ||
+      this.folderProvider.isUpdating(),
+  );
   protected readonly errorMessage: Signal<string | null> = this._errorMessage.asReadonly();
 
   protected readonly titleKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
@@ -91,7 +99,7 @@ export class TaskFormComponent extends ComponentBase {
   });
 
   protected readonly nameError: Signal<string | null> = computed<string | null>(() => {
-    void this.formStatus();
+    this.nameControlEvents();
     const errors = this.nameControl.errors;
     if (errors === null || !this.nameControl.touched) {
       return null;
@@ -107,15 +115,7 @@ export class TaskFormComponent extends ComponentBase {
     return null;
   });
 
-  private readonly formStatus: WritableSignal<number> = signal<number>(0);
   private readonly dialog = viewChild<DialogComponent>('dialog');
-
-  constructor() {
-    super();
-    this.form.valueChanges.pipe(this.takeUntilDestroyed()).subscribe(() => {
-      this.formStatus.update((value) => value + 1);
-    });
-  }
 
   openForCreateFolder(parentFolderId: string | null = null): void {
     this.resetState();
@@ -155,26 +155,22 @@ export class TaskFormComponent extends ComponentBase {
   }
 
   protected async onSubmit(): Promise<void> {
-    if (this._isSubmitting()) return;
+    if (this.isSubmitting()) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.formStatus.update((value) => value + 1);
       return;
     }
-    this._isSubmitting.set(true);
     this._errorMessage.set(null);
     try {
       await this.persist();
       this.dialog()?.close(true);
     } catch (error) {
       this._errorMessage.set(this.toErrorMessage(error));
-    } finally {
-      this._isSubmitting.set(false);
     }
   }
 
   protected onCancel(): void {
-    if (this._isSubmitting()) return;
+    if (this.isSubmitting()) return;
     this.dialog()?.close(false);
   }
 
@@ -230,7 +226,6 @@ export class TaskFormComponent extends ComponentBase {
   private resetState(): void {
     this._editingId.set(null);
     this._parentFolderId.set(null);
-    this._isSubmitting.set(false);
     this._errorMessage.set(null);
     this.nameControl.reset('');
     this.descriptionControl.reset('');
