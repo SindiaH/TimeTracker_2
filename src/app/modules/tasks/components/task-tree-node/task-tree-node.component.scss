@@ -1,13 +1,46 @@
+:host {
+  display: block;
+}
+
 .task-tree-node {
   display: flex;
   flex-direction: column;
+}
+
+.task-tree-node__drop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+:host.cdk-drag-preview {
+  box-shadow: var(--app-color-shadow, 0 4px 12px rgb(0 0 0 / 25%));
+  background: var(--app-color-surface);
+  border-radius: 0.5rem;
+  pointer-events: none;
+}
+
+:host.cdk-drag-preview .task-tree-node__children {
+  display: none;
+}
+
+:host.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drop-list-dragging :host:not(.cdk-drag-placeholder) {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.task-tree-node__row--drop-target.cdk-drop-list-receiving {
+  outline: 2px dashed var(--app-color-primary);
+  outline-offset: -2px;
 }
 
 .task-tree-node__row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-basis: 12px;
   height: 36px;
   padding: 0 0.75rem;
   cursor: pointer;
@@ -16,6 +49,10 @@
   font: var(--app-typography-body-medium);
   transition: background-color 120ms ease;
   justify-content: flex-start;
+}
+
+.task-tree-node__task-invisible {
+  margin-left: 8px !important;
 }
 
 .task-tree-node__row:hover {
@@ -54,7 +91,6 @@
 .task-tree-node__chevron--invisible {
   pointer-events: none;
   visibility: hidden;
-  width: 12px;
 }
 
 .task-tree-node__icon {

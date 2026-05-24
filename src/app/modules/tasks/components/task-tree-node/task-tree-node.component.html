@@ -6,6 +6,8 @@
 @let isExpanded = this.isExpanded();
 @let isSelected = this.isSelected();
 @let nodeColor = this.nodeColor();
+@let folderChildren = this.folderChildren();
+@let taskChildren = this.taskChildren();
 
 <div
   class="task-tree-node"
@@ -13,6 +15,12 @@
   [class.task-tree-node--archived]="node.isArchived">
   <div
     class="task-tree-node__row"
+    [class.task-tree-node__row--drop-target]="isFolder"
+    cdkDropList
+    [cdkDropListDisabled]="!isFolder"
+    [cdkDropListSortingDisabled]="true"
+    [cdkDropListEnterPredicate]="canDropIntoFolder"
+    (cdkDropListDropped)="onDropIntoFolder($event)"
     [style.padding-left.px]="node.depth * 20"
     (click)="onSelect()">
     @if (isFolder) {
@@ -25,7 +33,7 @@
         <app-icon>{{ isExpanded ? icons.expandMore : icons.expandLess }}</app-icon>
       </button>
     } @else {
-      <span class="task-tree-node__chevron task-tree-node__chevron--invisible"></span>
+      <div class="task-tree-node__chevron task-tree-node__chevron--invisible task-tree-node__task-invisible"></div>
     }
 
     <span
@@ -87,10 +95,37 @@
 
   @if (isFolder && hasChildren && isExpanded) {
     <div class="task-tree-node__children">
-      @for (child of node.children; track child.id) {
-        <app-task-tree-node
-          [node]="child"
-          (action)="onChildAction($event)" />
+      @if (folderChildren.length > 0) {
+        <div
+          class="task-tree-node__drop-list"
+          cdkDropList
+          [cdkDropListData]="folderChildren"
+          [cdkDropListEnterPredicate]="canDropFolderChild"
+          (cdkDropListDropped)="onFolderChildDrop($event)">
+          @for (child of folderChildren; track child.id) {
+            <app-task-tree-node
+              cdkDrag
+              [cdkDragData]="child"
+              [node]="child"
+              (action)="onChildAction($event)" />
+          }
+        </div>
+      }
+      @if (taskChildren.length > 0) {
+        <div
+          class="task-tree-node__drop-list"
+          cdkDropList
+          [cdkDropListData]="taskChildren"
+          [cdkDropListEnterPredicate]="canDropTaskChild"
+          (cdkDropListDropped)="onTaskChildDrop($event)">
+          @for (child of taskChildren; track child.id) {
+            <app-task-tree-node
+              cdkDrag
+              [cdkDragData]="child"
+              [node]="child"
+              (action)="onChildAction($event)" />
+          }
+        </div>
       }
     </div>
   }

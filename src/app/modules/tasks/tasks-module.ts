@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { TaskFormComponent } from './components/task-form/task-form.component';
@@ -8,6 +9,6 @@ import { TasksRoutingModule } from './tasks-routing-module';
 
 @NgModule({
   declarations: [TasksOverviewComponent, TaskTreeNodeComponent, TaskFormComponent, FormatDurationPipe],
-  imports: [SharedModule, TasksRoutingModule],
+  imports: [SharedModule, TasksRoutingModule, DragDropModule],
 })
 export class TasksModule {}

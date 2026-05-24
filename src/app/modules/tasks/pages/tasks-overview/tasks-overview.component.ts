@@ -1,3 +1,4 @@
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,13 +16,16 @@ import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-ke
 import { TranslationService } from '@core/i18n/translation.service';
 import { FolderProvider } from '@core/providers/folder.provider';
 import { TaskProvider } from '@core/providers/task.provider';
+import { UpdateFolderCommand } from '@database/entities/folder.entity';
+import { UpdateTaskCommand } from '@database/entities/task.entity';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { DialogComponent } from '@shared/base-components/dialog/dialog.component';
 import { TaskFormComponent } from '@modules/tasks/components/task-form/task-form.component';
 import { TaskTreeAction } from '@modules/tasks/components/task-tree-node/task-tree-node.component';
 import { TasksTreeService } from '@modules/tasks/services/tasks-tree.service';
-import { TaskTreeNode } from '@modules/tasks/types/task-tree-node.type';
+import { TreeDropPriorityService } from '@modules/tasks/services/tree-drop-priority.service';
+import { TaskTreeNode, TaskTreeNodeKind } from '@modules/tasks/types/task-tree-node.type';
 
 const FILTER_ALL = 'all';
 const FILTER_ARCHIVE = 'archive';
@@ -41,6 +45,7 @@ export class TasksOverviewComponent extends ComponentBase {
   private readonly folderProvider = inject(FolderProvider);
   private readonly translationService = inject(TranslationService);
   protected readonly tasksTreeService = inject(TasksTreeService);
+  private readonly dropPriority = inject(TreeDropPriorityService);
 
   protected readonly icons = APP_ICONS;
   protected readonly translationKeys = TRANSLATION_KEYS.tasks;
@@ -61,6 +66,12 @@ export class TasksOverviewComponent extends ComponentBase {
   ]);
 
   protected readonly tree: Signal<TaskTreeNode[]> = this.tasksTreeService.tree;
+  protected readonly rootFolders: Signal<TaskTreeNode[]> = computed<TaskTreeNode[]>(() =>
+    this.tree().filter((node) => node.kind === 'folder'),
+  );
+  protected readonly rootTasks: Signal<TaskTreeNode[]> = computed<TaskTreeNode[]>(() =>
+    this.tree().filter((node) => node.kind === 'task'),
+  );
   protected readonly hasNodes: Signal<boolean> = this.tasksTreeService.hasNodes;
   protected readonly isLoading: Signal<boolean> = this.tasksTreeService.isLoading;
   protected readonly isInitialized: Signal<boolean> = this.tasksTreeService.isInitialized;
@@ -137,8 +148,35 @@ export class TasksOverviewComponent extends ComponentBase {
       case 'delete':
         this.requestDelete(event.node);
         return;
+      case 'drop':
+        void this.handleDrop(event.dragged, event.targetParentFolderId, event.targetIndex);
+        return;
     }
   }
+
+  protected onRootFolderDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
+    const dragged = event.item.data as TaskTreeNode | undefined;
+    if (!dragged) return;
+    void this.handleDrop(dragged, null, event.currentIndex);
+  }
+
+  protected onRootTaskDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
+    const dragged = event.item.data as TaskTreeNode | undefined;
+    if (!dragged) return;
+    void this.handleDrop(dragged, null, event.currentIndex);
+  }
+
+  protected readonly canDropFolderRoot = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
+    if (drag.data?.kind !== 'folder') return false;
+    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
+    return true;
+  };
+
+  protected readonly canDropTaskRoot = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
+    if (drag.data?.kind !== 'task') return false;
+    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
+    return true;
+  };
 
   protected async confirmDelete(): Promise<void> {
     const node = this._pendingDelete();
@@ -178,6 +216,107 @@ export class TasksOverviewComponent extends ComponentBase {
   private requestDelete(node: TaskTreeNode): void {
     this._pendingDelete.set(node);
     void this.deleteDialog()?.open({ width: '420px' });
+  }
+
+  private async handleDrop(
+    dragged: TaskTreeNode,
+    targetParentFolderId: string | null,
+    targetIndex: number,
+  ): Promise<void> {
+    if (targetParentFolderId !== null && dragged.id === targetParentFolderId) return;
+    if (dragged.kind === 'folder' && targetParentFolderId !== null) {
+      if (this.tasksTreeService.isDescendantOrSelf(dragged.id, targetParentFolderId)) return;
+    }
+
+    const sourceParentFolderId = dragged.parentFolderId ?? null;
+    const isCrossParent = sourceParentFolderId !== targetParentFolderId;
+    const targetSiblings = this.findSiblings(dragged.kind, targetParentFolderId);
+    const newSiblings = [...targetSiblings];
+
+    if (isCrossParent) {
+      const insertIdx = targetIndex < 0 ? newSiblings.length : Math.max(0, Math.min(targetIndex, newSiblings.length));
+      newSiblings.splice(insertIdx, 0, dragged);
+    } else {
+      const fromIdx = newSiblings.findIndex((node) => node.id === dragged.id);
+      if (fromIdx < 0) return;
+      const insertIdx =
+        targetIndex < 0 ? newSiblings.length - 1 : Math.max(0, Math.min(targetIndex, newSiblings.length - 1));
+      if (fromIdx === insertIdx) return;
+      const [moved] = newSiblings.splice(fromIdx, 1);
+      if (!moved) return;
+      newSiblings.splice(insertIdx, 0, moved);
+    }
+
+    const updates: Promise<unknown>[] = this.collectUpdates(
+      dragged.kind,
+      newSiblings,
+      dragged.id,
+      isCrossParent,
+      targetParentFolderId,
+    );
+
+    if (isCrossParent) {
+      const oldSiblings = this.findSiblings(dragged.kind, sourceParentFolderId).filter(
+        (node) => node.id !== dragged.id,
+      );
+      for (let i = 0; i < oldSiblings.length; i++) {
+        const node = oldSiblings[i];
+        if (!node) continue;
+        if (node.source.order === i) continue;
+        if (dragged.kind === 'folder') {
+          updates.push(this.folderProvider.updateFolder({ id: node.id, order: i }));
+        } else {
+          updates.push(this.taskProvider.updateTask({ id: node.id, order: i }));
+        }
+      }
+    }
+
+    if (updates.length === 0) return;
+
+    if (targetParentFolderId !== null) {
+      this.tasksTreeService.expand(targetParentFolderId);
+    }
+
+    await Promise.all(updates);
+  }
+
+  private collectUpdates(
+    kind: TaskTreeNodeKind,
+    newSiblings: TaskTreeNode[],
+    draggedId: string,
+    isCrossParent: boolean,
+    targetParentFolderId: string | null,
+  ): Promise<unknown>[] {
+    const updates: Promise<unknown>[] = [];
+    for (let i = 0; i < newSiblings.length; i++) {
+      const node = newSiblings[i];
+      if (!node) continue;
+      const isDraggedNode = node.id === draggedId;
+      const orderChanged = node.source.order !== i;
+      const parentChanged = isDraggedNode && isCrossParent;
+      if (!orderChanged && !parentChanged) continue;
+      if (kind === 'folder') {
+        const command: UpdateFolderCommand = { id: node.id };
+        if (orderChanged) command.order = i;
+        if (parentChanged) command.parentFolderId = targetParentFolderId;
+        updates.push(this.folderProvider.updateFolder(command));
+      } else {
+        const command: UpdateTaskCommand = { id: node.id };
+        if (orderChanged) command.order = i;
+        if (parentChanged) command.parentFolderId = targetParentFolderId;
+        updates.push(this.taskProvider.updateTask(command));
+      }
+    }
+    return updates;
+  }
+
+  private findSiblings(kind: TaskTreeNodeKind, parentFolderId: string | null): TaskTreeNode[] {
+    if (parentFolderId === null) {
+      return this.tree().filter((node) => node.kind === kind);
+    }
+    const parent = this.findNode(this.tree(), parentFolderId);
+    if (parent === null) return [];
+    return parent.children.filter((node) => node.kind === kind);
   }
 
   private findNode(nodes: TaskTreeNode[], id: string): TaskTreeNode | null {

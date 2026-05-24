@@ -2,7 +2,8 @@
 @let icons = this.icons;
 @let filterOptions = this.filterOptions();
 @let filterControl = this.filterControl;
-@let tree = this.tree();
+@let rootFolders = this.rootFolders();
+@let rootTasks = this.rootTasks();
 @let hasNodes = this.hasNodes();
 @let isLoading = this.isLoading();
 @let isInitialized = this.isInitialized();
@@ -54,11 +55,40 @@
           </p>
         </div>
       } @else {
-        <div class="tasks-overview__tree">
-          @for (node of tree; track node.id) {
-            <app-task-tree-node
-              [node]="node"
-              (action)="onTreeAction($event)" />
+        <div
+          class="tasks-overview__tree"
+          cdkDropListGroup>
+          @if (rootFolders.length > 0) {
+            <div
+              class="tasks-overview__drop-list"
+              cdkDropList
+              [cdkDropListData]="rootFolders"
+              [cdkDropListEnterPredicate]="canDropFolderRoot"
+              (cdkDropListDropped)="onRootFolderDrop($event)">
+              @for (node of rootFolders; track node.id) {
+                <app-task-tree-node
+                  cdkDrag
+                  [cdkDragData]="node"
+                  [node]="node"
+                  (action)="onTreeAction($event)" />
+              }
+            </div>
+          }
+          @if (rootTasks.length > 0) {
+            <div
+              class="tasks-overview__drop-list"
+              cdkDropList
+              [cdkDropListData]="rootTasks"
+              [cdkDropListEnterPredicate]="canDropTaskRoot"
+              (cdkDropListDropped)="onRootTaskDrop($event)">
+              @for (node of rootTasks; track node.id) {
+                <app-task-tree-node
+                  cdkDrag
+                  [cdkDragData]="node"
+                  [node]="node"
+                  (action)="onTreeAction($event)" />
+              }
+            </div>
           }
         </div>
       }

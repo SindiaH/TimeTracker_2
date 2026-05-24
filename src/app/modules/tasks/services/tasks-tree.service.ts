@@ -62,6 +62,34 @@ export class TasksTreeService extends ServiceBase {
     return !this._collapsedIds().has(nodeId);
   }
 
+  getNodeById(nodeId: string): TaskTreeNode | null {
+    return this.findNode(this.tree(), nodeId);
+  }
+
+  isDescendantOrSelf(ancestorId: string, candidateId: string): boolean {
+    if (ancestorId === candidateId) return true;
+    const ancestor = this.getNodeById(ancestorId);
+    if (ancestor === null) return false;
+    return this.containsId(ancestor, candidateId);
+  }
+
+  private findNode(nodes: TaskTreeNode[], id: string): TaskTreeNode | null {
+    for (const node of nodes) {
+      if (node.id === id) return node;
+      const childMatch = this.findNode(node.children, id);
+      if (childMatch !== null) return childMatch;
+    }
+    return null;
+  }
+
+  private containsId(node: TaskTreeNode, id: string): boolean {
+    for (const child of node.children) {
+      if (child.id === id) return true;
+      if (this.containsId(child, id)) return true;
+    }
+    return false;
+  }
+
   private buildTree(folders: FolderReadModel[], tasks: TaskReadModel[]): TaskTreeNode[] {
     const folderById = new Map<string, FolderReadModel>();
     for (const folder of folders) {
