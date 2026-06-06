@@ -8,10 +8,11 @@ import { AppShellComponent } from '@shared/components/app-shell/app-shell.compon
 import { SharedHeaderComponent } from '@shared/components/shared-header/shared-header.component';
 import { ModuleStubComponent } from '@shared/components/module-stub/module-stub.component';
 import { SideMenuComponent } from '@shared/components/side-menu/side-menu.component';
+import { FormatDurationPipe } from '@shared/pipes/format-duration.pipe';
 import { SearchFilterPipe } from '@shared/pipes/search-filter.pipe';
 
 const COMPONENTS = [AppShellComponent, SharedHeaderComponent, ModuleStubComponent, SideMenuComponent];
-const PIPES = [SearchFilterPipe];
+const PIPES = [FormatDurationPipe, SearchFilterPipe];
 
 @NgModule({
   declarations: [...COMPONENTS, ...PIPES],

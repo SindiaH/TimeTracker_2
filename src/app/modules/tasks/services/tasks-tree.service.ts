@@ -20,6 +20,11 @@ export class TasksTreeService extends ServiceBase {
 
   readonly collapsedIds: Signal<Set<string>> = this._collapsedIds.asReadonly();
   readonly selectedNodeId: Signal<string | null> = this._selectedNodeId.asReadonly();
+  readonly selectedNode: Signal<TaskTreeNode | null> = computed<TaskTreeNode | null>(() => {
+    const id = this._selectedNodeId();
+    if (id === null) return null;
+    return this.findNode(this.tree(), id);
+  });
 
   readonly hasNodes: Signal<boolean> = computed<boolean>(
     () => this.folderProvider.folderList().length > 0 || this.taskProvider.taskList().length > 0,

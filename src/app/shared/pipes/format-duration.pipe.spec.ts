@@ -1,4 +1,4 @@
-import { FormatDurationPipe } from '@modules/tasks/pipes/format-duration.pipe';
+import { FormatDurationPipe } from '@shared/pipes/format-duration.pipe';
 
 describe('FormatDurationPipe', () => {
   const pipe = new FormatDurationPipe();

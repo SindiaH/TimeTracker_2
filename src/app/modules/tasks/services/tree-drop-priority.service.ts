@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { ServiceBase } from '@core/base/service-base';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TreeDropPriorityService extends ServiceBase {
   private readonly document = inject(DOCUMENT);
   private cursor: { x: number; y: number } | null = null;

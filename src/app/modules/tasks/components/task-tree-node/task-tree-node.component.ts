@@ -15,7 +15,7 @@ import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { TasksTreeService } from '@modules/tasks/services/tasks-tree.service';
 import { TreeDropPriorityService } from '@modules/tasks/services/tree-drop-priority.service';
-import { TaskTreeNode } from '@modules/tasks/types/task-tree-node.type';
+import { TaskTreeNode, TaskTreeNodeKind } from '@modules/tasks/types/task-tree-node.type';
 
 export type TaskTreeNodeAction = {
   type: 'select' | 'toggle' | 'add-folder-here' | 'add-task-here' | 'edit' | 'archive' | 'unarchive' | 'delete';
@@ -106,11 +106,7 @@ export class TaskTreeNodeComponent extends ComponentBase {
     this.action.emit(action);
   }
 
-  protected onFolderChildDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
-    this.emitDrop(event, this.node().id, event.currentIndex);
-  }
-
-  protected onTaskChildDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
+  protected onChildDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
     this.emitDrop(event, this.node().id, event.currentIndex);
   }
 
@@ -128,20 +124,17 @@ export class TaskTreeNodeComponent extends ComponentBase {
     return true;
   };
 
-  protected readonly canDropFolderChild = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
-    const dragged = drag.data;
-    if (!dragged || dragged.kind !== 'folder') return false;
-    const targetParentId = this.node().id;
-    if (this.tasksTreeService.isDescendantOrSelf(dragged.id, targetParentId)) return false;
-    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
-    return true;
+  protected readonly canDropChildOfKind = (kind: TaskTreeNodeKind) => {
+    return (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
+      const dragged = drag.data;
+      if (!dragged || dragged.kind !== kind) return false;
+      if (kind === 'folder' && this.tasksTreeService.isDescendantOrSelf(dragged.id, this.node().id)) return false;
+      return !this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement);
+    };
   };
 
-  protected readonly canDropTaskChild = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
-    if (drag.data?.kind !== 'task') return false;
-    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
-    return true;
-  };
+  protected readonly canDropFolderChild = this.canDropChildOfKind('folder');
+  protected readonly canDropTaskChild = this.canDropChildOfKind('task');
 
   private emitDrop(event: CdkDragDrop<TaskTreeNode[]>, targetParentFolderId: string | null, targetIndex: number): void {
     const dragged = event.item.data as TaskTreeNode | undefined;

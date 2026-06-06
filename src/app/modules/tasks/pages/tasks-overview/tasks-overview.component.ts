@@ -24,7 +24,6 @@ import { DialogComponent } from '@shared/base-components/dialog/dialog.component
 import { TaskFormComponent } from '@modules/tasks/components/task-form/task-form.component';
 import { TaskTreeAction } from '@modules/tasks/components/task-tree-node/task-tree-node.component';
 import { TasksTreeService } from '@modules/tasks/services/tasks-tree.service';
-import { TreeDropConnectionService } from '@modules/tasks/services/tree-drop-connection.service';
 import { TreeDropPriorityService } from '@modules/tasks/services/tree-drop-priority.service';
 import { TaskTreeNode, TaskTreeNodeKind } from '@modules/tasks/types/task-tree-node.type';
 
@@ -39,7 +38,6 @@ type FilterValue = typeof FILTER_ALL | typeof FILTER_ARCHIVE;
   templateUrl: './tasks-overview.component.html',
   styleUrl: './tasks-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TasksTreeService, TreeDropConnectionService],
 })
 export class TasksOverviewComponent extends ComponentBase {
   private readonly taskProvider = inject(TaskProvider);
@@ -77,11 +75,7 @@ export class TasksOverviewComponent extends ComponentBase {
   protected readonly isLoading: Signal<boolean> = this.tasksTreeService.isLoading;
   protected readonly isInitialized: Signal<boolean> = this.tasksTreeService.isInitialized;
   protected readonly selectedNodeId: Signal<string | null> = this.tasksTreeService.selectedNodeId;
-  protected readonly selectedNode: Signal<TaskTreeNode | null> = computed<TaskTreeNode | null>(() => {
-    const id = this.selectedNodeId();
-    if (id === null) return null;
-    return this.findNode(this.tree(), id);
-  });
+  protected readonly selectedNode: Signal<TaskTreeNode | null> = this.tasksTreeService.selectedNode;
 
   private readonly _pendingDelete: WritableSignal<TaskTreeNode | null> = signal<TaskTreeNode | null>(null);
   protected readonly pendingDelete: Signal<TaskTreeNode | null> = this._pendingDelete.asReadonly();
@@ -155,29 +149,21 @@ export class TasksOverviewComponent extends ComponentBase {
     }
   }
 
-  protected onRootFolderDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
+  protected onRootDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
     const dragged = event.item.data as TaskTreeNode | undefined;
     if (!dragged) return;
     void this.handleDrop(dragged, null, event.currentIndex);
   }
 
-  protected onRootTaskDrop(event: CdkDragDrop<TaskTreeNode[]>): void {
-    const dragged = event.item.data as TaskTreeNode | undefined;
-    if (!dragged) return;
-    void this.handleDrop(dragged, null, event.currentIndex);
-  }
-
-  protected readonly canDropFolderRoot = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
-    if (drag.data?.kind !== 'folder') return false;
-    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
-    return true;
+  protected readonly canDropAtRoot = (kind: TaskTreeNodeKind) => {
+    return (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
+      if (drag.data?.kind !== kind) return false;
+      return !this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement);
+    };
   };
 
-  protected readonly canDropTaskRoot = (drag: CdkDrag<TaskTreeNode>, drop: CdkDropList): boolean => {
-    if (drag.data?.kind !== 'task') return false;
-    if (this.dropPriority.hasInnerDropListUnderCursor(drop.element.nativeElement)) return false;
-    return true;
-  };
+  protected readonly canDropFolderRoot = this.canDropAtRoot('folder');
+  protected readonly canDropTaskRoot = this.canDropAtRoot('task');
 
   protected async confirmDelete(): Promise<void> {
     const node = this._pendingDelete();
@@ -315,17 +301,8 @@ export class TasksOverviewComponent extends ComponentBase {
     if (parentFolderId === null) {
       return this.tree().filter((node) => node.kind === kind);
     }
-    const parent = this.findNode(this.tree(), parentFolderId);
+    const parent = this.tasksTreeService.getNodeById(parentFolderId);
     if (parent === null) return [];
     return parent.children.filter((node) => node.kind === kind);
-  }
-
-  private findNode(nodes: TaskTreeNode[], id: string): TaskTreeNode | null {
-    for (const node of nodes) {
-      if (node.id === id) return node;
-      const childMatch = this.findNode(node.children, id);
-      if (childMatch) return childMatch;
-    }
-    return null;
   }
 }

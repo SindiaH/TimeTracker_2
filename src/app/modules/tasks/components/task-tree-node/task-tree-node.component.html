@@ -103,7 +103,7 @@
           appTreeDrop
           [cdkDropListData]="folderChildren"
           [cdkDropListEnterPredicate]="canDropFolderChild"
-          (cdkDropListDropped)="onFolderChildDrop($event)">
+          (cdkDropListDropped)="onChildDrop($event)">
           @for (child of folderChildren; track child.id) {
             <app-task-tree-node
               cdkDrag
@@ -120,7 +120,7 @@
           appTreeDrop
           [cdkDropListData]="taskChildren"
           [cdkDropListEnterPredicate]="canDropTaskChild"
-          (cdkDropListDropped)="onTaskChildDrop($event)">
+          (cdkDropListDropped)="onChildDrop($event)">
           @for (child of taskChildren; track child.id) {
             <app-task-tree-node
               cdkDrag
