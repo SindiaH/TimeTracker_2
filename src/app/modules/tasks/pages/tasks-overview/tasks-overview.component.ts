@@ -24,6 +24,7 @@ import { DialogComponent } from '@shared/base-components/dialog/dialog.component
 import { TaskFormComponent } from '@modules/tasks/components/task-form/task-form.component';
 import { TaskTreeAction } from '@modules/tasks/components/task-tree-node/task-tree-node.component';
 import { TasksTreeService } from '@modules/tasks/services/tasks-tree.service';
+import { TreeDropConnectionService } from '@modules/tasks/services/tree-drop-connection.service';
 import { TreeDropPriorityService } from '@modules/tasks/services/tree-drop-priority.service';
 import { TaskTreeNode, TaskTreeNodeKind } from '@modules/tasks/types/task-tree-node.type';
 
@@ -38,7 +39,7 @@ type FilterValue = typeof FILTER_ALL | typeof FILTER_ARCHIVE;
   templateUrl: './tasks-overview.component.html',
   styleUrl: './tasks-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TasksTreeService],
+  providers: [TasksTreeService, TreeDropConnectionService],
 })
 export class TasksOverviewComponent extends ComponentBase {
   private readonly taskProvider = inject(TaskProvider);

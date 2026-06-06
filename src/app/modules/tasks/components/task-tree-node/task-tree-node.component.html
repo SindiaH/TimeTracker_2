@@ -17,6 +17,7 @@
     class="task-tree-node__row"
     [class.task-tree-node__row--drop-target]="isFolder"
     cdkDropList
+    appTreeDrop
     [cdkDropListDisabled]="!isFolder"
     [cdkDropListSortingDisabled]="true"
     [cdkDropListEnterPredicate]="canDropIntoFolder"
@@ -99,6 +100,7 @@
         <div
           class="task-tree-node__drop-list"
           cdkDropList
+          appTreeDrop
           [cdkDropListData]="folderChildren"
           [cdkDropListEnterPredicate]="canDropFolderChild"
           (cdkDropListDropped)="onFolderChildDrop($event)">
@@ -115,6 +117,7 @@
         <div
           class="task-tree-node__drop-list"
           cdkDropList
+          appTreeDrop
           [cdkDropListData]="taskChildren"
           [cdkDropListEnterPredicate]="canDropTaskChild"
           (cdkDropListDropped)="onTaskChildDrop($event)">
