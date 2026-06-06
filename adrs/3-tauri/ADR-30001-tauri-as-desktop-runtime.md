@@ -47,7 +47,7 @@ Target platforms remain macOS (universal x64 + arm64 `.dmg`/`.app`), Windows (NS
 - **Native code lives in Rust**: New OS-level features must be added as Rust commands or plugins, not as Node modules. The team accepts a small Rust learning curve, reduced by the fact that the existing native binaries are re-used as sidecars.
 - **No `electron-builder`**: Packaging moves to `tauri build` driven by `tauri.conf.json`. NSIS configuration (per-machine, allow-elevation) and macOS entitlements (AppleEvents for browser URL detection, hardened runtime) are migrated 1:1.
 - **No `electron-reloader`**: Hot reload is provided by `tauri dev` pointing at the Angular dev server (`http://localhost:4200`). DevTools are available in dev builds via `--features devtools`.
-- **Web build remains unchanged**: `npm run build` (Angular `web-production` configuration) continues to produce a deployable browser bundle without any Tauri code.
+- **Web build remains unchanged**: `pnpm run build` (Angular `web-production` configuration) continues to produce a deployable browser bundle without any Tauri code.
 
 ## Alternatives Considered
 

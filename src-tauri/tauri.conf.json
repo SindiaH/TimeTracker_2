@@ -6,8 +6,8 @@
   "build": {
     "frontendDist": "../dist/TimeTracker_2/browser",
     "devUrl": "http://localhost:54321",
-    "beforeDevCommand": "npm start",
-    "beforeBuildCommand": "npm run build"
+    "beforeDevCommand": "pnpm start",
+    "beforeBuildCommand": "pnpm run build"
   },
   "app": {
     "windows": [

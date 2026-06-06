@@ -1,4 +1,4 @@
-# Make Node/npm visible to GUI Git clients (Fork, SourceTree, GitKraken, …)
+# Make Node/pnpm visible to GUI Git clients (Fork, SourceTree, GitKraken, …)
 # whose login PATH does not include Homebrew or nvm by default.
 if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
@@ -8,7 +8,7 @@ if [ -d "$HOME/.nvm" ]; then
   [ -s "$NVM_DIR/nvm.sh" ] && nvm use --silent default >/dev/null 2>&1 || true
 fi
 
-for candidate in /opt/homebrew/bin /usr/local/bin "$HOME/.volta/bin" "$HOME/.fnm" "$HOME/.bun/bin"; do
+for candidate in /opt/homebrew/bin /usr/local/bin "$HOME/.volta/bin" "$HOME/.fnm" "$HOME/.bun/bin" "$HOME/Library/pnpm" "$HOME/.local/share/pnpm"; do
   [ -d "$candidate" ] && case ":$PATH:" in
     *":$candidate:"*) ;;
     *) PATH="$candidate:$PATH" ;;
@@ -16,10 +16,10 @@ for candidate in /opt/homebrew/bin /usr/local/bin "$HOME/.volta/bin" "$HOME/.fnm
 done
 export PATH
 
-if ! command -v npx >/dev/null 2>&1; then
-  echo "husky pre-commit: 'npx' not found in PATH=$PATH" >&2
-  echo "  → install Node (https://nodejs.org) or expose your existing Node install to GUI Git clients." >&2
+if ! command -v pnpm >/dev/null 2>&1; then
+  echo "husky pre-commit: 'pnpm' not found in PATH=$PATH" >&2
+  echo "  → install pnpm (https://pnpm.io/installation) or expose your existing pnpm install to GUI Git clients." >&2
   exit 1
 fi
 
-npx lint-staged
+pnpm exec lint-staged

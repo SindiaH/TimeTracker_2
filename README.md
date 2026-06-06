@@ -36,20 +36,20 @@ TimeTracker_2/
 ### Web (Angular only)
 
 ```bash
-npm start                    # Angular dev server — http://localhost:54321 (local environment)
-npm run build                # Production build
-npm run build:dev            # Development build
-npm run build:test           # Test environment build
+pnpm start                   # Angular dev server — http://localhost:54321 (local environment)
+pnpm run build               # Production build
+pnpm run build:dev           # Development build
+pnpm run build:test          # Test environment build
 ```
 
 ### Desktop (Tauri shell + Angular)
 
 ```bash
-npm run tauri:dev            # Tauri dev — opens the desktop window pointing at http://localhost:54321
-npm run tauri:build          # Production bundle for the current host platform
-npm run tauri:build:mac      # Universal macOS .app/.dmg (x64 + arm64), signed + notarized
-npm run tauri:build:win      # Windows NSIS installer (perMachine, allowElevation)
-npm run tauri:build:linux    # Linux AppImage
+pnpm run tauri:dev           # Tauri dev — opens the desktop window pointing at http://localhost:54321
+pnpm run tauri:build         # Production bundle for the current host platform
+pnpm run tauri:build:mac     # Universal macOS .app/.dmg (x64 + arm64), signed + notarized
+pnpm run tauri:build:win     # Windows NSIS installer (perMachine, allowElevation)
+pnpm run tauri:build:linux   # Linux AppImage
 ```
 
 The same Angular bundle runs in both targets. The `DesktopService` (see ADR-30008) feature-detects `window.__TAURI_INTERNALS__` and falls back to web behavior in the browser.
@@ -57,33 +57,33 @@ The same Angular bundle runs in both targets. The `DesktopService` (see ADR-3000
 ### Testing
 
 ```bash
-npm test                     # Vitest in watch mode (jsdom, no browser)
-npm run test:silent          # Vitest single-run (CI/PR)
-npm run test:coverage        # Vitest with coverage report
+pnpm test                    # Vitest in watch mode (jsdom, no browser)
+pnpm run test:silent         # Vitest single-run (CI/PR)
+pnpm run test:coverage       # Vitest with coverage report
 ```
 
 ### Linting & Formatting
 
 ```bash
-npm run lint                 # ESLint (Angular rules)
-npm run lint:fix             # ESLint with auto-fix
-npm run prettier             # Prettier check
-npm run prettier:fix         # Prettier write
-npm run stylelint            # Stylelint (SCSS)
-npm run stylelint:fix        # Stylelint auto-fix
+pnpm run lint                # ESLint (Angular rules)
+pnpm run lint:fix            # ESLint with auto-fix
+pnpm run prettier            # Prettier check
+pnpm run prettier:fix        # Prettier write
+pnpm run stylelint           # Stylelint (SCSS)
+pnpm run stylelint:fix       # Stylelint auto-fix
 ```
 
-`husky` + `lint-staged` run `lint:fix`, `prettier:fix`, and `stylelint:fix` on staged files before each commit (see ADR-10008). Husky `pre-push` runs `npm run test:silent` (see ADR-10016).
+`husky` + `lint-staged` run `lint:fix`, `prettier:fix`, and `stylelint:fix` on staged files before each commit (see ADR-10008). Husky `pre-push` runs `pnpm run test:silent` (see ADR-10016).
 
 ### Pre-PR
 
 ```bash
-npm run prepare:pr           # Lint, format, stylelint, and unit tests
+pnpm run prepare:pr          # Lint, format, stylelint, and unit tests
 ```
 
 ## Environments
 
-Four configurations (`local`, `development`, `test`, `production`) wired via `angular.json` `fileReplacements` and `src/environments/`. `local` is the default for `npm start`.
+Four configurations (`local`, `development`, `test`, `production`) wired via `angular.json` `fileReplacements` and `src/environments/`. `local` is the default for `pnpm start`.
 
 ## Tauri Build Prerequisites
 
@@ -92,7 +92,7 @@ Four configurations (`local`, `development`, `test`, `production`) wired via `an
 - For macOS release builds: Apple Developer ID identity (same one used by the legacy app)
 - For Windows release builds: Authenticode certificate
 
-The web-only build (`npm run build`) does not require Rust.
+The web-only build (`pnpm run build`) does not require Rust.
 
 ## ADR Index
 

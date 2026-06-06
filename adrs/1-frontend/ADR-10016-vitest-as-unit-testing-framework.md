@@ -114,10 +114,10 @@ These exclusions are codified in `vitest.config.ts` under `coverage.exclude` so 
 "test": "ng test",
 "test:silent": "ng test --watch=false",
 "test:coverage": "ng test --watch=false --code-coverage",
-"prepare:pr": "npm run lint:fix && npm run prettier:fix && npm run stylelint:fix && npm run test:silent"
+"prepare:pr": "pnpm run lint:fix && pnpm run prettier:fix && pnpm run stylelint:fix && pnpm run test:silent"
 ```
 
-Husky `pre-commit` stays scoped to lint-staged (fast); a Husky `pre-push` hook runs `npm run test:silent` so the test suite is one push-time check away from CI. CI runs `npm run test:silent` after lint and before `cargo` checks.
+Husky `pre-commit` stays scoped to lint-staged (fast); a Husky `pre-push` hook runs `pnpm run test:silent` so the test suite is one push-time check away from CI. CI runs `pnpm run test:silent` after lint and before `cargo` checks.
 
 ## Consequences
 

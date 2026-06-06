@@ -19,15 +19,15 @@ When implementing, do not jump ahead to features that depend on a stage that has
 See `README.md` for the full command list. The most-used:
 
 ```bash
-npm start                    # Angular dev server (http://localhost:54321)
-npm run tauri:dev            # Tauri shell pointing at the dev server
-npm run lint                 # ESLint
-npm run prettier:fix         # Prettier write
-npm run stylelint            # SCSS lint
-npm test                     # Vitest watch
-npm run test:silent          # Vitest single-run (CI)
-npm run test:coverage        # Vitest with coverage report
-npm run prepare:pr           # Lint + format + stylelint + tests
+pnpm start                   # Angular dev server (http://localhost:54321)
+pnpm run tauri:dev           # Tauri shell pointing at the dev server
+pnpm run lint                # ESLint
+pnpm run prettier:fix        # Prettier write
+pnpm run stylelint           # SCSS lint
+pnpm test                    # Vitest watch
+pnpm run test:silent         # Vitest single-run (CI)
+pnpm run test:coverage       # Vitest with coverage report
+pnpm run prepare:pr          # Lint + format + stylelint + tests
 ```
 
 Pre-commit hooks (Husky + lint-staged) run `lint:fix`, `prettier:fix`, and `stylelint:fix` on staged files (ADR-10008).
