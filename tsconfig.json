@@ -3,7 +3,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./src",
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitAny": true,
@@ -30,13 +29,13 @@
     "moduleResolution": "bundler",
     "useDefineForClassFields": false,
     "paths": {
-      "@app/*": ["app/*"],
-      "@core/*": ["app/core/*"],
-      "@shared/*": ["app/shared/*"],
-      "@modules/*": ["app/modules/*"],
-      "@database/*": ["app/database/*"],
-      "@environments/*": ["environments/*"],
-      "@testing/*": ["testing/*"]
+      "@app/*": ["./src/app/*"],
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@modules/*": ["./src/app/modules/*"],
+      "@database/*": ["./src/app/database/*"],
+      "@environments/*": ["./src/environments/*"],
+      "@testing/*": ["./src/testing/*"]
     }
   },
   "angularCompilerOptions": {
