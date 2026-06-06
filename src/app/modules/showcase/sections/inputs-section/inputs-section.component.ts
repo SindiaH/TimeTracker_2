@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
+import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { InputValue } from '@shared/base-components/input/input.component';
 import { InputSelectSearchValue } from '@shared/base-components/input-select-search/input-select-search.component';
@@ -45,11 +46,11 @@ export class InputsSectionComponent extends ComponentBase {
   protected readonly readonlyControl: FormControl<InputValue> = new FormControl<InputValue>('Read-only');
 
   protected readonly selectItems: ISelectItem[] = [
-    { id: 'tasks', name: 'Tasks', icon: 'check_circle' },
-    { id: 'time', name: 'Time entries', icon: 'schedule' },
-    { id: 'calendar', name: 'Calendar', icon: 'calendar_month' },
-    { id: 'activities', name: 'Activities', icon: 'analytics' },
-    { id: 'settings', name: 'Settings', icon: 'settings' },
+    { id: 'tasks', name: 'Tasks', icon: APP_ICONS.navTasks },
+    { id: 'time', name: 'Time entries', icon: APP_ICONS.navTimeEntries },
+    { id: 'calendar', name: 'Calendar', icon: APP_ICONS.navCalendar },
+    { id: 'activities', name: 'Activities', icon: APP_ICONS.navActivities },
+    { id: 'settings', name: 'Settings', icon: APP_ICONS.navSettings },
   ];
 
   protected readonly singleSelectControl: FormControl<InputSelectValue> = new FormControl<InputSelectValue>('tasks');

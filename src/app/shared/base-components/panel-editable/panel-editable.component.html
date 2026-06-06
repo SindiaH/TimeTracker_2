@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let editing = this.editing();
 @let editingAllowed = this.editingAllowed();
 @let loading = this.loading();
@@ -30,7 +31,7 @@
       @if (!editing && editingAllowed) {
         <app-button
           variant="stroked"
-          icon="edit"
+          [icon]="icons.edit"
           [loading]="loadingButtons"
           [disabled]="loadingButtons"
           (clicked)="edit()">

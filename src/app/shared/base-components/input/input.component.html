@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let control = this.control();
 @let appearance = this.appearance();
 @let type = this.type();
@@ -60,7 +61,7 @@
         mat-icon-button
         aria-label="Clear"
         (click)="clearValue()">
-        <app-icon>close</app-icon>
+        <app-icon>{{ icons.clear }}</app-icon>
       </button>
     }
     @if (errorKeys.has(formErrorCodes.required)) {

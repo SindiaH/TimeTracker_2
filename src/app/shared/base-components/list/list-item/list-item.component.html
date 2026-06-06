@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let icon = this.icon();
 @let titleText = this.titleText();
 @let additionalLines = this.additionalLines();
@@ -20,7 +21,7 @@
       (click)="$event.stopPropagation()">
       <app-button
         variant="icon"
-        icon="delete"
+        [icon]="icons.delete"
         [tooltip]="removeTooltipText"
         (clicked)="removeClicked.emit()">
       </app-button>

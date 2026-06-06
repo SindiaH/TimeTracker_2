@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
+import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ListSelectableValue } from '@shared/base-components/list-selectable/list-selectable.component';
 import { ListType } from '@shared/types/list.type';
@@ -27,9 +28,9 @@ export class ListsSectionComponent extends ComponentBase {
   ];
 
   protected readonly listItems: { title: string; lines: string[]; icon: string }[] = [
-    { title: 'Tasks', lines: ['Track your work'], icon: 'check_circle' },
-    { title: 'Time entries', lines: ['Recorded sessions', 'Including today'], icon: 'schedule' },
-    { title: 'Calendar', lines: ['Daily overview'], icon: 'calendar_month' },
+    { title: 'Tasks', lines: ['Track your work'], icon: APP_ICONS.success },
+    { title: 'Time entries', lines: ['Recorded sessions', 'Including today'], icon: APP_ICONS.time },
+    { title: 'Calendar', lines: ['Daily overview'], icon: APP_ICONS.navCalendar },
   ];
 
   protected readonly selectableItems: ListType[] = [

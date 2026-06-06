@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 import { PanelAppearance } from '@shared/base-components/panel/panel.component';
 
 @Component({
@@ -8,7 +9,7 @@ import { PanelAppearance } from '@shared/base-components/panel/panel.component';
   styleUrl: './panel-editable.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PanelEditableComponent {
+export class PanelEditableComponent extends ComponentBase {
   readonly titleText = input<string | null>(null);
   readonly subTitleText = input<string | null>(null);
   readonly appearance = input<PanelAppearance>('raised');

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 
 @Component({
   selector: 'app-chip',
@@ -7,7 +8,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   styleUrl: './chip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChipComponent {
+export class ChipComponent extends ComponentBase {
   readonly avatarUrl = input<string | null>(null);
   readonly disabled = input<boolean>(false);
   readonly removable = input<boolean>(false);

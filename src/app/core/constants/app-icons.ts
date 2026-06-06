@@ -24,6 +24,23 @@ export const APP_ICONS = {
   unarchive: 'unarchive',
   delete: 'delete',
   empty: 'inbox',
+  clear: 'close',
+  close: 'close',
+  search: 'search',
+  chipRemove: 'cancel',
+  info: 'info',
+  success: 'check_circle',
+  warning: 'warning',
+  error: 'error',
+  time: 'schedule',
+  duplicate: 'content_copy',
+  block: 'block',
+  translate: 'translate',
+  openInNew: 'open_in_new',
+  favorite: 'favorite',
+  viewList: 'view_list',
+  viewGrid: 'grid_view',
+  viewCard: 'view_module',
 } as const;
 
 export type AppIcon = (typeof APP_ICONS)[keyof typeof APP_ICONS];

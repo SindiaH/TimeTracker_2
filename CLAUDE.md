@@ -247,6 +247,21 @@ These rules MUST always be followed when writing code.
 - **No comments**: Do not add comments in HTML or TypeScript files. Code should be self-explanatory through good naming and structure. Exception: `// TODO:` comments are allowed (e.g., `// TODO: Will be implemented in follow-up ticket (calendar view)`).
 - **Use shared components**: Always prefer existing shared components (e.g., `ButtonComponent` for buttons). If a shared component lacks needed functionality, extend it rather than building a custom solution.
 
+### Icon Rules
+
+Material icon names are **never** allowed as raw string literals anywhere in the codebase. Every icon value MUST come from `APP_ICONS` (`@core/constants/app-icons.ts`).
+
+- **`<app-icon>` content**: bind to `icons.*`, never to a literal:
+  - Bad: `<app-icon>close</app-icon>`
+  - Good: `<app-icon>{{ icons.clear }}</app-icon>`
+- **`icon` inputs on shared components** (`<app-button>`, `<app-link>`, `<app-menu>`, `<app-menu-item>`, `<app-menu-link>`, `<app-list-item>`, …): use property binding to `icons.*`, never a string attribute:
+  - Bad: `<app-button icon="edit">`
+  - Good: `<app-button [icon]="icons.edit">`
+- **TypeScript data**: data arrays whose entries hold an icon (e.g. `ISelectItem`, `ButtonToggleOption`, `ListType`, nav-link descriptors) must reference `APP_ICONS.*` — never a raw `'check_circle'` / `'schedule'` / etc.
+- **Adding a new icon**: extend `APP_ICONS` first with a **semantic** key (`clear`, `chipRemove`, `viewGrid`, …, **not** `close2` or the raw Material name). Reuse an existing entry only when the *semantic* meaning matches — don't reuse `menuClose` for a dialog close just because both render `close`; add a new `close` entry if the intent differs.
+- **Accessing `icons` in templates**: `ComponentBase` exposes `this.icons` (the full `APP_ICONS` constant). Add `@let icons = this.icons;` at the top of the template before use. Components that currently don't extend `ComponentBase` but need to render icons MUST extend it (even shared base-components like `ChipComponent`, `ListItemComponent`).
+- **Accessing `APP_ICONS` in TypeScript**: import `APP_ICONS` directly from `@core/constants/app-icons` only for *static* class-property initializers (data arrays, default values). Inside instance code prefer `this.icons` via `ComponentBase`.
+
 ### TypeScript Rules
 
 - **Explicit types**: Never use inline/implicit types. Always create named `type` or `interface` declarations.

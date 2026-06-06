@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let control = this.searchControl;
 @let labelText = this.labelText();
 @let appearance = this.appearance();
@@ -57,7 +58,7 @@
           @if (loadingMore) {
             <app-progress-indicator class="loading-items"></app-progress-indicator>
           } @else {
-            <app-icon>expand_more</app-icon>
+            <app-icon>{{ icons.expandMore }}</app-icon>
           }
           <span>{{ loadMoreText }}</span>
         </div>
@@ -85,7 +86,7 @@
     <app-button
       class="clear-input-select-search"
       variant="icon"
-      icon="close"
+      [icon]="icons.close"
       (clicked)="clearInputAndMarkTouched()">
     </app-button>
   }

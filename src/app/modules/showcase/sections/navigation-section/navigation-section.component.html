@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let translationKeys = this.translationKeys;
 @let searchTerm = this.searchTerm();
 @let keywords = this.keywords;
@@ -8,16 +9,16 @@
     <app-tab-group [tabs]="tabs" />
 
     <div class="showcase-row">
-      <app-menu icon="more_vert">
-        <app-menu-item icon="edit">Edit</app-menu-item>
-        <app-menu-item icon="content_copy">Duplicate</app-menu-item>
+      <app-menu [icon]="icons.more">
+        <app-menu-item [icon]="icons.edit">Edit</app-menu-item>
+        <app-menu-item [icon]="icons.duplicate">Duplicate</app-menu-item>
         <app-menu-item
-          icon="delete"
+          [icon]="icons.delete"
           tooltip="Removes the item"
           >Delete</app-menu-item
         >
         <app-menu-item
-          icon="block"
+          [icon]="icons.block"
           [disabled]="true"
           >Disabled</app-menu-item
         >
@@ -25,9 +26,9 @@
 
       <app-menu
         labelText="Labelled menu"
-        icon="settings">
-        <app-menu-item icon="palette">Theme</app-menu-item>
-        <app-menu-item icon="translate">Language</app-menu-item>
+        [icon]="icons.navSettings">
+        <app-menu-item [icon]="icons.navShowcase">Theme</app-menu-item>
+        <app-menu-item [icon]="icons.translate">Language</app-menu-item>
       </app-menu>
 
       <app-menu
@@ -40,12 +41,12 @@
       <app-menu labelText="Links">
         <app-menu-link
           href="/tasks"
-          icon="check_circle"
+          [icon]="icons.success"
           >Tasks</app-menu-link
         >
         <app-menu-link
           href="https://anthropic.com"
-          icon="open_in_new"
+          [icon]="icons.openInNew"
           [externalLink]="true"
           target="_blank">
           External

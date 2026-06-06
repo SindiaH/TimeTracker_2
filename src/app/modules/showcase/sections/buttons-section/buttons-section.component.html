@@ -12,13 +12,13 @@
       <app-button variant="stroked">Stroked</app-button>
       <app-button
         variant="icon"
-        icon="favorite" />
+        [icon]="icons.favorite" />
       <app-button
         variant="fab"
-        icon="add" />
+        [icon]="icons.add" />
       <app-button
         variant="extended-fab"
-        icon="edit"
+        [icon]="icons.edit"
         >Extended FAB</app-button
       >
       <app-button [disabled]="true">Disabled</app-button>
@@ -48,7 +48,7 @@
       >
       <app-link
         variant="icon"
-        icon="open_in_new"
+        [icon]="icons.openInNew"
         href="#" />
       <app-link
         href="#"
@@ -57,12 +57,12 @@
       >
     </div>
     <div class="showcase-row">
-      <app-icon>info</app-icon>
-      <app-icon backgroundColor="icon-info">info</app-icon>
-      <app-icon backgroundColor="icon-success">check_circle</app-icon>
-      <app-icon backgroundColor="icon-warning">warning</app-icon>
-      <app-icon backgroundColor="icon-error">error</app-icon>
-      <app-icon iconSize="icon-header-size">schedule</app-icon>
+      <app-icon>{{ icons.info }}</app-icon>
+      <app-icon backgroundColor="icon-info">{{ icons.info }}</app-icon>
+      <app-icon backgroundColor="icon-success">{{ icons.success }}</app-icon>
+      <app-icon backgroundColor="icon-warning">{{ icons.warning }}</app-icon>
+      <app-icon backgroundColor="icon-error">{{ icons.error }}</app-icon>
+      <app-icon iconSize="icon-header-size">{{ icons.time }}</app-icon>
     </div>
   </app-panel>
 }

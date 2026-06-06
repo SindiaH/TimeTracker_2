@@ -1,3 +1,4 @@
+@let icons = this.icons;
 @let titleText = this.titleText();
 @let cancelButtonText = this.cancelButtonText();
 @let submitButtonText = this.submitButtonText();
@@ -18,7 +19,7 @@
             <app-button
               class="mini-close-button"
               variant="icon"
-              icon="close"
+              [icon]="icons.close"
               (clicked)="close()">
             </app-button>
           }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
+import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
@@ -43,9 +44,9 @@ export class TogglesSectionComponent extends ComponentBase {
   protected readonly selectedRadio: string = 'two';
 
   protected readonly buttonToggleOptions: ButtonToggleOption[] = [
-    { id: 'list', name: 'List', icon: 'view_list' },
-    { id: 'grid', name: 'Grid', icon: 'grid_view' },
-    { id: 'card', name: 'Card', icon: 'view_module' },
+    { id: 'list', name: 'List', icon: APP_ICONS.viewList },
+    { id: 'grid', name: 'Grid', icon: APP_ICONS.viewGrid },
+    { id: 'card', name: 'Card', icon: APP_ICONS.viewCard },
   ];
   protected readonly buttonToggleControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>('grid');
   protected readonly buttonToggleMultiControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>([
