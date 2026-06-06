@@ -6,6 +6,21 @@
     "selector-class-pattern": null,
     "scss/dollar-variable-pattern": null,
     "scss/at-mixin-pattern": null,
-    "scss/percent-placeholder-pattern": null
+    "scss/percent-placeholder-pattern": null,
+    "declaration-property-value-disallowed-list": [
+      {
+        "/^(padding|margin)(-(top|right|bottom|left|inline|block|inline-start|inline-end|block-start|block-end))?$/": [
+          "/\\d+(\\.\\d+)?(px|rem|em)\\b/"
+        ],
+        "/^(gap|row-gap|column-gap)$/": ["/\\d+(\\.\\d+)?(px|rem|em)\\b/"],
+        "/^(top|right|bottom|left)$/": ["/\\d+(\\.\\d+)?(px|rem|em)\\b/"],
+        "/^inset(-(block|inline|block-start|block-end|inline-start|inline-end))?$/": [
+          "/\\d+(\\.\\d+)?(px|rem|em)\\b/"
+        ]
+      },
+      {
+        "message": "Use --app-spacing-* tokens instead of raw px/rem/em (see src/styles/variables/_spacing.scss)"
+      }
+    ]
   }
 }

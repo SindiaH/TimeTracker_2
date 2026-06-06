@@ -3,7 +3,7 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: var(--app-spacing-2xl) var(--app-spacing-md);
   min-height: 100%;
   background: var(--app-color-surface);
 }
@@ -11,10 +11,10 @@
 .auth-layout__card {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--app-spacing-xl);
   width: 100%;
   max-width: 26rem;
-  padding: 2rem;
+  padding: var(--app-spacing-2xl);
   background: var(--app-color-surface-container);
   border-radius: 1rem;
   box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
@@ -35,5 +35,5 @@
 .auth-layout__content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--app-spacing-md);
 }

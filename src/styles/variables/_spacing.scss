@@ -1,0 +1,17 @@
+// Application spacing tokens. Components and pages only reference `--app-spacing-*`;
+// raw px/rem spacing values are forbidden. The whole scale is derived from
+// `--app-spacing-unit`, so adjusting Material density (or our own scale) only
+// requires changing that one value. See ADR-10015.
+
+:root {
+  --app-spacing-unit: 0.25rem;
+  --app-spacing-3xs: calc(var(--app-spacing-unit) * 0.5);
+  --app-spacing-2xs: var(--app-spacing-unit);
+  --app-spacing-xs: calc(var(--app-spacing-unit) * 2);
+  --app-spacing-sm: calc(var(--app-spacing-unit) * 3);
+  --app-spacing-md: calc(var(--app-spacing-unit) * 4);
+  --app-spacing-lg: calc(var(--app-spacing-unit) * 5);
+  --app-spacing-xl: calc(var(--app-spacing-unit) * 6);
+  --app-spacing-2xl: calc(var(--app-spacing-unit) * 8);
+  --app-spacing-3xl: calc(var(--app-spacing-unit) * 12);
+}

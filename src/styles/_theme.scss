@@ -4,6 +4,7 @@
 @use './variables/colors';
 @use './variables/typography';
 @use './variables/shape';
+@use './variables/spacing';
 @include mat.core;
 
 :root,

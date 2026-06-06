@@ -2,14 +2,14 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 1rem;
-  padding: 1rem;
+  margin-top: var(--app-spacing-md);
+  padding: var(--app-spacing-md);
 }
 
 .load-more-process-indicator {
-  margin-top: 12px;
+  margin-top: var(--app-spacing-sm);
 }
 
 .load-more-button {
-  margin-top: 16px;
+  margin-top: var(--app-spacing-md);
 }

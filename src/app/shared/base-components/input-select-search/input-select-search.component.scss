@@ -5,7 +5,7 @@
 .input-select-search-container {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--app-spacing-2xs);
 }
 
 .input-select-search {
@@ -16,8 +16,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px;
+  gap: var(--app-spacing-xs);
+  padding: var(--app-spacing-xs);
   cursor: pointer;
   color: var(--app-color-primary);
 }

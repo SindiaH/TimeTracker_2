@@ -5,18 +5,18 @@
 .showcase-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--app-spacing-md);
   align-items: center;
 }
 
 .showcase-row + .showcase-row {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--app-spacing-md);
+  padding-top: var(--app-spacing-md);
   border-top: 1px solid var(--app-color-outline-variant);
 }
 
 .showcase-chips {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--app-spacing-md);
+  padding-top: var(--app-spacing-md);
   border-top: 1px solid var(--app-color-outline-variant);
 }

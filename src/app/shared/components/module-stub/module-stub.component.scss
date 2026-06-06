@@ -1,8 +1,8 @@
 .module-stub {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 2rem;
+  gap: var(--app-spacing-xs);
+  padding: var(--app-spacing-2xl);
   color: var(--app-color-on-surface);
 }
 

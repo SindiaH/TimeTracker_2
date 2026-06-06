@@ -1,21 +1,21 @@
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--app-spacing-md);
 }
 
 .login-form__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: var(--app-spacing-xs);
   flex-wrap: wrap;
 }
 
 .login-form__divider {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--app-spacing-xs);
   color: var(--app-color-on-surface-variant);
   font: var(--app-typography-body-small);
 }
@@ -36,7 +36,7 @@
 }
 
 .login-form__footer a {
-  margin-left: 0.25rem;
+  margin-left: var(--app-spacing-2xs);
   color: var(--app-color-primary);
   text-decoration: none;
 }

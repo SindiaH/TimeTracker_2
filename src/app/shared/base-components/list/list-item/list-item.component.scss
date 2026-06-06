@@ -17,5 +17,5 @@
 .list-item-remove > * {
   height: 100%;
   display: inline-block;
-  margin-top: 8px;
+  margin-top: var(--app-spacing-xs);
 }

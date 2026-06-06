@@ -5,5 +5,5 @@
 .menu-item__content {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--app-spacing-xs);
 }

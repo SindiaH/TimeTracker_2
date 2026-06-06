@@ -2,12 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  gap: 12px;
+  margin-bottom: var(--app-spacing-md);
+  gap: var(--app-spacing-sm);
 }
 
 .card-footer {
-  margin-top: 16px;
+  margin-top: var(--app-spacing-md);
 }
 
 .custom-outlined-card {
@@ -15,13 +15,13 @@
   background: var(--app-color-surface);
   border-radius: var(--app-shape-corner-medium);
   border: 1px solid var(--app-color-outline-variant);
-  padding: 24px;
+  padding: var(--app-spacing-xl);
   flex-direction: column;
   align-items: flex-start;
 }
 
 .custom-outlined-card .card-header {
-  margin-bottom: 16px;
+  margin-bottom: var(--app-spacing-md);
 }
 
 .custom-outlined-card .card-title {

@@ -4,10 +4,10 @@
 }
 
 .menu-icon {
-  margin-right: 4px;
+  margin-right: var(--app-spacing-2xs);
 }
 
 .mat-menu__content {
   display: flex;
-  gap: 0.2rem;
+  gap: var(--app-spacing-2xs);
 }

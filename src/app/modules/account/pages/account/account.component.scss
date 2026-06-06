@@ -3,7 +3,7 @@
   flex: 1;
   align-items: flex-start;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: var(--app-spacing-2xl) var(--app-spacing-md);
   min-height: 100%;
   background: var(--app-color-surface);
 }
@@ -11,10 +11,10 @@
 .account__card {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--app-spacing-xl);
   width: 100%;
   max-width: 32rem;
-  padding: 2rem;
+  padding: var(--app-spacing-2xl);
   background: var(--app-color-surface-container);
   border-radius: 1rem;
   box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
@@ -35,7 +35,7 @@
 .account__fields {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: 0.5rem 1.5rem;
+  gap: var(--app-spacing-xs) var(--app-spacing-xl);
   margin: 0;
 }
 

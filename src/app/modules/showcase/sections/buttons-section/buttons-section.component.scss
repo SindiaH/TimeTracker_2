@@ -5,12 +5,12 @@
 .showcase-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--app-spacing-sm);
   align-items: center;
 }
 
 .showcase-row + .showcase-row {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: var(--app-spacing-md);
+  padding-top: var(--app-spacing-md);
   border-top: 1px solid var(--app-color-outline-variant);
 }

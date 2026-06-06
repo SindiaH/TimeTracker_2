@@ -10,7 +10,7 @@
 .task-tree-node__drop-list {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: var(--app-spacing-3xs);
 }
 
 :host.cdk-drag-preview {
@@ -40,9 +40,9 @@
 .task-tree-node__row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--app-spacing-xs);
   height: 36px;
-  padding: 0 0.75rem;
+  padding: 0 var(--app-spacing-sm);
   cursor: pointer;
   border-radius: 0.5rem;
   color: var(--app-color-on-surface);
@@ -52,7 +52,7 @@
 }
 
 .task-tree-node__task-invisible {
-  margin-left: 8px !important;
+  margin-left: var(--app-spacing-xs) !important;
 }
 
 .task-tree-node__row:hover {
@@ -119,7 +119,7 @@
 .task-tree-node__menu-trigger {
   display: inline-flex;
   align-items: center;
-  margin-left: 0.25rem;
+  margin-left: var(--app-spacing-2xs);
   visibility: hidden;
 }
 
