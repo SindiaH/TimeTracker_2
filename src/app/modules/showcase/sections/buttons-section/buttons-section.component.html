@@ -22,6 +22,12 @@
       >
       <app-button [disabled]="true">Disabled</app-button>
       <app-button [loading]="true">Loading</app-button>
+      <app-button [icon]="APP_ICONS.archive">With Icon</app-button>
+      <app-button
+        [loading]="true"
+        [icon]="APP_ICONS.edit"
+        >With Icon, but loading</app-button
+      >
     </div>
     <div class="showcase-row">
       <app-link

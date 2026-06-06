@@ -14,10 +14,12 @@
     mat-button
     [matMenuTriggerFor]="menu"
     [class.filled-button]="appearance === 'filled'">
-    @if (icon) {
-      <app-icon class="menu-icon">{{ icon }}</app-icon>
-    }
-    <span class="label">{{ labelText }}</span>
+    <div class="mat-menu__content">
+      @if (icon) {
+        <app-icon class="menu-icon">{{ icon }}</app-icon>
+      }
+      <span class="label">{{ labelText }}</span>
+    </div>
   </button>
 }
 

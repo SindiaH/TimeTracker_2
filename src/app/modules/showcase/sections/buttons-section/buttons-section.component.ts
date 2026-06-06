@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
+import { APP_ICONS } from '@core/constants/app-icons';
 
 @Component({
   selector: 'app-buttons-section',
@@ -23,4 +24,5 @@ export class ButtonsSectionComponent {
     'app-link',
     'app-icon',
   ];
+  protected readonly APP_ICONS = APP_ICONS;
 }

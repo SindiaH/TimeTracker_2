@@ -9,7 +9,7 @@ $dark-config: (
   ),
   typography: palette.$typography-config,
   density: (
-    scale: 0,
+    scale: -3,
   ),
 );
 $dark-theme: mat.define-theme($dark-config);

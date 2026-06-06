@@ -9,10 +9,12 @@
   [disabled]="disabled"
   [matTooltip]="tooltip"
   (click)="clicked.emit()">
-  @if (icon) {
-    <app-icon>{{ icon }}</app-icon>
-  }
-  <span>
-    <ng-content></ng-content>
-  </span>
+  <div class="menu-item__content">
+    @if (icon) {
+      <app-icon>{{ icon }}</app-icon>
+    }
+    <span>
+      <ng-content></ng-content>
+    </span>
+  </div>
 </button>

@@ -1,12 +1,12 @@
 .button-content {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
 
 .is-loading {
-  display: inline-flex;
+  display: flex;
   animation: spin 1s linear infinite;
   transform-origin: center;
 }

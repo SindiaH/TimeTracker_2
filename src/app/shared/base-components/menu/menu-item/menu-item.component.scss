@@ -1,3 +1,9 @@
 .push-icon-to-right {
   flex-direction: row-reverse;
 }
+
+.menu-item__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

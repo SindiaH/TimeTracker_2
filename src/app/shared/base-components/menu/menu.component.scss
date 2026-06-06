@@ -6,3 +6,8 @@
 .menu-icon {
   margin-right: 4px;
 }
+
+.mat-menu__content {
+  display: flex;
+  gap: 0.2rem;
+}

@@ -73,7 +73,7 @@
 }
 
 <ng-template #contentTpl>
-  <span class="button-content">
+  <div class="button-content">
     @if (loading) {
       <app-icon
         class="is-loading"
@@ -84,7 +84,7 @@
       <app-icon [outlined]="outlined">{{ icon }}</app-icon>
     }
     <ng-container *ngTemplateOutlet="content"></ng-container>
-  </span>
+  </div>
 </ng-template>
 
 <ng-template #iconOnly>

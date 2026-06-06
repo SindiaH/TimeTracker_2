@@ -9,7 +9,7 @@ $light-config: (
   ),
   typography: palette.$typography-config,
   density: (
-    scale: 0,
+    scale: -3,
   ),
 );
 $light-theme: mat.define-theme($light-config);
