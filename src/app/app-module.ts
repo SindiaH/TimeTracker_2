@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 
 import { SharedModule } from '@shared/shared.module';
 import { provideAppTransloco } from '@core/i18n/transloco-config';
@@ -22,7 +22,7 @@ export function initializeTranslations(translationService: TranslationService): 
   imports: [BrowserModule, BrowserAnimationsModule, SharedModule, AppRoutingModule],
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
     provideAppTransloco(),
     provideAppDateAdapter('de-AT'),
     provideDatabaseBackends(),
