@@ -19,7 +19,7 @@ When implementing, do not jump ahead to features that depend on a stage that has
 See `README.md` for the full command list. The most-used:
 
 ```bash
-npm start                    # Angular dev server (http://localhost:4200)
+npm start                    # Angular dev server (http://localhost:54321)
 npm run tauri:dev            # Tauri shell pointing at the dev server
 npm run lint                 # ESLint
 npm run prettier:fix         # Prettier write

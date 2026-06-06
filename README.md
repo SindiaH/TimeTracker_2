@@ -36,7 +36,7 @@ TimeTracker_2/
 ### Web (Angular only)
 
 ```bash
-npm start                    # Angular dev server — http://localhost:4200 (local environment)
+npm start                    # Angular dev server — http://localhost:54321 (local environment)
 npm run build                # Production build
 npm run build:dev            # Development build
 npm run build:test           # Test environment build
@@ -45,7 +45,7 @@ npm run build:test           # Test environment build
 ### Desktop (Tauri shell + Angular)
 
 ```bash
-npm run tauri:dev            # Tauri dev — opens the desktop window pointing at http://localhost:4200
+npm run tauri:dev            # Tauri dev — opens the desktop window pointing at http://localhost:54321
 npm run tauri:build          # Production bundle for the current host platform
 npm run tauri:build:mac      # Universal macOS .app/.dmg (x64 + arm64), signed + notarized
 npm run tauri:build:win      # Windows NSIS installer (perMachine, allowElevation)

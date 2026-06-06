@@ -128,6 +128,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 54321
+          },
           "configurations": {
             "production": {
               "buildTarget": "TimeTracker_2:build:production"
