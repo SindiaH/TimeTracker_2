@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal, viewChild } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { BottomSheetComponent } from '@shared/base-components/bottom-sheet/bottom-sheet.component';
 import { DialogComponent } from '@shared/base-components/dialog/dialog.component';
@@ -11,10 +12,9 @@ import { SideSheetComponent } from '@shared/base-components/side-sheet/side-shee
   styleUrl: './dialogs-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DialogsSectionComponent {
+export class DialogsSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.dialogs,
     'dialog',

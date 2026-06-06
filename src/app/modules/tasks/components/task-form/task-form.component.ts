@@ -11,7 +11,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
-import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
+import { TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 import { FolderProvider } from '@core/providers/folder.provider';
 import { TaskProvider } from '@core/providers/task.provider';
@@ -41,8 +41,6 @@ export class TaskFormComponent extends ComponentBase {
   private readonly taskProvider = inject(TaskProvider);
   private readonly folderProvider = inject(FolderProvider);
   private readonly translationService = inject(TranslationService);
-
-  protected readonly translationKeys = TRANSLATION_KEYS.tasks;
 
   protected readonly nameControl: FormControl<string> = new FormControl<string>('', {
     nonNullable: true,
@@ -79,15 +77,15 @@ export class TaskFormComponent extends ComponentBase {
   protected readonly titleKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
     switch (this._mode()) {
       case 'create-folder':
-        return this.translationKeys.form.createFolderTitle;
+        return this.translationKeys.tasks.form.createFolderTitle;
       case 'create-task':
-        return this.translationKeys.form.createTaskTitle;
+        return this.translationKeys.tasks.form.createTaskTitle;
       case 'edit-folder':
-        return this.translationKeys.form.editFolderTitle;
+        return this.translationKeys.tasks.form.editFolderTitle;
       case 'edit-task':
-        return this.translationKeys.form.editTaskTitle;
+        return this.translationKeys.tasks.form.editTaskTitle;
       default:
-        return this.translationKeys.form.createTaskTitle;
+        return this.translationKeys.tasks.form.createTaskTitle;
     }
   });
 
@@ -103,10 +101,10 @@ export class TaskFormComponent extends ComponentBase {
       return null;
     }
     if (errors['required']) {
-      return this.translationService.instant(this.translationKeys.errors.nameRequired);
+      return this.translationService.instant(this.translationKeys.tasks.errors.nameRequired);
     }
     if (errors['maxlength']) {
-      return this.translationService.instant(this.translationKeys.errors.nameMaxLength, {
+      return this.translationService.instant(this.translationKeys.tasks.errors.nameMaxLength, {
         count: NAME_MAX_LENGTH,
       });
     }

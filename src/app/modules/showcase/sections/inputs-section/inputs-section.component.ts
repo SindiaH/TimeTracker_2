@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { InputValue } from '@shared/base-components/input/input.component';
 import { InputSelectSearchValue } from '@shared/base-components/input-select-search/input-select-search.component';
@@ -14,10 +15,9 @@ import { SearchValue } from '@shared/base-components/search/search.component';
   styleUrl: './inputs-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputsSectionComponent {
+export class InputsSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.inputs,
     'input',

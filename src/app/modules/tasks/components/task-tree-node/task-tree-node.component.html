@@ -29,7 +29,9 @@
         class="task-tree-node__chevron"
         type="button"
         [class.task-tree-node__chevron--invisible]="!hasChildren"
-        [attr.aria-label]="(isExpanded ? translationKeys.actions.collapse : translationKeys.actions.expand) | translate"
+        [attr.aria-label]="
+          (isExpanded ? translationKeys.tasks.actions.collapse : translationKeys.tasks.actions.expand) | translate
+        "
         (click)="onToggle(); $event.stopPropagation()">
         <app-icon>{{ isExpanded ? icons.expandMore : icons.expandLess }}</app-icon>
       </button>
@@ -59,36 +61,36 @@
           <app-menu-item
             [icon]="icons.taskFolder"
             (clicked)="onAddFolderHere()">
-            {{ translationKeys.actions.addSubfolder | translate }}
+            {{ translationKeys.tasks.actions.addSubfolder | translate }}
           </app-menu-item>
           <app-menu-item
             [icon]="icons.taskItem"
             (clicked)="onAddTaskHere()">
-            {{ translationKeys.actions.addChildTask | translate }}
+            {{ translationKeys.tasks.actions.addChildTask | translate }}
           </app-menu-item>
         }
         <app-menu-item
           [icon]="icons.edit"
           (clicked)="onEdit()">
-          {{ translationKeys.actions.edit | translate }}
+          {{ translationKeys.tasks.actions.edit | translate }}
         </app-menu-item>
         @if (node.isArchived) {
           <app-menu-item
             [icon]="icons.unarchive"
             (clicked)="onUnarchive()">
-            {{ translationKeys.actions.unarchive | translate }}
+            {{ translationKeys.tasks.actions.unarchive | translate }}
           </app-menu-item>
         } @else {
           <app-menu-item
             [icon]="icons.archive"
             (clicked)="onArchive()">
-            {{ translationKeys.actions.archive | translate }}
+            {{ translationKeys.tasks.actions.archive | translate }}
           </app-menu-item>
         }
         <app-menu-item
           [icon]="icons.delete"
           (clicked)="onDelete()">
-          {{ translationKeys.actions.delete | translate }}
+          {{ translationKeys.tasks.actions.delete | translate }}
         </app-menu-item>
       </app-menu>
     </span>

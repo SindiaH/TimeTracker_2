@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
-import { APP_ICONS } from '@core/constants/app-icons';
 
 @Component({
   selector: 'app-buttons-section',
@@ -9,10 +9,9 @@ import { APP_ICONS } from '@core/constants/app-icons';
   styleUrl: './buttons-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ButtonsSectionComponent {
+export class ButtonsSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.buttons,
     'button',
@@ -24,5 +23,4 @@ export class ButtonsSectionComponent {
     'app-link',
     'app-icon',
   ];
-  protected readonly APP_ICONS = APP_ICONS;
 }

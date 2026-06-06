@@ -11,8 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
-import { APP_ICONS } from '@core/constants/app-icons';
-import { TRANSLATION_KEYS, TranslationKey } from '@core/constants/translation-keys';
+import { TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
 import { FolderProvider } from '@core/providers/folder.provider';
 import { TaskProvider } from '@core/providers/task.provider';
@@ -46,9 +45,6 @@ export class TasksOverviewComponent extends ComponentBase {
   protected readonly tasksTreeService = inject(TasksTreeService);
   private readonly dropPriority = inject(TreeDropPriorityService);
 
-  protected readonly icons = APP_ICONS;
-  protected readonly translationKeys = TRANSLATION_KEYS.tasks;
-
   protected readonly filterControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>(FILTER_ALL, {
     nonNullable: true,
   });
@@ -56,11 +52,11 @@ export class TasksOverviewComponent extends ComponentBase {
   protected readonly filterOptions: Signal<ButtonToggleOption[]> = computed<ButtonToggleOption[]>(() => [
     {
       id: FILTER_ALL,
-      name: this.translationService.instant(this.translationKeys.filter.all),
+      name: this.translationService.instant(this.translationKeys.tasks.filter.all),
     },
     {
       id: FILTER_ARCHIVE,
-      name: this.translationService.instant(this.translationKeys.filter.archive),
+      name: this.translationService.instant(this.translationKeys.tasks.filter.archive),
     },
   ]);
 
@@ -88,14 +84,18 @@ export class TasksOverviewComponent extends ComponentBase {
 
   protected readonly deleteTitleKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
     const node = this._pendingDelete();
-    if (node === null) return this.translationKeys.delete.taskTitle;
-    return node.kind === 'folder' ? this.translationKeys.delete.folderTitle : this.translationKeys.delete.taskTitle;
+    if (node === null) return this.translationKeys.tasks.delete.taskTitle;
+    return node.kind === 'folder'
+      ? this.translationKeys.tasks.delete.folderTitle
+      : this.translationKeys.tasks.delete.taskTitle;
   });
 
   protected readonly deleteMessageKey: Signal<TranslationKey> = computed<TranslationKey>(() => {
     const node = this._pendingDelete();
-    if (node === null) return this.translationKeys.delete.taskMessage;
-    return node.kind === 'folder' ? this.translationKeys.delete.folderMessage : this.translationKeys.delete.taskMessage;
+    if (node === null) return this.translationKeys.tasks.delete.taskMessage;
+    return node.kind === 'folder'
+      ? this.translationKeys.tasks.delete.folderMessage
+      : this.translationKeys.tasks.delete.taskMessage;
   });
 
   private readonly taskForm = viewChild<TaskFormComponent>('taskForm');

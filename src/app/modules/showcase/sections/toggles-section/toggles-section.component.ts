@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
@@ -12,10 +13,9 @@ import { RadioButtonType } from '@shared/types/radio-button.type';
   styleUrl: './toggles-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TogglesSectionComponent {
+export class TogglesSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.toggles,
     'checkbox',

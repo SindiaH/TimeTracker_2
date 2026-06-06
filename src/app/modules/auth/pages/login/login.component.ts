@@ -70,14 +70,14 @@ export class LoginComponent extends AuthFormBase {
     const email = this.emailControl.value.trim();
     if (this.emailControl.invalid || email.length === 0) {
       this.emailControl.markAsTouched();
-      this.notificationService.showError(this.translationKeys.errors.emailRequired);
+      this.notificationService.showError(this.translationKeys.auth.errors.emailRequired);
       return;
     }
     this.isMagicLinkLoading.set(true);
     try {
       const succeeded = await this.sessionProvider.signInWithMagicLink(email, window.location.origin);
       if (succeeded) {
-        this.notificationService.showInfo(this.translationKeys.feedback.magicLinkSent);
+        this.notificationService.showInfo(this.translationKeys.auth.feedback.magicLinkSent);
       }
     } finally {
       this.isMagicLinkLoading.set(false);
@@ -91,7 +91,7 @@ export class LoginComponent extends AuthFormBase {
     const email = this.emailControl.value.trim();
     if (this.emailControl.invalid || email.length === 0) {
       this.emailControl.markAsTouched();
-      this.notificationService.showError(this.translationKeys.errors.emailRequired);
+      this.notificationService.showError(this.translationKeys.auth.errors.emailRequired);
       return;
     }
     this.isResettingPassword.set(true);
@@ -99,7 +99,7 @@ export class LoginComponent extends AuthFormBase {
       const redirectTo = `${window.location.origin}${ROUTE_PATHS.authPasswordReset}`;
       const succeeded = await this.sessionProvider.sendPasswordResetEmail(email, redirectTo);
       if (succeeded) {
-        this.notificationService.showInfo(this.translationKeys.feedback.passwordResetSent);
+        this.notificationService.showInfo(this.translationKeys.auth.feedback.passwordResetSent);
       }
     } finally {
       this.isResettingPassword.set(false);

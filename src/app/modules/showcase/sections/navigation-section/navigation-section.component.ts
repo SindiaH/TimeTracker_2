@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { TabGroupType } from '@shared/types/tab-group.type';
 
@@ -9,10 +10,9 @@ import { TabGroupType } from '@shared/types/tab-group.type';
   styleUrl: './navigation-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavigationSectionComponent {
+export class NavigationSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.navigation,
     'tab',

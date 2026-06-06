@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 
 @Component({
@@ -9,10 +10,9 @@ import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
   styleUrl: './date-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DateSectionComponent {
+export class DateSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.date,
     'date',

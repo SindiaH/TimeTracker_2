@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, Signal, WritableSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ComponentBase } from '@core/base/component-base';
-import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { SearchValue } from '@shared/base-components/search/search.component';
 
 @Component({
@@ -12,8 +11,6 @@ import { SearchValue } from '@shared/base-components/search/search.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowcasePageComponent extends ComponentBase {
-  protected readonly translationKeys = TRANSLATION_KEYS;
-
   protected readonly searchControl: FormControl<SearchValue> = new FormControl<SearchValue>(null);
   private readonly _searchTerm: WritableSignal<string | null> = signal<string | null>(null);
   protected readonly searchTerm: Signal<string | null> = this._searchTerm.asReadonly();

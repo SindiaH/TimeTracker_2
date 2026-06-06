@@ -11,8 +11,6 @@ import {
   Signal,
 } from '@angular/core';
 import { ComponentBase } from '@core/base/component-base';
-import { APP_ICONS } from '@core/constants/app-icons';
-import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { TasksTreeService } from '@modules/tasks/services/tasks-tree.service';
 import { TreeDropPriorityService } from '@modules/tasks/services/tree-drop-priority.service';
 import { TaskTreeNode, TaskTreeNodeKind } from '@modules/tasks/types/task-tree-node.type';
@@ -47,9 +45,6 @@ export class TaskTreeNodeComponent extends ComponentBase {
 
   readonly node: InputSignal<TaskTreeNode> = input.required<TaskTreeNode>();
   readonly action: OutputEmitterRef<TaskTreeAction> = output<TaskTreeAction>();
-
-  protected readonly icons = APP_ICONS;
-  protected readonly translationKeys = TRANSLATION_KEYS.tasks;
 
   protected readonly isFolder: Signal<boolean> = computed<boolean>(() => this.node().kind === 'folder');
   protected readonly hasChildren: Signal<boolean> = computed<boolean>(() => this.node().children.length > 0);

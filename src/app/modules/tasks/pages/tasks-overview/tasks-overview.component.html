@@ -25,17 +25,17 @@
 
     <app-menu
       [icon]="icons.add"
-      [labelText]="translationKeys.addMenu.trigger | translate"
+      [labelText]="translationKeys.tasks.addMenu.trigger | translate"
       appearance="filled">
       <app-menu-item
         [icon]="icons.taskFolder"
         (clicked)="onAddFolder()">
-        {{ translationKeys.addMenu.addFolder | translate }}
+        {{ translationKeys.tasks.addMenu.addFolder | translate }}
       </app-menu-item>
       <app-menu-item
         [icon]="icons.taskItem"
         (clicked)="onAddTask()">
-        {{ translationKeys.addMenu.addTask | translate }}
+        {{ translationKeys.tasks.addMenu.addTask | translate }}
       </app-menu-item>
     </app-menu>
   </header>
@@ -49,9 +49,9 @@
       } @else if (!hasNodes) {
         <div class="tasks-overview__empty">
           <app-icon class="tasks-overview__empty-icon">{{ icons.empty }}</app-icon>
-          <h3 class="tasks-overview__empty-title">{{ translationKeys.empty.title | translate }}</h3>
+          <h3 class="tasks-overview__empty-title">{{ translationKeys.tasks.empty.title | translate }}</h3>
           <p class="tasks-overview__empty-description">
-            {{ translationKeys.empty.description | translate }}
+            {{ translationKeys.tasks.empty.description | translate }}
           </p>
         </div>
       } @else {
@@ -103,15 +103,15 @@
           <h2 class="tasks-overview__details-title">{{ selectedNode.name }}</h2>
         </header>
         <p class="tasks-overview__details-placeholder">
-          {{ translationKeys.selection.placeholderDescription | translate }}
+          {{ translationKeys.tasks.selection.placeholderDescription | translate }}
         </p>
       } @else {
         <div class="tasks-overview__details-empty">
           <h3 class="tasks-overview__details-title">
-            {{ translationKeys.selection.placeholderTitle | translate }}
+            {{ translationKeys.tasks.selection.placeholderTitle | translate }}
           </h3>
           <p class="tasks-overview__details-placeholder">
-            {{ translationKeys.selection.placeholderDescription | translate }}
+            {{ translationKeys.tasks.selection.placeholderDescription | translate }}
           </p>
         </div>
       }
@@ -135,7 +135,7 @@
       variant="basic"
       [disabled]="isDeleting"
       (clicked)="cancelDelete()">
-      {{ translationKeys.delete.cancel | translate }}
+      {{ translationKeys.tasks.delete.cancel | translate }}
     </app-button>
     <app-button
       variant="flat"
@@ -143,7 +143,7 @@
       [loading]="isDeleting"
       [disabled]="isDeleting"
       (clicked)="confirmDelete()">
-      {{ translationKeys.delete.confirm | translate }}
+      {{ translationKeys.tasks.delete.confirm | translate }}
     </app-button>
   </div>
 </app-dialog>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal, Signal, signal } from '@angular/core';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 
 @Component({
@@ -8,10 +9,9 @@ import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
   styleUrl: './containers-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContainersSectionComponent {
+export class ContainersSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.containers,
     'panel',

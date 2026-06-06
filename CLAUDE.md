@@ -107,6 +107,8 @@ import { ComponentBase } from '@core/base/component-base';
 @Component({ ... })
 export class TasksOverviewComponent extends ComponentBase {
   // - DestroyRef + takeUntilDestroyed() for automatic subscription cleanup
+  // - icons: full APP_ICONS constant, ready to consume in templates
+  // - translationKeys: full TRANSLATION_KEYS constant, ready to consume in templates
   // - shared utility methods
 }
 ```
@@ -121,7 +123,11 @@ export class TaskProvider extends ServiceBase {
 }
 ```
 
-All components extend `ComponentBase`. All stateful services (providers) extend `ServiceBase`.
+**Every component under `src/app/modules/` MUST extend `ComponentBase`** — directly or through an intermediate abstract base (e.g. `AuthFormBase extends ComponentBase`). Components in `src/app/shared/` and `src/app/core/` are exempt (they may extend `ComponentBase` when they need its features, but it is not required).
+
+`ComponentBase` already exposes the full `APP_ICONS` and `TRANSLATION_KEYS` as `this.icons` and `this.translationKeys`. **Never redeclare them in a subclass** and never narrow them to a sub-tree (`= TRANSLATION_KEYS.tasks`). Always use the full path in templates and TS code: `translationKeys.tasks.actions.archive`, `icons.delete`. Only import `APP_ICONS` / `TRANSLATION_KEYS` directly when a *static* class-property initializer needs the literal (e.g. the showcase `keywords` arrays).
+
+All stateful services (providers) extend `ServiceBase`.
 
 ### State Management (ADR-10002)
 

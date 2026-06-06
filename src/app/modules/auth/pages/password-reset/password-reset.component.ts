@@ -67,14 +67,14 @@ export class PasswordResetComponent extends AuthFormBase {
       return;
     }
     if (!this.canResetPassword()) {
-      this.notificationService.showError(this.translationKeys.errors.recoveryLinkInvalid);
+      this.notificationService.showError(this.translationKeys.auth.errors.recoveryLinkInvalid);
       return;
     }
     this.isSubmitting.set(true);
     try {
       const succeeded = await this.sessionProvider.updatePassword(this.passwordControl.value);
       if (!succeeded) return;
-      this.notificationService.showSuccess(this.translationKeys.feedback.passwordUpdated);
+      this.notificationService.showSuccess(this.translationKeys.auth.feedback.passwordUpdated);
       this.resetForm.reset();
       this.stripRecoveryTokensFromUrl();
       void this.router.navigate([`/${DEFAULT_ROUTE_SEGMENT}`]);

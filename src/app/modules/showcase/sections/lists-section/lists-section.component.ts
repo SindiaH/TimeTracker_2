@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ListSelectableValue } from '@shared/base-components/list-selectable/list-selectable.component';
 import { ListType } from '@shared/types/list.type';
@@ -11,10 +12,9 @@ import { ListType } from '@shared/types/list.type';
   styleUrl: './lists-section.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListsSectionComponent {
+export class ListsSectionComponent extends ComponentBase {
   readonly searchTerm: InputSignal<string | null> = input.required<string | null>();
 
-  protected readonly translationKeys = TRANSLATION_KEYS;
   protected readonly keywords: ReadonlyArray<string> = [
     TRANSLATION_KEYS.showcase.sections.lists,
     'list',

@@ -1,11 +1,12 @@
+@let translationKeys = this.translationKeys;
 @let isSubmitting = this.isSubmitting();
 @let emailError = this.getEmailError(emailControl);
 @let passwordError = this.getPasswordError(passwordControl);
 @let confirmPasswordError = this.getConfirmPasswordError(confirmPasswordControl);
 
 <app-auth-layout
-  [titleKey]="translationKeys.register.title"
-  [descriptionKey]="translationKeys.register.description">
+  [titleKey]="translationKeys.auth.register.title"
+  [descriptionKey]="translationKeys.auth.register.description">
   <form
     class="register-form"
     [formGroup]="registerForm"
@@ -13,18 +14,18 @@
     <app-input
       [control]="emailControl"
       [type]="'email'"
-      [labelText]="translationKeys.fields.email | translate"
+      [labelText]="translationKeys.auth.fields.email | translate"
       [errorText]="emailError"
       [showClearButton]="true" />
     <app-input
       [control]="passwordControl"
       [type]="'password'"
-      [labelText]="translationKeys.fields.password | translate"
+      [labelText]="translationKeys.auth.fields.password | translate"
       [errorText]="passwordError" />
     <app-input
       [control]="confirmPasswordControl"
       [type]="'password'"
-      [labelText]="translationKeys.fields.confirmPassword | translate"
+      [labelText]="translationKeys.auth.fields.confirmPassword | translate"
       [errorText]="confirmPasswordError" />
 
     <app-button
@@ -32,12 +33,12 @@
       [loading]="isSubmitting"
       [disabled]="isSubmitting"
       (clicked)="onSubmit()">
-      {{ translationKeys.register.submit | translate }}
+      {{ translationKeys.auth.register.submit | translate }}
     </app-button>
   </form>
 
   <p class="register-form__footer">
-    {{ translationKeys.register.haveAccount | translate }}
-    <a [routerLink]="loginLink">{{ translationKeys.register.goToLogin | translate }}</a>
+    {{ translationKeys.auth.register.haveAccount | translate }}
+    <a [routerLink]="loginLink">{{ translationKeys.auth.register.goToLogin | translate }}</a>
   </p>
 </app-auth-layout>

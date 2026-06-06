@@ -62,7 +62,7 @@ export class RegisterComponent extends AuthFormBase {
         password: this.passwordControl.value,
       });
       if (!succeeded) return;
-      this.notificationService.showSuccess(this.translationKeys.feedback.signupSuccess);
+      this.notificationService.showSuccess(this.translationKeys.auth.feedback.signupSuccess);
       this.registerForm.reset();
     } finally {
       this.isSubmitting.set(false);
