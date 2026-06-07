@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+import type { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 import { ComponentBase } from '@core/base/component-base';
-
-export type DatePickerAppearance = 'fill' | 'outline';
 
 @Component({
   selector: 'app-date-picker',
@@ -11,22 +10,41 @@ export type DatePickerAppearance = 'fill' | 'outline';
   templateUrl: './date-picker.component.html',
   styleUrl: './date-picker.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
 export class DatePickerComponent extends ComponentBase {
-  readonly control = input.required<FormControl<Date | null>>();
-  readonly labelText = input.required<string>();
-  readonly placeholder = input<string | null>(null);
-  readonly invalidErrorText = input<string>('Pflichtfeld');
-  readonly disabled = input<boolean>(false);
-  readonly hint = input<string | null>(null);
-  readonly appearance = input<DatePickerAppearance>('outline');
-
-  readonly dateChanged = output<Date | null>();
+  readonly control = input.required<FieldTree<Date | null, string>>();
+  readonly labelText = input<string>('');
+  readonly placeholder = input<string>('');
+  readonly minDate = input<Date>();
+  readonly maxDate = input<Date>();
+  readonly supportingText = input<string>();
+  readonly errorText = input<string>();
+  readonly appearance = input<MatFormFieldAppearance>('outline');
+  readonly floatLabel = input<FloatLabelType>('auto');
+  readonly cssClass = input<string>('');
 
   protected readonly useTouchUi = signal<boolean>(false);
 
-  constructor(breakpointObserver: BreakpointObserver) {
+  readonly hasError = computed<boolean>(() => {
+    const state = this.control()();
+    return state.invalid() && state.touched();
+  });
+
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-date-picker-host'];
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
+
+  constructor() {
     super();
+    const breakpointObserver = inject(BreakpointObserver);
     breakpointObserver
       .observe('(max-width: 599px)')
       .pipe(this.takeUntilDestroyed())

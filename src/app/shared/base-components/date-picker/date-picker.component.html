@@ -1,29 +1,38 @@
-@let control = this.control();
 @let labelText = this.labelText();
 @let placeholder = this.placeholder();
-@let invalidErrorText = this.invalidErrorText();
-@let hint = this.hint();
 @let appearance = this.appearance();
+@let floatLabel = this.floatLabel();
+@let control = this.control();
+@let minDate = this.minDate();
+@let maxDate = this.maxDate();
+@let hasError = this.hasError();
+@let errorText = this.errorText();
+@let supportingText = this.supportingText();
 @let useTouchUi = this.useTouchUi();
 
-<mat-form-field [appearance]="appearance">
-  <mat-label>{{ labelText }}</mat-label>
+<mat-form-field
+  class="app-date-picker"
+  [appearance]="appearance"
+  [floatLabel]="floatLabel">
+  @if (labelText) {
+    <mat-label>{{ labelText }}</mat-label>
+  }
   <input
     matInput
-    [formControl]="control"
-    [placeholder]="placeholder ?? ''"
     [matDatepicker]="picker"
-    (dateChange)="dateChanged.emit($event.value)" />
-  @if (hint) {
-    <mat-hint>{{ hint }}</mat-hint>
-  }
+    [formField]="control"
+    [placeholder]="placeholder"
+    [min]="minDate"
+    [max]="maxDate" />
   <mat-datepicker-toggle
     matIconSuffix
     [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker
     #picker
     [touchUi]="useTouchUi"></mat-datepicker>
-  @if (control.invalid) {
-    <mat-error [matTooltip]="invalidErrorText">{{ invalidErrorText }}</mat-error>
+  @if (hasError && errorText) {
+    <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+  } @else if (supportingText) {
+    <mat-hint>{{ supportingText }}</mat-hint>
   }
 </mat-form-field>

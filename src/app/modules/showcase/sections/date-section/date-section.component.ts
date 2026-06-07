@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { disabled, form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
+
+type DatePickerShowcaseModel = {
+  single: Date | null;
+  disabled: Date | null;
+};
 
 @Component({
   selector: 'app-date-section',
@@ -24,11 +30,14 @@ export class DateSectionComponent extends ComponentBase {
     'app-date-range-picker',
   ];
 
-  protected readonly singleDateControl: FormControl<Date | null> = new FormControl<Date | null>(new Date());
-  protected readonly disabledDateControl: FormControl<Date | null> = new FormControl<Date | null>({
-    value: new Date(),
-    disabled: true,
+  protected readonly datePickerModel = signal<DatePickerShowcaseModel>({
+    single: new Date(),
+    disabled: new Date(),
   });
+  protected readonly datePickerForm = form(this.datePickerModel, (f) => {
+    disabled(f.disabled);
+  });
+
   protected readonly rangeStartControl: FormControl<Date | null> = new FormControl<Date | null>(new Date());
   protected readonly rangeEndControl: FormControl<Date | null> = new FormControl<Date | null>(
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),

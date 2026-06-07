@@ -2,8 +2,7 @@
 @let searchTerm = this.searchTerm();
 @let keywords = this.keywords;
 
-@let singleDateControl = this.singleDateControl;
-@let disabledDateControl = this.disabledDateControl;
+@let datePickerForm = this.datePickerForm;
 @let rangeStartControl = this.rangeStartControl;
 @let rangeEndControl = this.rangeEndControl;
 
@@ -12,14 +11,14 @@
     <div class="showcase-grid">
       <app-date-picker
         labelText="Single date"
-        [control]="singleDateControl" />
+        [control]="datePickerForm.single" />
       <app-date-picker
         labelText="Filled"
         appearance="fill"
-        [control]="singleDateControl" />
+        [control]="datePickerForm.single" />
       <app-date-picker
         labelText="Disabled"
-        [control]="disabledDateControl" />
+        [control]="datePickerForm.disabled" />
       <app-date-range-picker
         labelText="Date range"
         [startControl]="rangeStartControl"
