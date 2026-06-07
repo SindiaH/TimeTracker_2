@@ -1,26 +1,32 @@
+@let icons = this.icons;
 @let control = this.control();
 @let items = this.items();
 @let labelText = this.labelText();
+@let placeholder = this.placeholder();
 @let appearance = this.appearance();
+@let floatLabel = this.floatLabel();
 @let multiple = this.multiple();
 @let showAsNumbered = this.showAsNumbered();
 @let hideErrorField = this.hideErrorField();
 @let errorText = this.errorText();
-@let errorRequiredText = this.errorRequiredText();
+@let hasError = this.hasError();
 @let selectedItemsText = this.selectedItemsText();
-@let errorKeys = this.errorKeys();
 
 <mat-form-field
+  class="app-input-select"
   [appearance]="appearance"
-  [class]="appearance + '-style'"
+  [floatLabel]="floatLabel"
   [class.hide-error-field]="hideErrorField">
-  <mat-label>{{ labelText }}</mat-label>
+  @if (labelText) {
+    <mat-label>{{ labelText }}</mat-label>
+  }
   <mat-select
-    [formControl]="control"
+    [formField]="control"
     [multiple]="multiple"
+    [placeholder]="placeholder"
     (closed)="closed.emit()">
     <mat-select-trigger>
-      <div class="select-name">{{ selectedItemsText ? selectedItemsText : control.value }}</div>
+      <div class="select-name">{{ selectedItemsText }}</div>
     </mat-select-trigger>
     @for (item of items; track item.id; let i = $index) {
       <mat-option [value]="item.id">
@@ -35,10 +41,14 @@
       </mat-option>
     }
   </mat-select>
-  @if (control.invalid && errorKeys.has(formErrorCodes.required)) {
-    <mat-error [matTooltip]="errorRequiredText">{{ errorRequiredText }}</mat-error>
+  @if (hasError) {
+    <app-icon
+      matSuffix
+      class="app-input-select-error-icon">
+      {{ icons.error }}
+    </app-icon>
   }
-  @if (errorText) {
+  @if (hasError && errorText) {
     <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
   }
 </mat-form-field>

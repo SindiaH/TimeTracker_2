@@ -2,8 +2,12 @@
   display: block;
 }
 
-.outline-style {
-  display: inline-block;
+.app-input-select {
+  width: 100%;
+}
+
+.app-input-select-error-icon {
+  color: var(--app-color-error);
 }
 
 .app-option-content {

@@ -1,24 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  signal,
-  untracked,
-} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+import type { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 import { ComponentBase } from '@core/base/component-base';
-import { FORM_ERROR_CODES } from '@core/constants/form-error-codes';
-import { controlErrorKeys } from '@core/utils/control-error-keys';
 import { ISelectItem } from '@shared/base-components/input-select/input-select.type';
 
-export type InputSelectAppearance = 'fill' | 'outline';
-export type InputSelectValue = string | string[] | number | number[] | null | undefined;
+export type InputSelectValue = string | string[] | number | number[] | null;
 
 @Component({
   selector: 'app-input-select',
@@ -26,76 +12,52 @@ export type InputSelectValue = string | string[] | number | number[] | null | un
   templateUrl: './input-select.component.html',
   styleUrl: './input-select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
-export class InputSelectComponent extends ComponentBase implements OnInit, OnDestroy {
+export class InputSelectComponent extends ComponentBase {
   readonly items = input.required<ISelectItem[]>();
-  readonly labelText = input.required<string>();
-  readonly control = input.required<FormControl<InputSelectValue>>();
+  readonly control = input.required<FieldTree<InputSelectValue, string>>();
+  readonly labelText = input<string>('');
+  readonly placeholder = input<string>('');
   readonly showAsNumbered = input<boolean>(false);
-  readonly appearance = input<InputSelectAppearance>('outline');
-  readonly errorText = input<string | null>(null);
-  readonly errorRequiredText = input<string>('Pflichtfeld');
-  readonly hideErrorField = input<boolean>(false);
   readonly multiple = input<boolean>(false);
-  readonly disableControl = input<boolean>(false);
+  readonly appearance = input<MatFormFieldAppearance>('outline');
+  readonly floatLabel = input<FloatLabelType>('auto');
+  readonly errorText = input<string>();
+  readonly hideErrorField = input<boolean>(false);
+  readonly cssClass = input<string>('');
 
-  readonly changed = output<InputSelectValue>();
   readonly closed = output<void>();
 
-  protected readonly changeSubject = new Subject<InputSelectValue>();
-  protected readonly selectedItems = signal<ISelectItem[]>([]);
-  protected readonly errorKeys = controlErrorKeys(this.control);
-  protected readonly formErrorCodes = FORM_ERROR_CODES;
-  protected readonly selectedItemsText = computed<string>(() => {
-    return this.selectedItems()
-      .map((item) => item.name ?? '')
-      .join(', ');
+  readonly hasError = computed<boolean>(() => {
+    const state = this.control()();
+    return state.invalid() && state.touched();
   });
 
-  constructor() {
-    super();
-    effect(() => {
-      const value = this.control().value;
-      const items = this.items();
-      untracked(() => this.updateSelectedItems(value, items));
-    });
-
-    effect(() => {
-      const disable = this.disableControl();
-      const control = this.control();
-      untracked(() => {
-        if (disable && !control.disabled) {
-          control.disable();
-        } else if (!disable && control.disabled) {
-          control.enable();
-        }
-      });
-    });
-  }
-
-  ngOnInit(): void {
-    this.changeSubject.pipe(debounceTime(200), distinctUntilChanged(), this.takeUntilDestroyed()).subscribe((value) => {
-      this.changed.emit(value);
-    });
-    this.control()
-      .valueChanges.pipe(this.takeUntilDestroyed())
-      .subscribe((value) => {
-        this.changeSubject.next(value);
-        this.updateSelectedItems(value, this.items());
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.changeSubject.complete();
-  }
-
-  private updateSelectedItems(value: InputSelectValue, items: ISelectItem[]): void {
+  readonly selectedItems = computed<ISelectItem[]>(() => {
+    const value = this.control()().value();
     if (value == null || (Array.isArray(value) && value.length === 0)) {
-      this.selectedItems.set([]);
-      return;
+      return [];
     }
     const values = (Array.isArray(value) ? value : [value]).map((v) => String(v));
     const valueSet = new Set(values);
-    this.selectedItems.set(items.filter((item) => item.id != null && valueSet.has(String(item.id))));
-  }
+    return this.items().filter((item) => item.id != null && valueSet.has(String(item.id)));
+  });
+
+  readonly selectedItemsText = computed<string>(() =>
+    this.selectedItems()
+      .map((item) => item.name ?? '')
+      .join(', '),
+  );
+
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-input-select-host'];
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
 }

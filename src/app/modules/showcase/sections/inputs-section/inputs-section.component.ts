@@ -8,6 +8,11 @@ import { InputSelectSearchValue } from '@shared/base-components/input-select-sea
 import { InputSelectValue } from '@shared/base-components/input-select/input-select.component';
 import { ISelectItem } from '@shared/base-components/input-select/input-select.type';
 
+type SelectShowcaseModel = {
+  single: InputSelectValue;
+  multi: InputSelectValue;
+};
+
 type InputShowcaseModel = {
   text: string;
   number: string;
@@ -71,11 +76,12 @@ export class InputsSectionComponent extends ComponentBase {
     { id: 'settings', name: 'Settings', icon: APP_ICONS.navSettings },
   ];
 
-  protected readonly singleSelectControl: FormControl<InputSelectValue> = new FormControl<InputSelectValue>('tasks');
-  protected readonly multiSelectControl: FormControl<InputSelectValue> = new FormControl<InputSelectValue>([
-    'tasks',
-    'time',
-  ]);
+  protected readonly selectModel = signal<SelectShowcaseModel>({
+    single: 'tasks',
+    multi: ['tasks', 'time'],
+  });
+  protected readonly selectForm = form(this.selectModel);
+
   protected readonly autocompleteControl: FormControl<InputSelectSearchValue> = new FormControl<InputSelectSearchValue>(
     null,
   );

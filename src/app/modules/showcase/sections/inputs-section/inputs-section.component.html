@@ -4,8 +4,7 @@
 
 @let inputForm = this.inputForm;
 @let selectItems = this.selectItems;
-@let singleSelectControl = this.singleSelectControl;
-@let multiSelectControl = this.multiSelectControl;
+@let selectForm = this.selectForm;
 @let autocompleteControl = this.autocompleteControl;
 @let searchForm = this.searchForm;
 
@@ -44,11 +43,11 @@
     <div class="showcase-grid">
       <app-input-select
         labelText="Single select"
-        [control]="singleSelectControl"
+        [control]="selectForm.single"
         [items]="selectItems" />
       <app-input-select
         labelText="Multi select"
-        [control]="multiSelectControl"
+        [control]="selectForm.multi"
         [items]="selectItems"
         [multiple]="true" />
       <app-input-select-search
