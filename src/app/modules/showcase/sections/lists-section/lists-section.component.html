@@ -3,8 +3,7 @@
 @let keywords = this.keywords;
 @let listItems = this.listItems;
 @let selectableItems = this.selectableItems;
-@let singleSelectionControl = this.singleSelectionControl;
-@let multiSelectionControl = this.multiSelectionControl;
+@let selectionForm = this.selectionForm;
 
 @if (searchTerm | searchFilter: keywords) {
   <app-panel [titleText]="translationKeys.showcase.sections.lists | translate">
@@ -32,10 +31,10 @@
     <div class="showcase-grid">
       <app-list-selectable
         [list]="selectableItems"
-        [control]="singleSelectionControl" />
+        [control]="selectionForm.single" />
       <app-list-selectable
         [list]="selectableItems"
-        [control]="multiSelectionControl"
+        [control]="selectionForm.multi"
         [multiple]="true" />
     </div>
   </app-panel>

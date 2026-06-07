@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { disabled, form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS } from '@core/constants/app-icons';
@@ -26,6 +25,11 @@ type ToggleShowcaseModel = {
 
 type RadioShowcaseModel = {
   selected: RadioButtonValue;
+};
+
+type ButtonToggleShowcaseModel = {
+  single: ButtonToggleValue;
+  multi: ButtonToggleValue;
 };
 
 @Component({
@@ -88,9 +92,9 @@ export class TogglesSectionComponent extends ComponentBase {
     { id: 'grid', name: 'Grid', icon: APP_ICONS.viewGrid },
     { id: 'card', name: 'Card', icon: APP_ICONS.viewCard },
   ];
-  protected readonly buttonToggleControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>('grid');
-  protected readonly buttonToggleMultiControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>([
-    'list',
-    'grid',
-  ]);
+  protected readonly buttonToggleModel = signal<ButtonToggleShowcaseModel>({
+    single: 'grid',
+    multi: ['list', 'grid'],
+  });
+  protected readonly buttonToggleForm = form(this.buttonToggleModel);
 }

@@ -1,7 +1,7 @@
 @let translationKeys = this.translationKeys;
 @let icons = this.icons;
 @let filterOptions = this.filterOptions();
-@let filterControl = this.filterControl;
+@let filterForm = this.filterForm;
 @let rootFolders = this.rootFolders();
 @let rootTasks = this.rootTasks();
 @let hasNodes = this.hasNodes();
@@ -16,7 +16,7 @@
 <section class="tasks-overview">
   <header class="tasks-overview__toolbar">
     <app-button-toggle
-      [control]="filterControl"
+      [control]="filterForm.filter"
       [options]="filterOptions"
       [hideIndicator]="true"
       (optionChanged)="onFilterChanged($event)" />

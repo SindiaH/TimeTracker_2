@@ -3,9 +3,8 @@
 @let multiple = this.multiple();
 
 <mat-selection-list
-  [formControl]="control"
-  [multiple]="multiple"
-  (selectionChange)="onSelectionChanged()">
+  [formField]="control"
+  [multiple]="multiple">
   @for (item of list; track item.id) {
     <mat-list-option [value]="item.id">
       <div class="list-option">

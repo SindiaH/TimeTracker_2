@@ -7,8 +7,7 @@
 @let radioOptions = this.radioOptions;
 @let radioForm = this.radioForm;
 @let buttonToggleOptions = this.buttonToggleOptions;
-@let buttonToggleControl = this.buttonToggleControl;
-@let buttonToggleMultiControl = this.buttonToggleMultiControl;
+@let buttonToggleForm = this.buttonToggleForm;
 
 @if (searchTerm | searchFilter: keywords) {
   <app-panel [titleText]="translationKeys.showcase.sections.toggles | translate">
@@ -48,10 +47,10 @@
     </div>
     <div class="showcase-row">
       <app-button-toggle
-        [control]="buttonToggleControl"
+        [control]="buttonToggleForm.single"
         [options]="buttonToggleOptions" />
       <app-button-toggle
-        [control]="buttonToggleMultiControl"
+        [control]="buttonToggleForm.multi"
         [options]="buttonToggleOptions"
         [multiple]="true" />
     </div>

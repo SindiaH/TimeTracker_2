@@ -41,13 +41,13 @@
   <div class="side-menu__footer">
     <app-button-toggle
       class="side-menu__toggle"
-      [control]="themeControl"
+      [control]="settingsForm.theme"
       [options]="themeOptions"
       [hideIndicator]="true"
       (optionChanged)="onThemeChanged($event)" />
     <app-button-toggle
       class="side-menu__toggle"
-      [control]="languageControl"
+      [control]="settingsForm.language"
       [options]="languageOptions"
       [hideIndicator]="true"
       (optionChanged)="onLanguageChanged($event)" />

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@core/i18n/translate.pipe';
@@ -79,15 +78,7 @@ const COMPONENTS = [
 
 @NgModule({
   declarations: COMPONENTS,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormField,
-    RouterLink,
-    RouterLinkActive,
-    TranslatePipe,
-    MaterialComponentsModule,
-  ],
-  exports: [...COMPONENTS, ReactiveFormsModule, FormField, RouterLink, RouterLinkActive, TranslatePipe],
+  imports: [CommonModule, FormField, RouterLink, RouterLinkActive, TranslatePipe, MaterialComponentsModule],
+  exports: [...COMPONENTS, FormField, RouterLink, RouterLinkActive, TranslatePipe],
 })
 export class BaseComponentsModule {}

@@ -9,7 +9,7 @@ import {
   viewChild,
   WritableSignal,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
@@ -31,6 +31,10 @@ const FILTER_ARCHIVE = 'archive';
 
 type FilterValue = typeof FILTER_ALL | typeof FILTER_ARCHIVE;
 
+type FilterFormModel = {
+  filter: ButtonToggleValue;
+};
+
 @Component({
   selector: 'app-tasks-overview',
   standalone: false,
@@ -45,9 +49,8 @@ export class TasksOverviewComponent extends ComponentBase {
   protected readonly tasksTreeService = inject(TasksTreeService);
   private readonly dropPriority = inject(TreeDropPriorityService);
 
-  protected readonly filterControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>(FILTER_ALL, {
-    nonNullable: true,
-  });
+  protected readonly filterModel = signal<FilterFormModel>({ filter: FILTER_ALL });
+  protected readonly filterForm = form(this.filterModel);
 
   protected readonly filterOptions: Signal<ButtonToggleOption[]> = computed<ButtonToggleOption[]>(() => [
     {

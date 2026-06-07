@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+import { ComponentBase } from '@core/base/component-base';
 import { ListType } from '@shared/types/list.type';
-
-export type ListSelectableValue = string[] | null | undefined;
 
 @Component({
   selector: 'app-list-selectable',
@@ -10,15 +9,22 @@ export type ListSelectableValue = string[] | null | undefined;
   templateUrl: './list-selectable.component.html',
   styleUrl: './list-selectable.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
-export class ListSelectableComponent {
-  readonly control = input.required<FormControl<ListSelectableValue>>();
+export class ListSelectableComponent extends ComponentBase {
+  readonly control = input.required<FieldTree<string[], string>>();
   readonly list = input.required<ListType[]>();
   readonly multiple = input<boolean>(false);
+  readonly cssClass = input<string>('');
 
-  readonly selectionChanged = output<ListSelectableValue>();
-
-  protected onSelectionChanged(): void {
-    this.selectionChanged.emit(this.control().value);
-  }
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-list-selectable-host'];
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
 }

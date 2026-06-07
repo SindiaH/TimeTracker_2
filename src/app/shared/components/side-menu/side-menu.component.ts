@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, signal } from '@angular/core';
+import { form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { AppIcon, APP_ICONS } from '@core/constants/app-icons';
 import { LANGUAGE_IDS, LanguageId } from '@core/constants/language.constants';
@@ -13,6 +13,11 @@ import { MenuStateService } from '@core/services/menu-state/menu-state.service';
 import { ThemeService } from '@core/services/theme/theme.service';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
+
+type SideMenuModel = {
+  theme: ButtonToggleValue;
+  language: ButtonToggleValue;
+};
 
 @Component({
   selector: 'app-side-menu',
@@ -42,13 +47,11 @@ export class SideMenuComponent extends ComponentBase {
   protected readonly theme: Signal<ThemePreference> = this.themeService.theme;
   protected readonly language: Signal<LanguageId> = this.translationService.selectedLanguageId$;
 
-  protected readonly themeControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>(
-    this.themeService.theme(),
-  );
-
-  protected readonly languageControl: FormControl<ButtonToggleValue> = new FormControl<ButtonToggleValue>(
-    this.translationService.getSelectedLanguageId(),
-  );
+  protected readonly model = signal<SideMenuModel>({
+    theme: this.themeService.theme(),
+    language: this.translationService.getSelectedLanguageId(),
+  });
+  protected readonly settingsForm = form(this.model);
 
   protected readonly themeOptions: Signal<ButtonToggleOption[]> = computed<ButtonToggleOption[]>(() => [
     { id: THEME_PREFERENCES.light, name: '', icon: APP_ICONS.themeLight },
@@ -66,15 +69,15 @@ export class SideMenuComponent extends ComponentBase {
 
     effect(() => {
       const preference = this.theme();
-      if (this.themeControl.value !== preference) {
-        this.themeControl.setValue(preference, { emitEvent: false });
+      if (this.model().theme !== preference) {
+        this.model.update((m) => ({ ...m, theme: preference }));
       }
     });
 
     effect(() => {
       const langId = this.language();
-      if (this.languageControl.value !== langId) {
-        this.languageControl.setValue(langId, { emitEvent: false });
+      if (this.model().language !== langId) {
+        this.model.update((m) => ({ ...m, language: langId }));
       }
     });
   }

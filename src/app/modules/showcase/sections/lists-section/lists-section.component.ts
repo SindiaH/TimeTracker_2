@@ -1,10 +1,14 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
+import { form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
-import { ListSelectableValue } from '@shared/base-components/list-selectable/list-selectable.component';
 import { ListType } from '@shared/types/list.type';
+
+type ListSelectableShowcaseModel = {
+  single: string[];
+  multi: string[];
+};
 
 @Component({
   selector: 'app-lists-section',
@@ -40,11 +44,9 @@ export class ListsSectionComponent extends ComponentBase {
     { id: 'material', name: 'Material' },
   ];
 
-  protected readonly singleSelectionControl: FormControl<ListSelectableValue> = new FormControl<ListSelectableValue>([
-    'angular',
-  ]);
-  protected readonly multiSelectionControl: FormControl<ListSelectableValue> = new FormControl<ListSelectableValue>([
-    'tauri',
-    'angular',
-  ]);
+  protected readonly selectionModel = signal<ListSelectableShowcaseModel>({
+    single: ['angular'],
+    multi: ['tauri', 'angular'],
+  });
+  protected readonly selectionForm = form(this.selectionModel);
 }
