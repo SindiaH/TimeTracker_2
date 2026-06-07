@@ -3,7 +3,7 @@
 @let keywords = this.keywords;
 
 @let checkboxForm = this.checkboxForm;
-@let toggleControl = this.toggleControl;
+@let toggleForm = this.toggleForm;
 @let radioOptions = this.radioOptions;
 @let selectedRadio = this.selectedRadio;
 @let buttonToggleOptions = this.buttonToggleOptions;
@@ -28,15 +28,11 @@
       >
     </div>
     <div class="showcase-row">
-      <app-toggle [control]="toggleControl">Toggle</app-toggle>
-      <app-toggle [checked]="true">On</app-toggle>
+      <app-toggle [control]="toggleForm.toggle">Toggle</app-toggle>
+      <app-toggle [control]="toggleForm.on">On</app-toggle>
+      <app-toggle [control]="toggleForm.disabled">Disabled</app-toggle>
       <app-toggle
-        [checked]="false"
-        [disabled]="true"
-        >Disabled</app-toggle
-      >
-      <app-toggle
-        [checked]="true"
+        [control]="toggleForm.labelBefore"
         labelPosition="before"
         >Label before</app-toggle
       >

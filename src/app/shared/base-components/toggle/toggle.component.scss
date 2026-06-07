@@ -1,3 +1,7 @@
-.custom-toggle {
+:host {
+  display: inline-block;
+}
+
+.app-toggle {
   margin: var(--app-spacing-2xs) 0;
 }

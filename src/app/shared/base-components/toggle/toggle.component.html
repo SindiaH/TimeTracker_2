@@ -1,12 +1,12 @@
-@let checkedValue = this.checkedValue();
-@let disabled = this.disabled();
+@let control = this.control();
+@let label = this.label();
+@let ariaLabel = this.ariaLabel();
 @let labelPosition = this.labelPosition();
 
 <mat-slide-toggle
-  class="custom-toggle"
-  [checked]="checkedValue"
-  [disabled]="disabled"
+  class="app-toggle"
+  [formField]="control"
   [labelPosition]="labelPosition"
-  (change)="valueChanged($event)">
-  <ng-content></ng-content>
+  [attr.aria-label]="ariaLabel">
+  {{ label }}<ng-content></ng-content>
 </mat-slide-toggle>

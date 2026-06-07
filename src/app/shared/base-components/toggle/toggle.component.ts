@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, input, OnInit, output, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 
 export type ToggleLabelPosition = 'before' | 'after';
@@ -11,44 +10,26 @@ export type ToggleLabelPosition = 'before' | 'after';
   templateUrl: './toggle.component.html',
   styleUrl: './toggle.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
-export class ToggleComponent extends ComponentBase implements OnInit {
-  readonly control = input<FormControl<boolean | null> | undefined>(undefined);
-  readonly checked = input<boolean | undefined>(undefined);
-  readonly disabled = input<boolean>(false);
+export class ToggleComponent extends ComponentBase {
+  readonly control = input.required<FieldTree<boolean, string>>();
+  readonly label = input<string>('');
+  readonly ariaLabel = input<string>();
   readonly labelPosition = input<ToggleLabelPosition>('after');
+  readonly cssClass = input<string>('');
 
-  readonly changed = output<boolean>();
-
-  protected readonly checkedValue = signal<boolean>(false);
-
-  constructor() {
-    super();
-    effect(() => {
-      const checked = this.checked();
-      if (checked !== undefined) {
-        this.checkedValue.set(checked);
-      }
-    });
-    effect(() => {
-      const control = this.control();
-      if (control !== undefined) {
-        this.checkedValue.set(control.value ?? false);
-      }
-    });
-  }
-
-  ngOnInit(): void {
-    const control = this.control();
-    if (control !== undefined) {
-      control.valueChanges.pipe(this.takeUntilDestroyed()).subscribe((value) => {
-        this.checkedValue.set(value ?? false);
-      });
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-toggle-host'];
+    if (this.control()().value()) {
+      classes.push('app-toggle-host--checked');
     }
-  }
-
-  protected valueChanged($event: MatSlideToggleChange): void {
-    this.changed.emit($event.checked);
-    this.control()?.setValue($event.checked);
-  }
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
 }

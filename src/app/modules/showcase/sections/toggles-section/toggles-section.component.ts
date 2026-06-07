@@ -16,6 +16,13 @@ type CheckboxShowcaseModel = {
   labelBefore: boolean;
 };
 
+type ToggleShowcaseModel = {
+  toggle: boolean;
+  on: boolean;
+  disabled: boolean;
+  labelBefore: boolean;
+};
+
 @Component({
   selector: 'app-toggles-section',
   standalone: false,
@@ -53,7 +60,15 @@ export class TogglesSectionComponent extends ComponentBase {
     disabled(f.disabled);
   });
 
-  protected readonly toggleControl: FormControl<boolean | null> = new FormControl<boolean | null>(false);
+  protected readonly toggleModel = signal<ToggleShowcaseModel>({
+    toggle: false,
+    on: true,
+    disabled: false,
+    labelBefore: true,
+  });
+  protected readonly toggleForm = form(this.toggleModel, (f) => {
+    disabled(f.disabled);
+  });
 
   protected readonly radioOptions: RadioButtonType[] = [
     { id: 'one', name: 'One' },
