@@ -8,8 +8,7 @@ import {
   viewChild,
   WritableSignal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { form, maxLength, required } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { TranslationKey } from '@core/constants/translation-keys';
 import { TranslationService } from '@core/i18n/translation.service';
@@ -24,11 +23,13 @@ const DESCRIPTION_MAX_LENGTH = 500;
 
 type TaskFormMode = 'create-folder' | 'create-task' | 'edit-folder' | 'edit-task';
 
-type TaskFormGroup = {
-  name: FormControl<string>;
-  description: FormControl<string>;
-  color: FormControl<string>;
+type TaskFormModel = {
+  name: string;
+  description: string;
+  color: string;
 };
+
+const EMPTY_MODEL: TaskFormModel = { name: '', description: '', color: '' };
 
 @Component({
   selector: 'app-task-form',
@@ -42,28 +43,17 @@ export class TaskFormComponent extends ComponentBase {
   private readonly folderProvider = inject(FolderProvider);
   private readonly translationService = inject(TranslationService);
 
-  protected readonly nameControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.maxLength(NAME_MAX_LENGTH)],
-  });
-  protected readonly descriptionControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.maxLength(DESCRIPTION_MAX_LENGTH)],
-  });
-  protected readonly colorControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-  });
-  protected readonly form: FormGroup<TaskFormGroup> = new FormGroup<TaskFormGroup>({
-    name: this.nameControl,
-    description: this.descriptionControl,
-    color: this.colorControl,
+  protected readonly model = signal<TaskFormModel>({ ...EMPTY_MODEL });
+
+  protected readonly taskForm = form(this.model, (f) => {
+    required(f.name);
+    maxLength(f.name, NAME_MAX_LENGTH);
+    maxLength(f.description, DESCRIPTION_MAX_LENGTH);
   });
 
   private readonly _mode: WritableSignal<TaskFormMode | null> = signal<TaskFormMode | null>(null);
   private readonly _editingId: WritableSignal<string | null> = signal<string | null>(null);
   private readonly _parentFolderId: WritableSignal<string | null> = signal<string | null>(null);
-
-  private readonly nameControlEvents = toSignal(this.nameControl.events);
 
   protected readonly mode: Signal<TaskFormMode | null> = this._mode.asReadonly();
   protected readonly isSubmitting: Signal<boolean> = computed<boolean>(
@@ -95,15 +85,14 @@ export class TaskFormComponent extends ComponentBase {
   });
 
   protected readonly nameError: Signal<string | null> = computed<string | null>(() => {
-    this.nameControlEvents();
-    const errors = this.nameControl.errors;
-    if (errors === null || !this.nameControl.touched) {
+    const state = this.taskForm.name();
+    if (!state.touched()) {
       return null;
     }
-    if (errors['required']) {
+    if (state.getError('required')) {
       return this.translationService.instant(this.translationKeys.tasks.errors.nameRequired);
     }
-    if (errors['maxlength']) {
+    if (state.getError('maxLength')) {
       return this.translationService.instant(this.translationKeys.tasks.errors.nameMaxLength, {
         count: NAME_MAX_LENGTH,
       });
@@ -117,7 +106,7 @@ export class TaskFormComponent extends ComponentBase {
     this.resetState();
     this._mode.set('create-folder');
     this._parentFolderId.set(parentFolderId);
-    this.colorControl.setValue(this.resolveTopMostParentColor(parentFolderId));
+    this.model.set({ ...EMPTY_MODEL, color: this.resolveTopMostParentColor(parentFolderId) });
     this.openDialog();
   }
 
@@ -125,7 +114,7 @@ export class TaskFormComponent extends ComponentBase {
     this.resetState();
     this._mode.set('create-task');
     this._parentFolderId.set(parentFolderId);
-    this.colorControl.setValue(this.resolveTopMostParentColor(parentFolderId));
+    this.model.set({ ...EMPTY_MODEL, color: this.resolveTopMostParentColor(parentFolderId) });
     this.openDialog();
   }
 
@@ -134,8 +123,11 @@ export class TaskFormComponent extends ComponentBase {
     this._mode.set('edit-folder');
     this._editingId.set(folder.id ?? null);
     this._parentFolderId.set(folder.parentFolderId ?? null);
-    this.nameControl.setValue(folder.name);
-    this.colorControl.setValue(folder.color ?? this.resolveTopMostParentColor(folder.parentFolderId));
+    this.model.set({
+      name: folder.name,
+      description: '',
+      color: folder.color ?? this.resolveTopMostParentColor(folder.parentFolderId),
+    });
     this.openDialog();
   }
 
@@ -144,16 +136,18 @@ export class TaskFormComponent extends ComponentBase {
     this._mode.set('edit-task');
     this._editingId.set(task.id ?? null);
     this._parentFolderId.set(task.parentFolderId ?? null);
-    this.nameControl.setValue(task.name);
-    this.descriptionControl.setValue(task.description ?? '');
-    this.colorControl.setValue(task.color ?? this.resolveTopMostParentColor(task.parentFolderId));
+    this.model.set({
+      name: task.name,
+      description: task.description ?? '',
+      color: task.color ?? this.resolveTopMostParentColor(task.parentFolderId),
+    });
     this.openDialog();
   }
 
   protected async onSubmit(): Promise<void> {
     if (this.isSubmitting()) return;
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (this.taskForm().invalid()) {
+      this.taskForm().markAsTouched();
       return;
     }
     const succeeded = await this.persist();
@@ -169,9 +163,10 @@ export class TaskFormComponent extends ComponentBase {
 
   private async persist(): Promise<boolean> {
     const mode = this._mode();
-    const name = this.nameControl.value.trim();
-    const description = this.descriptionControl.value.trim();
-    const color = this.colorControl.value.trim();
+    const { name: rawName, description: rawDescription, color: rawColor } = this.model();
+    const name = rawName.trim();
+    const description = rawDescription.trim();
+    const color = rawColor.trim();
     const parentFolderId = this._parentFolderId();
     const editingId = this._editingId();
     switch (mode) {
@@ -223,11 +218,8 @@ export class TaskFormComponent extends ComponentBase {
   private resetState(): void {
     this._editingId.set(null);
     this._parentFolderId.set(null);
-    this.nameControl.reset('');
-    this.descriptionControl.reset('');
-    this.colorControl.reset('');
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    this.model.set({ ...EMPTY_MODEL });
+    this.taskForm().reset();
   }
 
   private resolveTopMostParentColor(parentFolderId: string | null | undefined): string {

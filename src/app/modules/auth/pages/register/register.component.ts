@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
+import { email, form, minLength, required } from '@angular/forms/signals';
 import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
-import { matchControlsValidator } from '@modules/auth/utils/match-control.validator';
+import { matchValueValidator } from '@modules/auth/utils/match-control.validator';
 
-type RegisterForm = {
-  email: FormControl<string>;
-  password: FormControl<string>;
-  confirmPassword: FormControl<string>;
+type RegisterModel = {
+  email: string;
+  password: string;
+  confirmPassword: string;
 };
 
 @Component({
@@ -24,46 +24,44 @@ export class RegisterComponent extends AuthFormBase {
 
   protected readonly loginLink: string = ROUTE_PATHS.authLogin;
 
-  protected readonly emailControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.email],
-  });
+  protected readonly model = signal<RegisterModel>({ email: '', password: '', confirmPassword: '' });
 
-  protected readonly passwordControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH)],
+  protected readonly registerForm = form(this.model, (f) => {
+    required(f.email);
+    email(f.email);
+    required(f.password);
+    minLength(f.password, PASSWORD_MIN_LENGTH);
+    required(f.confirmPassword);
+    matchValueValidator(f.confirmPassword, f.password);
   });
-
-  protected readonly confirmPasswordControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required],
-  });
-
-  protected readonly registerForm: FormGroup<RegisterForm> = new FormGroup<RegisterForm>(
-    {
-      email: this.emailControl,
-      password: this.passwordControl,
-      confirmPassword: this.confirmPasswordControl,
-    },
-    { validators: [matchControlsValidator('password', 'confirmPassword')] },
-  );
 
   protected readonly isSubmitting = signal<boolean>(false);
 
+  protected readonly emailError: Signal<string | null> = computed<string | null>(() =>
+    this.getEmailError(this.registerForm.email()),
+  );
+  protected readonly passwordError: Signal<string | null> = computed<string | null>(() =>
+    this.getPasswordError(this.registerForm.password()),
+  );
+  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() =>
+    this.getConfirmPasswordError(this.registerForm.confirmPassword()),
+  );
+
   protected async onSubmit(): Promise<void> {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
+    if (this.registerForm().invalid()) {
+      this.registerForm().markAsTouched();
       return;
     }
     this.isSubmitting.set(true);
     try {
       const succeeded = await this.sessionProvider.signUpWithPassword({
-        email: this.emailControl.value.trim(),
-        password: this.passwordControl.value,
+        email: this.model().email.trim(),
+        password: this.model().password,
       });
       if (!succeeded) return;
       this.notificationService.showSuccess(this.translationKeys.auth.feedback.signupSuccess);
-      this.registerForm.reset();
+      this.model.set({ email: '', password: '', confirmPassword: '' });
+      this.registerForm().reset();
     } finally {
       this.isSubmitting.set(false);
     }

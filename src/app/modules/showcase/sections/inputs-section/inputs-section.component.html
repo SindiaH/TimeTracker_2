@@ -2,50 +2,44 @@
 @let searchTerm = this.searchTerm();
 @let keywords = this.keywords;
 
-@let textControl = this.textControl;
-@let numberControl = this.numberControl;
-@let passwordControl = this.passwordControl;
-@let textareaControl = this.textareaControl;
-@let disabledControl = this.disabledControl;
-@let readonlyControl = this.readonlyControl;
+@let inputForm = this.inputForm;
 @let selectItems = this.selectItems;
 @let singleSelectControl = this.singleSelectControl;
 @let multiSelectControl = this.multiSelectControl;
 @let autocompleteControl = this.autocompleteControl;
-@let searchControl = this.searchControl;
+@let searchForm = this.searchForm;
 
 @if (searchTerm | searchFilter: keywords) {
   <app-panel [titleText]="translationKeys.showcase.sections.inputs | translate">
     <div class="showcase-grid">
       <app-input
-        labelText="Text"
-        [control]="textControl"
-        [showClearButton]="true" />
+        label="Text"
+        [control]="inputForm.text"
+        [isClearable]="true" />
       <app-input
-        labelText="Number"
+        label="Number"
         type="number"
-        [control]="numberControl" />
+        [control]="inputForm.number" />
       <app-input
-        labelText="Password"
+        label="Password"
         type="password"
-        [control]="passwordControl" />
+        [control]="inputForm.password" />
       <app-input
-        labelText="Email"
+        label="Email"
         type="email"
-        [control]="textControl"
-        prefixIcon="alternate_email" />
+        [control]="inputForm.email"
+        [leadingIcon]="icons.search" />
       <app-input
-        labelText="Textarea"
-        type="text-area"
-        [control]="textareaControl"
+        label="Textarea"
+        type="textarea"
+        [control]="inputForm.textarea"
         [rows]="4" />
       <app-input
-        labelText="Disabled"
-        [control]="disabledControl" />
+        label="Disabled"
+        [control]="inputForm.disabled" />
       <app-input
-        labelText="Read-only"
-        [control]="readonlyControl"
-        [displayOnly]="true" />
+        label="Read-only"
+        [control]="inputForm.readonly" />
     </div>
     <div class="showcase-grid">
       <app-input-select
@@ -65,8 +59,8 @@
     <div class="showcase-row">
       <app-search
         class="showcase-search"
-        placeholderText="Search…"
-        [control]="searchControl" />
+        placeholder="Search…"
+        [control]="searchForm.query" />
     </div>
   </app-panel>
 }

@@ -1,26 +1,29 @@
 @let icons = this.icons;
+@let label = this.label();
+@let placeholder = this.placeholder();
 @let control = this.control();
-@let placeholderText = this.placeholderText();
+@let canClear = this.canClear();
 
 <mat-form-field
-  class="search"
+  class="app-search"
   appearance="outline">
+  @if (label) {
+    <mat-label>{{ label }}</mat-label>
+  }
   <app-icon matPrefix>{{ icons.search }}</app-icon>
-  <mat-label>{{ placeholderText }}</mat-label>
   <input
-    type="text"
     matInput
-    [formControl]="control"
-    (focus)="focusInEvent.emit()"
-    (keyup)="search(getValue($event))"
-    (keydown)="keyPressed($event)"
-    (change)="onChange()" />
-  @if (control.value) {
+    type="text"
+    [formField]="control"
+    [placeholder]="placeholder"
+    (keydown.enter)="onEnter()" />
+  @if (canClear) {
     <button
       matSuffix
       mat-icon-button
+      type="button"
       aria-label="Clear"
-      (click)="resetValue()">
+      (click)="clear()">
       <app-icon>{{ icons.clear }}</app-icon>
     </button>
   }

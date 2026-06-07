@@ -1,13 +1,26 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { disabled, form, readonly } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
-import { InputValue } from '@shared/base-components/input/input.component';
 import { InputSelectSearchValue } from '@shared/base-components/input-select-search/input-select-search.component';
 import { InputSelectValue } from '@shared/base-components/input-select/input-select.component';
 import { ISelectItem } from '@shared/base-components/input-select/input-select.type';
-import { SearchValue } from '@shared/base-components/search/search.component';
+
+type InputShowcaseModel = {
+  text: string;
+  number: string;
+  password: string;
+  textarea: string;
+  email: string;
+  disabled: string;
+  readonly: string;
+};
+
+type SearchShowcaseModel = {
+  query: string;
+};
 
 @Component({
   selector: 'app-inputs-section',
@@ -35,15 +48,20 @@ export class InputsSectionComponent extends ComponentBase {
     'app-search',
   ];
 
-  protected readonly textControl: FormControl<InputValue> = new FormControl<InputValue>('Hello world');
-  protected readonly numberControl: FormControl<InputValue> = new FormControl<InputValue>(42);
-  protected readonly passwordControl: FormControl<InputValue> = new FormControl<InputValue>('secret');
-  protected readonly textareaControl: FormControl<InputValue> = new FormControl<InputValue>('Multi\nline\ntext');
-  protected readonly disabledControl: FormControl<InputValue> = new FormControl<InputValue>({
-    value: 'Disabled',
-    disabled: true,
+  protected readonly inputModel = signal<InputShowcaseModel>({
+    text: 'Hello world',
+    number: '42',
+    password: 'secret',
+    textarea: 'Multi\nline\ntext',
+    email: 'user@example.com',
+    disabled: 'Disabled',
+    readonly: 'Read-only',
   });
-  protected readonly readonlyControl: FormControl<InputValue> = new FormControl<InputValue>('Read-only');
+
+  protected readonly inputForm = form(this.inputModel, (f) => {
+    disabled(f.disabled);
+    readonly(f.readonly);
+  });
 
   protected readonly selectItems: ISelectItem[] = [
     { id: 'tasks', name: 'Tasks', icon: APP_ICONS.navTasks },
@@ -61,5 +79,7 @@ export class InputsSectionComponent extends ComponentBase {
   protected readonly autocompleteControl: FormControl<InputSelectSearchValue> = new FormControl<InputSelectSearchValue>(
     null,
   );
-  protected readonly searchControl: FormControl<SearchValue> = new FormControl<SearchValue>(null);
+
+  protected readonly searchModel = signal<SearchShowcaseModel>({ query: '' });
+  protected readonly searchForm = form(this.searchModel);
 }

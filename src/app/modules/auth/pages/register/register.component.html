@@ -1,32 +1,32 @@
 @let translationKeys = this.translationKeys;
 @let isSubmitting = this.isSubmitting();
-@let emailError = this.getEmailError(emailControl);
-@let passwordError = this.getPasswordError(passwordControl);
-@let confirmPasswordError = this.getConfirmPasswordError(confirmPasswordControl);
+@let emailError = this.emailError();
+@let passwordError = this.passwordError();
+@let confirmPasswordError = this.confirmPasswordError();
+@let registerForm = this.registerForm;
 
 <app-auth-layout
   [titleKey]="translationKeys.auth.register.title"
   [descriptionKey]="translationKeys.auth.register.description">
   <form
     class="register-form"
-    [formGroup]="registerForm"
     (ngSubmit)="onSubmit()">
     <app-input
-      [control]="emailControl"
+      [control]="registerForm.email"
       [type]="'email'"
-      [labelText]="translationKeys.auth.fields.email | translate"
-      [errorText]="emailError"
-      [showClearButton]="true" />
+      [label]="translationKeys.auth.fields.email | translate"
+      [errorText]="emailError ?? ''"
+      [isClearable]="true" />
     <app-input
-      [control]="passwordControl"
+      [control]="registerForm.password"
       [type]="'password'"
-      [labelText]="translationKeys.auth.fields.password | translate"
-      [errorText]="passwordError" />
+      [label]="translationKeys.auth.fields.password | translate"
+      [errorText]="passwordError ?? ''" />
     <app-input
-      [control]="confirmPasswordControl"
+      [control]="registerForm.confirmPassword"
       [type]="'password'"
-      [labelText]="translationKeys.auth.fields.confirmPassword | translate"
-      [errorText]="confirmPasswordError" />
+      [label]="translationKeys.auth.fields.confirmPassword | translate"
+      [errorText]="confirmPasswordError ?? ''" />
 
     <app-button
       [variant]="'flat'"

@@ -3,6 +3,7 @@
 @let showDescription = this.showDescription();
 @let isSubmitting = this.isSubmitting();
 @let nameError = this.nameError();
+@let taskForm = this.taskForm;
 
 <app-dialog
   #dialog
@@ -11,23 +12,22 @@
   [showMiniCloseButton]="true">
   <form
     class="task-form"
-    [formGroup]="form"
     (ngSubmit)="onSubmit()">
     <app-input
-      [control]="nameControl"
-      [labelText]="translationKeys.tasks.fields.name | translate"
-      [errorText]="nameError" />
+      [control]="taskForm.name"
+      [label]="translationKeys.tasks.fields.name | translate"
+      [errorText]="nameError ?? ''" />
 
     @if (showDescription) {
       <app-input
-        [control]="descriptionControl"
-        [type]="'text-area'"
-        [labelText]="translationKeys.tasks.fields.description | translate" />
+        [control]="taskForm.description"
+        [type]="'textarea'"
+        [label]="translationKeys.tasks.fields.description | translate" />
     }
 
     <app-input
-      [control]="colorControl"
-      [labelText]="translationKeys.tasks.fields.color | translate"
+      [control]="taskForm.color"
+      [label]="translationKeys.tasks.fields.color | translate"
       [placeholder]="'#1976D2'" />
   </form>
 

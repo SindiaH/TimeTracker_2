@@ -3,27 +3,27 @@
 @let isMagicLinkLoading = this.isMagicLinkLoading();
 @let isResettingPassword = this.isResettingPassword();
 @let isLoading = this.isLoading();
-@let emailError = this.getEmailError(emailControl);
-@let passwordError = this.getPasswordError(passwordControl);
+@let emailError = this.emailError();
+@let passwordError = this.passwordError();
+@let loginForm = this.loginForm;
 
 <app-auth-layout
   [titleKey]="translationKeys.auth.login.title"
   [descriptionKey]="translationKeys.auth.login.description">
   <form
     class="login-form"
-    [formGroup]="loginForm"
     (ngSubmit)="onSubmit()">
     <app-input
-      [control]="emailControl"
+      [control]="loginForm.email"
       [type]="'email'"
-      [labelText]="translationKeys.auth.fields.email | translate"
-      [errorText]="emailError"
-      [showClearButton]="true" />
+      [label]="translationKeys.auth.fields.email | translate"
+      [errorText]="emailError ?? ''"
+      [isClearable]="true" />
     <app-input
-      [control]="passwordControl"
+      [control]="loginForm.password"
       [type]="'password'"
-      [labelText]="translationKeys.auth.fields.password | translate"
-      [errorText]="passwordError" />
+      [label]="translationKeys.auth.fields.password | translate"
+      [errorText]="passwordError ?? ''" />
 
     <div class="login-form__row">
       <app-button

@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { form, minLength, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
 import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
-import { matchControlsValidator } from '@modules/auth/utils/match-control.validator';
+import { matchValueValidator } from '@modules/auth/utils/match-control.validator';
 
-type PasswordResetForm = {
-  password: FormControl<string>;
-  confirmPassword: FormControl<string>;
+type PasswordResetModel = {
+  password: string;
+  confirmPassword: string;
 };
 
 @Component({
@@ -27,29 +27,27 @@ export class PasswordResetComponent extends AuthFormBase {
 
   protected readonly loginLink: string = ROUTE_PATHS.authLogin;
 
-  protected readonly passwordControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH)],
-  });
+  protected readonly model = signal<PasswordResetModel>({ password: '', confirmPassword: '' });
 
-  protected readonly confirmPasswordControl: FormControl<string> = new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required],
+  protected readonly resetForm = form(this.model, (f) => {
+    required(f.password);
+    minLength(f.password, PASSWORD_MIN_LENGTH);
+    required(f.confirmPassword);
+    matchValueValidator(f.confirmPassword, f.password);
   });
-
-  protected readonly resetForm: FormGroup<PasswordResetForm> = new FormGroup<PasswordResetForm>(
-    {
-      password: this.passwordControl,
-      confirmPassword: this.confirmPasswordControl,
-    },
-    { validators: [matchControlsValidator('password', 'confirmPassword')] },
-  );
 
   protected readonly isSubmitting = signal<boolean>(false);
   protected readonly isInitializing = signal<boolean>(this.sessionProvider.isLoading());
 
   protected readonly canResetPassword: Signal<boolean> = computed<boolean>(() =>
     this.sessionProvider.isPasswordRecovery(),
+  );
+
+  protected readonly passwordError: Signal<string | null> = computed<string | null>(() =>
+    this.getPasswordError(this.resetForm.password()),
+  );
+  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() =>
+    this.getConfirmPasswordError(this.resetForm.confirmPassword()),
   );
 
   constructor() {
@@ -62,8 +60,8 @@ export class PasswordResetComponent extends AuthFormBase {
   }
 
   protected async onSubmit(): Promise<void> {
-    if (this.resetForm.invalid) {
-      this.resetForm.markAllAsTouched();
+    if (this.resetForm().invalid()) {
+      this.resetForm().markAsTouched();
       return;
     }
     if (!this.canResetPassword()) {
@@ -72,10 +70,11 @@ export class PasswordResetComponent extends AuthFormBase {
     }
     this.isSubmitting.set(true);
     try {
-      const succeeded = await this.sessionProvider.updatePassword(this.passwordControl.value);
+      const succeeded = await this.sessionProvider.updatePassword(this.model().password);
       if (!succeeded) return;
       this.notificationService.showSuccess(this.translationKeys.auth.feedback.passwordUpdated);
-      this.resetForm.reset();
+      this.model.set({ password: '', confirmPassword: '' });
+      this.resetForm().reset();
       this.stripRecoveryTokensFromUrl();
       void this.router.navigate([`/${DEFAULT_ROUTE_SEGMENT}`]);
     } finally {

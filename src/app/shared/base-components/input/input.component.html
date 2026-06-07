@@ -1,86 +1,67 @@
 @let icons = this.icons;
-@let control = this.control();
 @let appearance = this.appearance();
-@let type = this.type();
-@let labelText = this.labelText();
+@let floatLabel = this.floatLabel();
+@let label = this.label();
 @let placeholder = this.placeholder();
-@let errorText = this.errorText();
-@let errorRequiredText = this.errorRequiredText();
-@let errorMaxLengthText = this.errorMaxLengthText();
-@let errorMinLengthText = this.errorMinLengthText();
-@let errorPatternText = this.errorPatternText();
-@let prefixIcon = this.prefixIcon();
-@let showClearButton = this.showClearButton();
-@let displayOnly = this.displayOnly();
-@let subscriptSizingDynamic = this.subscriptSizingDynamic();
-@let max = this.max();
-@let min = this.min();
-@let step = this.step();
+@let type = this.type();
 @let rows = this.rows();
-@let readonlyValue = this.readonlyValue();
-@let errorKeys = this.errorKeys();
+@let leadingIcon = this.leadingIcon();
+@let trailingIcon = this.trailingIcon();
+@let supportingText = this.supportingText();
+@let errorText = this.errorText();
+@let control = this.control();
+@let hasError = this.hasError();
+@let canClear = this.canClear();
 
-@if (displayOnly) {
-  <app-text-readonly
-    [labelText]="labelText"
-    [value]="readonlyValue" />
-} @else {
-  <mat-form-field
-    [appearance]="appearance"
-    [subscriptSizing]="subscriptSizingDynamic ? 'dynamic' : 'fixed'">
-    @if (labelText) {
-      <mat-label>{{ labelText }}</mat-label>
+<mat-form-field
+  class="app-input"
+  [appearance]="appearance"
+  [floatLabel]="floatLabel">
+  @if (label) {
+    <mat-label>{{ label }}</mat-label>
+  }
+  @if (leadingIcon) {
+    <app-icon matPrefix>{{ leadingIcon }}</app-icon>
+  }
+  @switch (type) {
+    @case ('textarea') {
+      <textarea
+        matInput
+        [rows]="rows"
+        [placeholder]="placeholder"
+        [formField]="control"></textarea>
     }
-    @switch (type) {
-      @case ('text-area') {
-        <textarea
-          matInput
-          [rows]="rows"
-          [formControl]="control"
-          [placeholder]="placeholder ?? ''"
-          (keyup)="keyupEvent.emit($event)"></textarea>
-      }
-      @default {
-        <input
-          matInput
-          [type]="type"
-          [formControl]="control"
-          [placeholder]="placeholder ?? ''"
-          [max]="max"
-          [min]="min"
-          [step]="step"
-          (keyup)="keyupEvent.emit($event)" />
-      }
+    @default {
+      <input
+        matInput
+        [type]="type"
+        [placeholder]="placeholder"
+        [formField]="control" />
     }
-    @if (prefixIcon) {
-      <app-icon matPrefix>{{ prefixIcon }}</app-icon>
-    }
-    @if (showClearButton && control.value) {
-      <button
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="clearValue()">
-        <app-icon>{{ icons.clear }}</app-icon>
-      </button>
-    }
-    @if (errorKeys.has(formErrorCodes.required)) {
-      <mat-error>{{ errorRequiredText }}</mat-error>
-    }
-    @if (errorKeys.has(formErrorCodes.maxLength) || errorKeys.has(formErrorCodes.max)) {
-      <mat-error [matTooltip]="errorMaxLengthText">{{ errorMaxLengthText }}</mat-error>
-    }
-    @if (errorKeys.has(formErrorCodes.minLength) || errorKeys.has(formErrorCodes.min)) {
-      <mat-error [matTooltip]="errorMinLengthText">{{ errorMinLengthText }}</mat-error>
-    }
-    @if (errorKeys.has(formErrorCodes.pattern)) {
-      <mat-error [matTooltip]="errorPatternText">{{ errorPatternText }}</mat-error>
-    }
-    @if (errorKeys.has(formErrorCodes.email)) {
-      <mat-error>E-Mail ungültig</mat-error>
-    }
-    @if (control.invalid && errorText) {
-      <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
-    }
-  </mat-form-field>
-}
+  }
+
+  @if (canClear) {
+    <button
+      matSuffix
+      mat-icon-button
+      type="button"
+      aria-label="Clear"
+      (click)="clear()">
+      <app-icon>{{ icons.clear }}</app-icon>
+    </button>
+  } @else if (hasError) {
+    <app-icon
+      matSuffix
+      class="app-input-error-icon">
+      {{ icons.error }}
+    </app-icon>
+  } @else if (trailingIcon) {
+    <app-icon matSuffix>{{ trailingIcon }}</app-icon>
+  }
+
+  @if (hasError && errorText) {
+    <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+  } @else if (supportingText) {
+    <mat-hint>{{ supportingText }}</mat-hint>
+  }
+</mat-form-field>

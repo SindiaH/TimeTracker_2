@@ -1,24 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  signal,
-  untracked,
-} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+import type { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 import { ComponentBase } from '@core/base/component-base';
-import { FORM_ERROR_CODES } from '@core/constants/form-error-codes';
-import { controlErrorKeys } from '@core/utils/control-error-keys';
+import type { AppIcon } from '@core/constants/app-icons';
 
-export type InputAppearance = 'fill' | 'outline';
-export type InputType = 'password' | 'number' | 'text' | 'text-area' | 'email';
-export type InputValue = string | number | null | undefined;
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'textarea';
 
 @Component({
   selector: 'app-input',
@@ -26,82 +12,46 @@ export type InputValue = string | number | null | undefined;
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
-export class InputComponent extends ComponentBase implements OnInit, OnDestroy {
-  readonly control = input.required<FormControl<InputValue>>();
-  readonly appearance = input<InputAppearance>('outline');
+export class InputComponent extends ComponentBase {
+  readonly control = input.required<FieldTree<string, string>>();
+  readonly label = input<string>('');
+  readonly placeholder = input<string>('');
   readonly type = input<InputType>('text');
-  readonly labelText = input<string | null>(null);
-  readonly placeholder = input<string | null>(null);
-  readonly errorText = input<string | null>(null);
-  readonly errorRequiredText = input<string>('Pflichtfeld');
-  readonly errorMaxLengthText = input<string>('Eingabe zu lang');
-  readonly errorMinLengthText = input<string>('Eingabe zu kurz');
-  readonly errorPatternText = input<string>('Eingabe ungültig');
-  readonly prefixIcon = input<string | null>(null);
-  readonly showClearButton = input<boolean>(false);
-  readonly displayOnly = input<boolean>(false);
-  readonly disabled = input<boolean | undefined>(undefined);
-  readonly subscriptSizingDynamic = input<boolean>(false);
-  readonly max = input<number | null>(null);
-  readonly min = input<number | null>(null);
-  readonly step = input<number | null>(null);
   readonly rows = input<number>(3);
+  readonly isClearable = input<boolean>(false);
 
-  readonly keyupEvent = output<KeyboardEvent>();
-  readonly clearEvent = output<void>();
-  readonly changed = output<InputValue>();
+  readonly leadingIcon = input<AppIcon>();
+  readonly trailingIcon = input<AppIcon>();
+  readonly supportingText = input<string>();
+  readonly errorText = input<string>();
+  readonly appearance = input<MatFormFieldAppearance>('outline');
+  readonly floatLabel = input<FloatLabelType>('auto');
+  readonly cssClass = input<string>('');
 
-  protected readonly changeSubject = new Subject<InputValue>();
-  private readonly currentValue = signal<InputValue>(undefined);
-  protected readonly errorKeys = controlErrorKeys(this.control);
-  protected readonly formErrorCodes = FORM_ERROR_CODES;
+  readonly cleared = output<void>();
 
-  protected readonly readonlyValue = computed<string>(() => {
-    const value = this.currentValue();
-    if (this.type() === 'password') {
-      return '••••••••';
-    }
-    return value ? value.toString() : '';
+  readonly canClear = computed<boolean>(() => this.isClearable() && !!this.control()().value());
+
+  readonly hasError = computed<boolean>(() => {
+    const state = this.control()();
+    return state.invalid() && state.touched();
   });
 
-  constructor() {
-    super();
-    effect(() => {
-      const controlValue = this.control().value;
-      untracked(() => this.currentValue.set(controlValue));
-    });
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-input-host'];
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
 
-    effect(() => {
-      const disabled = this.disabled();
-      untracked(() => {
-        if (disabled === undefined) return;
-        const control = this.control();
-        if (disabled && !control.disabled) {
-          control.disable();
-        } else if (!disabled && control.disabled) {
-          control.enable();
-        }
-      });
-    });
-  }
-
-  ngOnInit(): void {
-    this.changeSubject.pipe(debounceTime(300), distinctUntilChanged(), this.takeUntilDestroyed()).subscribe((value) => {
-      this.currentValue.set(value);
-      this.changed.emit(value);
-    });
-    this.control()
-      .valueChanges.pipe(this.takeUntilDestroyed())
-      .subscribe((value) => this.changeSubject.next(value));
-  }
-
-  ngOnDestroy(): void {
-    this.changeSubject.complete();
-  }
-
-  protected clearValue(): void {
-    this.control().setValue(null);
-    this.clearEvent.emit();
+  clear(): void {
+    this.control()().value.set('');
+    this.cleared.emit();
   }
 }

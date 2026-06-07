@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal, Signal, WritableSignal } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
-import { SearchValue } from '@shared/base-components/search/search.component';
+
+type SearchModel = {
+  query: string;
+};
 
 @Component({
   selector: 'app-showcase-page',
@@ -11,11 +14,13 @@ import { SearchValue } from '@shared/base-components/search/search.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShowcasePageComponent extends ComponentBase {
-  protected readonly searchControl: FormControl<SearchValue> = new FormControl<SearchValue>(null);
+  protected readonly searchModel = signal<SearchModel>({ query: '' });
+  protected readonly searchForm = form(this.searchModel);
+
   private readonly _searchTerm: WritableSignal<string | null> = signal<string | null>(null);
   protected readonly searchTerm: Signal<string | null> = this._searchTerm.asReadonly();
 
-  protected onSearchChanged(value: SearchValue): void {
-    this._searchTerm.set(value ?? null);
+  protected onSearchChanged(value: string): void {
+    this._searchTerm.set(value === '' ? null : value);
   }
 }
