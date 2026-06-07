@@ -1,45 +1,45 @@
-@let group = this.formGroup();
-@let startControl = this.startControl();
-@let endControl = this.endControl();
 @let labelText = this.labelText();
-@let appearance = this.appearance();
-@let hint = this.hint();
-@let minStartDate = this.minStartDate();
-@let useTouchUi = this.useTouchUi();
 @let fromLabel = this.fromLabel();
 @let toLabel = this.toLabel();
-@let minDateErrorText = this.minDateErrorText();
-@let startErrorKeys = this.startErrorKeys();
+@let appearance = this.appearance();
+@let floatLabel = this.floatLabel();
+@let control = this.control();
+@let minDate = this.minDate();
+@let maxDate = this.maxDate();
+@let hasError = this.hasError();
+@let errorText = this.errorText();
+@let supportingText = this.supportingText();
+@let useTouchUi = this.useTouchUi();
 
-@if (group) {
-  <mat-form-field [appearance]="appearance">
+<mat-form-field
+  class="app-date-range-picker"
+  [appearance]="appearance"
+  [floatLabel]="floatLabel">
+  @if (labelText) {
     <mat-label>{{ labelText }}</mat-label>
-    <mat-date-range-input
-      [formGroup]="group"
-      [rangePicker]="picker"
-      [min]="minStartDate">
-      <input
-        matStartDate
-        [placeholder]="fromLabel"
-        [formControl]="startControl" />
-      <input
-        matEndDate
-        [placeholder]="toLabel"
-        [formControl]="endControl" />
-    </mat-date-range-input>
-    @if (hint) {
-      <mat-hint>{{ hint }}</mat-hint>
-    }
-    <mat-datepicker-toggle
-      matIconSuffix
-      [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker
-      #picker
-      [touchUi]="useTouchUi"></mat-date-range-picker>
-    @if (startErrorKeys.has('matDatepickerMin')) {
-      <mat-error [matTooltip]="minDateErrorText">{{ minDateErrorText }}</mat-error>
-    }
-  </mat-form-field>
-} @else {
-  <app-progress-indicator type="bar" />
-}
+  }
+  <mat-date-range-input
+    [rangePicker]="picker"
+    [min]="minDate"
+    [max]="maxDate">
+    <input
+      matStartDate
+      [formField]="control.start"
+      [placeholder]="fromLabel" />
+    <input
+      matEndDate
+      [formField]="control.end"
+      [placeholder]="toLabel" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle
+    matIconSuffix
+    [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker
+    #picker
+    [touchUi]="useTouchUi"></mat-date-range-picker>
+  @if (hasError && errorText) {
+    <mat-error [matTooltip]="errorText">{{ errorText }}</mat-error>
+  } @else if (supportingText) {
+    <mat-hint>{{ supportingText }}</mat-hint>
+  }
+</mat-form-field>

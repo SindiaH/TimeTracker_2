@@ -3,8 +3,7 @@
 @let keywords = this.keywords;
 
 @let datePickerForm = this.datePickerForm;
-@let rangeStartControl = this.rangeStartControl;
-@let rangeEndControl = this.rangeEndControl;
+@let dateRangeForm = this.dateRangeForm;
 
 @if (searchTerm | searchFilter: keywords) {
   <app-panel [titleText]="translationKeys.showcase.sections.date | translate">
@@ -21,8 +20,9 @@
         [control]="datePickerForm.disabled" />
       <app-date-range-picker
         labelText="Date range"
-        [startControl]="rangeStartControl"
-        [endControl]="rangeEndControl" />
+        fromLabel="From"
+        toLabel="To"
+        [control]="dateRangeForm.range" />
     </div>
   </app-panel>
 }

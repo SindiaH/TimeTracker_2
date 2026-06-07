@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { disabled, form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
+import { DateRangeValue } from '@shared/base-components/date-range-picker/date-range-picker.component';
 
 type DatePickerShowcaseModel = {
   single: Date | null;
   disabled: Date | null;
+};
+
+type DateRangeShowcaseModel = {
+  range: DateRangeValue;
 };
 
 @Component({
@@ -38,8 +42,11 @@ export class DateSectionComponent extends ComponentBase {
     disabled(f.disabled);
   });
 
-  protected readonly rangeStartControl: FormControl<Date | null> = new FormControl<Date | null>(new Date());
-  protected readonly rangeEndControl: FormControl<Date | null> = new FormControl<Date | null>(
-    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  );
+  protected readonly dateRangeModel = signal<DateRangeShowcaseModel>({
+    range: {
+      start: new Date(),
+      end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
+  protected readonly dateRangeForm = form(this.dateRangeModel);
 }
