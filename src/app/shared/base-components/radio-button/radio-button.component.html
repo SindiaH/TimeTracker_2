@@ -1,11 +1,12 @@
+@let control = this.control();
+@let name = this.name();
 @let radioValues = this.radioValues();
-@let selectedValue = this.selectedValue();
-@let alignItems = this.alignItems();
+@let groupClass = this.groupClass();
 
 <mat-radio-group
-  [class]="'align-' + alignItems"
-  [value]="selectedValue"
-  (change)="valueChanged($event)">
+  [class]="groupClass"
+  [formField]="control"
+  [name]="name">
   @for (value of radioValues; track value.id) {
     <mat-radio-button [value]="value.id">{{ value.name }}</mat-radio-button>
   }

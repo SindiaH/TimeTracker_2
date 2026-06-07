@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatRadioChange } from '@angular/material/radio';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+import { ComponentBase } from '@core/base/component-base';
 import { RadioButtonType } from '@shared/types/radio-button.type';
 
 export type RadioButtonAlignment = 'row' | 'column';
+export type RadioButtonValue = string | number | null;
 
 @Component({
   selector: 'app-radio-button',
@@ -11,14 +13,11 @@ export type RadioButtonAlignment = 'row' | 'column';
   styleUrl: './radio-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioButtonComponent {
+export class RadioButtonComponent extends ComponentBase {
+  readonly control = input.required<FieldTree<RadioButtonValue, string>>();
   readonly radioValues = input.required<RadioButtonType[]>();
-  readonly selectedValue = input.required<string | number>();
+  readonly name = input<string>('');
   readonly alignItems = input<RadioButtonAlignment>('row');
 
-  readonly changed = output<string | number>();
-
-  protected valueChanged($event: MatRadioChange): void {
-    this.changed.emit($event.value);
-  }
+  readonly groupClass = computed<string>(() => 'app-radio-button align-' + this.alignItems());
 }

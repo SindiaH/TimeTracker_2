@@ -5,7 +5,7 @@
 @let checkboxForm = this.checkboxForm;
 @let toggleForm = this.toggleForm;
 @let radioOptions = this.radioOptions;
-@let selectedRadio = this.selectedRadio;
+@let radioForm = this.radioForm;
 @let buttonToggleOptions = this.buttonToggleOptions;
 @let buttonToggleControl = this.buttonToggleControl;
 @let buttonToggleMultiControl = this.buttonToggleMultiControl;
@@ -39,11 +39,11 @@
     </div>
     <div class="showcase-row">
       <app-radio-button
-        [radioValues]="radioOptions"
-        [selectedValue]="selectedRadio" />
+        [control]="radioForm.selected"
+        [radioValues]="radioOptions" />
       <app-radio-button
+        [control]="radioForm.selected"
         [radioValues]="radioOptions"
-        [selectedValue]="selectedRadio"
         alignItems="column" />
     </div>
     <div class="showcase-row">

@@ -6,6 +6,7 @@ import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
+import { RadioButtonValue } from '@shared/base-components/radio-button/radio-button.component';
 import { RadioButtonType } from '@shared/types/radio-button.type';
 
 type CheckboxShowcaseModel = {
@@ -21,6 +22,10 @@ type ToggleShowcaseModel = {
   on: boolean;
   disabled: boolean;
   labelBefore: boolean;
+};
+
+type RadioShowcaseModel = {
+  selected: RadioButtonValue;
 };
 
 @Component({
@@ -75,7 +80,8 @@ export class TogglesSectionComponent extends ComponentBase {
     { id: 'two', name: 'Two' },
     { id: 'three', name: 'Three' },
   ];
-  protected readonly selectedRadio: string = 'two';
+  protected readonly radioModel = signal<RadioShowcaseModel>({ selected: 'two' });
+  protected readonly radioForm = form(this.radioModel);
 
   protected readonly buttonToggleOptions: ButtonToggleOption[] = [
     { id: 'list', name: 'List', icon: APP_ICONS.viewList },
