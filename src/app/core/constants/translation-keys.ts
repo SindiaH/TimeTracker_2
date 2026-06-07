@@ -6,6 +6,15 @@ export const TRANSLATION_KEYS = {
     previous: 'shared.previous',
     next: 'shared.next',
     close: 'shared.close',
+    formErrors: {
+      required: 'shared.formErrors.required',
+      email: 'shared.formErrors.email',
+      minLength: 'shared.formErrors.minLength',
+      maxLength: 'shared.formErrors.maxLength',
+      min: 'shared.formErrors.min',
+      max: 'shared.formErrors.max',
+      pattern: 'shared.formErrors.pattern',
+    },
   },
   header: {
     navigation: 'header.navigation',
@@ -79,8 +88,6 @@ export const TRANSLATION_KEYS = {
     errors: {
       emailRequired: 'auth.errors.emailRequired',
       emailInvalid: 'auth.errors.emailInvalid',
-      passwordRequired: 'auth.errors.passwordRequired',
-      passwordMinLength: 'auth.errors.passwordMinLength',
       passwordMismatch: 'auth.errors.passwordMismatch',
       invalidCredentials: 'auth.errors.invalidCredentials',
       emailNotConfirmed: 'auth.errors.emailNotConfirmed',
@@ -154,10 +161,6 @@ export const TRANSLATION_KEYS = {
       loadFailed: 'tasks.feedback.loadFailed',
       saveFailed: 'tasks.feedback.saveFailed',
       deleteFailed: 'tasks.feedback.deleteFailed',
-    },
-    errors: {
-      nameRequired: 'tasks.errors.nameRequired',
-      nameMaxLength: 'tasks.errors.nameMaxLength',
     },
   },
   showcase: {

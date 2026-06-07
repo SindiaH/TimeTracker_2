@@ -2,7 +2,6 @@
 @let titleKey = this.titleKey();
 @let showDescription = this.showDescription();
 @let isSubmitting = this.isSubmitting();
-@let nameError = this.nameError();
 @let taskForm = this.taskForm;
 
 <app-dialog
@@ -15,8 +14,7 @@
     (ngSubmit)="onSubmit()">
     <app-input
       [control]="taskForm.name"
-      [label]="translationKeys.tasks.fields.name | translate"
-      [errorText]="nameError ?? ''" />
+      [label]="translationKeys.tasks.fields.name | translate" />
 
     @if (showDescription) {
       <app-input

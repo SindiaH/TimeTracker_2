@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { email, form, minLength, required } from '@angular/forms/signals';
+import { ComponentBase } from '@core/base/component-base';
 import { ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
+import { TranslationService } from '@core/i18n/translation.service';
 import { SessionProvider } from '@core/providers/session.provider';
-import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
+import { NotificationService } from '@core/services/notification/notification.service';
 import { matchValueValidator } from '@modules/auth/utils/match-control.validator';
 
 type RegisterModel = {
@@ -19,8 +21,10 @@ type RegisterModel = {
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent extends AuthFormBase {
+export class RegisterComponent extends ComponentBase {
   private readonly sessionProvider = inject(SessionProvider);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translationService = inject(TranslationService);
 
   protected readonly loginLink: string = ROUTE_PATHS.authLogin;
 
@@ -37,15 +41,14 @@ export class RegisterComponent extends AuthFormBase {
 
   protected readonly isSubmitting = signal<boolean>(false);
 
-  protected readonly emailError: Signal<string | null> = computed<string | null>(() =>
-    this.getEmailError(this.registerForm.email()),
-  );
-  protected readonly passwordError: Signal<string | null> = computed<string | null>(() =>
-    this.getPasswordError(this.registerForm.password()),
-  );
-  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() =>
-    this.getConfirmPasswordError(this.registerForm.confirmPassword()),
-  );
+  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() => {
+    const state = this.registerForm.confirmPassword();
+    if (!state.touched()) return null;
+    if (state.getError('mismatch')) {
+      return this.translationService.instant(this.translationKeys.auth.errors.passwordMismatch);
+    }
+    return null;
+  });
 
   protected async onSubmit(): Promise<void> {
     if (this.registerForm().invalid()) {

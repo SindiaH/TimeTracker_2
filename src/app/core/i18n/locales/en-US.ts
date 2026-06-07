@@ -8,6 +8,15 @@ export const enUs: TranslationShape = {
     previous: 'Back',
     next: 'Next',
     close: 'Close',
+    formErrors: {
+      required: 'This field is required.',
+      email: 'Please enter a valid email address.',
+      minLength: 'Must be at least {{count}} characters.',
+      maxLength: 'Must be at most {{count}} characters.',
+      min: 'Must be at least {{min}}.',
+      max: 'Must be at most {{max}}.',
+      pattern: 'Please enter a valid value.',
+    },
   },
   modules: {
     tasks: 'Tasks',
@@ -81,8 +90,6 @@ export const enUs: TranslationShape = {
     errors: {
       emailRequired: 'Please enter your email address.',
       emailInvalid: 'Please enter a valid email address.',
-      passwordRequired: 'Please enter your password.',
-      passwordMinLength: 'Password must be at least {{count}} characters.',
       passwordMismatch: 'Passwords do not match.',
       invalidCredentials: 'Invalid email or password.',
       emailNotConfirmed: 'Please confirm your email address before signing in.',
@@ -157,10 +164,6 @@ export const enUs: TranslationShape = {
       loadFailed: 'Could not load tasks. Please try again.',
       saveFailed: 'Could not save changes. Please try again.',
       deleteFailed: 'Could not delete the item. Please try again.',
-    },
-    errors: {
-      nameRequired: 'Please enter a name.',
-      nameMaxLength: 'Name must be at most {{count}} characters.',
     },
   },
   showcase: {

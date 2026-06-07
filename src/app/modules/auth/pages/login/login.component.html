@@ -3,8 +3,6 @@
 @let isMagicLinkLoading = this.isMagicLinkLoading();
 @let isResettingPassword = this.isResettingPassword();
 @let isLoading = this.isLoading();
-@let emailError = this.emailError();
-@let passwordError = this.passwordError();
 @let loginForm = this.loginForm;
 
 <app-auth-layout
@@ -17,13 +15,11 @@
       [control]="loginForm.email"
       [type]="'email'"
       [label]="translationKeys.auth.fields.email | translate"
-      [errorText]="emailError ?? ''"
       [isClearable]="true" />
     <app-input
       [control]="loginForm.password"
       [type]="'password'"
-      [label]="translationKeys.auth.fields.password | translate"
-      [errorText]="passwordError ?? ''" />
+      [label]="translationKeys.auth.fields.password | translate" />
 
     <div class="login-form__row">
       <app-button

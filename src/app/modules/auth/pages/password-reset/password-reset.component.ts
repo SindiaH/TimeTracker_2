@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, s
 import { DOCUMENT } from '@angular/common';
 import { form, minLength, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { ComponentBase } from '@core/base/component-base';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
+import { TranslationService } from '@core/i18n/translation.service';
 import { SessionProvider } from '@core/providers/session.provider';
-import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
+import { NotificationService } from '@core/services/notification/notification.service';
 import { matchValueValidator } from '@modules/auth/utils/match-control.validator';
 
 type PasswordResetModel = {
@@ -20,8 +22,10 @@ type PasswordResetModel = {
   styleUrl: './password-reset.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PasswordResetComponent extends AuthFormBase {
+export class PasswordResetComponent extends ComponentBase {
   private readonly sessionProvider = inject(SessionProvider);
+  private readonly notificationService = inject(NotificationService);
+  private readonly translationService = inject(TranslationService);
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
 
@@ -43,12 +47,14 @@ export class PasswordResetComponent extends AuthFormBase {
     this.sessionProvider.isPasswordRecovery(),
   );
 
-  protected readonly passwordError: Signal<string | null> = computed<string | null>(() =>
-    this.getPasswordError(this.resetForm.password()),
-  );
-  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() =>
-    this.getConfirmPasswordError(this.resetForm.confirmPassword()),
-  );
+  protected readonly confirmPasswordError: Signal<string | null> = computed<string | null>(() => {
+    const state = this.resetForm.confirmPassword();
+    if (!state.touched()) return null;
+    if (state.getError('mismatch')) {
+      return this.translationService.instant(this.translationKeys.auth.errors.passwordMismatch);
+    }
+    return null;
+  });
 
   constructor() {
     super();

@@ -11,7 +11,6 @@ import {
 import { form, maxLength, required } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { TranslationKey } from '@core/constants/translation-keys';
-import { TranslationService } from '@core/i18n/translation.service';
 import { FolderProvider } from '@core/providers/folder.provider';
 import { TaskProvider } from '@core/providers/task.provider';
 import { FolderReadModel } from '@database/read-models/folder-read-model';
@@ -41,7 +40,6 @@ const EMPTY_MODEL: TaskFormModel = { name: '', description: '', color: '' };
 export class TaskFormComponent extends ComponentBase {
   private readonly taskProvider = inject(TaskProvider);
   private readonly folderProvider = inject(FolderProvider);
-  private readonly translationService = inject(TranslationService);
 
   protected readonly model = signal<TaskFormModel>({ ...EMPTY_MODEL });
 
@@ -82,22 +80,6 @@ export class TaskFormComponent extends ComponentBase {
   protected readonly showDescription: Signal<boolean> = computed<boolean>(() => {
     const mode = this._mode();
     return mode === 'create-task' || mode === 'edit-task';
-  });
-
-  protected readonly nameError: Signal<string | null> = computed<string | null>(() => {
-    const state = this.taskForm.name();
-    if (!state.touched()) {
-      return null;
-    }
-    if (state.getError('required')) {
-      return this.translationService.instant(this.translationKeys.tasks.errors.nameRequired);
-    }
-    if (state.getError('maxLength')) {
-      return this.translationService.instant(this.translationKeys.tasks.errors.nameMaxLength, {
-        count: NAME_MAX_LENGTH,
-      });
-    }
-    return null;
   });
 
   private readonly dialog = viewChild<DialogComponent>('dialog');

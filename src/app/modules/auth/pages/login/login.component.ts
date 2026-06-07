@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { email, form, minLength, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { ComponentBase } from '@core/base/component-base';
 import { DEFAULT_ROUTE_SEGMENT, ROUTE_PATHS } from '@core/constants/app-routes';
 import { PASSWORD_MIN_LENGTH } from '@core/constants/auth.constants';
 import { SessionProvider } from '@core/providers/session.provider';
-import { AuthFormBase } from '@modules/auth/utils/auth-form-base';
+import { NotificationService } from '@core/services/notification/notification.service';
 
 type LoginModel = {
   email: string;
@@ -18,8 +19,9 @@ type LoginModel = {
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent extends AuthFormBase {
+export class LoginComponent extends ComponentBase {
   private readonly sessionProvider = inject(SessionProvider);
+  private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
 
   protected readonly registerLink: string = ROUTE_PATHS.authRegister;
@@ -39,13 +41,6 @@ export class LoginComponent extends AuthFormBase {
 
   protected readonly isLoading: Signal<boolean> = computed<boolean>(
     () => this.isSubmitting() || this.isMagicLinkLoading() || this.isResettingPassword(),
-  );
-
-  protected readonly emailError: Signal<string | null> = computed<string | null>(() =>
-    this.getEmailError(this.loginForm.email()),
-  );
-  protected readonly passwordError: Signal<string | null> = computed<string | null>(() =>
-    this.getPasswordError(this.loginForm.password()),
   );
 
   protected async onSubmit(): Promise<void> {

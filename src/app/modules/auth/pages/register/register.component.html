@@ -1,7 +1,5 @@
 @let translationKeys = this.translationKeys;
 @let isSubmitting = this.isSubmitting();
-@let emailError = this.emailError();
-@let passwordError = this.passwordError();
 @let confirmPasswordError = this.confirmPasswordError();
 @let registerForm = this.registerForm;
 
@@ -15,13 +13,11 @@
       [control]="registerForm.email"
       [type]="'email'"
       [label]="translationKeys.auth.fields.email | translate"
-      [errorText]="emailError ?? ''"
       [isClearable]="true" />
     <app-input
       [control]="registerForm.password"
       [type]="'password'"
-      [label]="translationKeys.auth.fields.password | translate"
-      [errorText]="passwordError ?? ''" />
+      [label]="translationKeys.auth.fields.password | translate" />
     <app-input
       [control]="registerForm.confirmPassword"
       [type]="'password'"

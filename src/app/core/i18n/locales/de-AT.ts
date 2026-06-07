@@ -8,6 +8,15 @@ export const deAt: TranslationShape = {
     previous: 'Zurück',
     next: 'Weiter',
     close: 'Schließen',
+    formErrors: {
+      required: 'Pflichtfeld.',
+      email: 'Bitte gib eine gültige E-Mail-Adresse ein.',
+      minLength: 'Mindestens {{count}} Zeichen.',
+      maxLength: 'Maximal {{count}} Zeichen.',
+      min: 'Mindestens {{min}}.',
+      max: 'Maximal {{max}}.',
+      pattern: 'Ungültige Eingabe.',
+    },
   },
   modules: {
     tasks: 'Aufgaben',
@@ -81,8 +90,6 @@ export const deAt: TranslationShape = {
     errors: {
       emailRequired: 'Bitte gib deine E-Mail-Adresse ein.',
       emailInvalid: 'Bitte gib eine gültige E-Mail-Adresse ein.',
-      passwordRequired: 'Bitte gib dein Passwort ein.',
-      passwordMinLength: 'Passwort muss mindestens {{count}} Zeichen haben.',
       passwordMismatch: 'Die Passwörter stimmen nicht überein.',
       invalidCredentials: 'Ungültige E-Mail-Adresse oder ungültiges Passwort.',
       emailNotConfirmed: 'Bitte bestätige zuerst deine E-Mail-Adresse.',
@@ -158,10 +165,6 @@ export const deAt: TranslationShape = {
       loadFailed: 'Aufgaben konnten nicht geladen werden. Bitte erneut versuchen.',
       saveFailed: 'Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.',
       deleteFailed: 'Eintrag konnte nicht gelöscht werden. Bitte erneut versuchen.',
-    },
-    errors: {
-      nameRequired: 'Bitte einen Namen eingeben.',
-      nameMaxLength: 'Name darf maximal {{count}} Zeichen lang sein.',
     },
   },
   showcase: {
