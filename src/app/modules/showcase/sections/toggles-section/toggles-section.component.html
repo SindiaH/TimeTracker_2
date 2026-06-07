@@ -2,7 +2,7 @@
 @let searchTerm = this.searchTerm();
 @let keywords = this.keywords;
 
-@let checkboxControl = this.checkboxControl;
+@let checkboxForm = this.checkboxForm;
 @let toggleControl = this.toggleControl;
 @let radioOptions = this.radioOptions;
 @let selectedRadio = this.selectedRadio;
@@ -13,20 +13,16 @@
 @if (searchTerm | searchFilter: keywords) {
   <app-panel [titleText]="translationKeys.showcase.sections.toggles | translate">
     <div class="showcase-row">
-      <app-checkbox [control]="checkboxControl">Checked</app-checkbox>
-      <app-checkbox [checked]="false">Unchecked</app-checkbox>
+      <app-checkbox [control]="checkboxForm.checked">Checked</app-checkbox>
+      <app-checkbox [control]="checkboxForm.unchecked">Unchecked</app-checkbox>
       <app-checkbox
-        [checked]="true"
-        [indeterminate]="true"
+        [control]="checkboxForm.indeterminate"
+        [isIndeterminate]="true"
         >Indeterminate</app-checkbox
       >
+      <app-checkbox [control]="checkboxForm.disabled">Disabled</app-checkbox>
       <app-checkbox
-        [checked]="true"
-        [disabled]="true"
-        >Disabled</app-checkbox
-      >
-      <app-checkbox
-        [checked]="true"
+        [control]="checkboxForm.labelBefore"
         labelPosition="before"
         >Label before</app-checkbox
       >

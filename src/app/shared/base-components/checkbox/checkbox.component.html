@@ -1,13 +1,14 @@
-@let checkedValue = this.checkedValue();
-@let disabled = this.disabled();
-@let indeterminate = this.indeterminate();
+@let control = this.control();
+@let label = this.label();
+@let ariaLabel = this.ariaLabel();
 @let labelPosition = this.labelPosition();
+@let isIndeterminate = this.isIndeterminate();
 
 <mat-checkbox
-  [checked]="checkedValue"
-  [disabled]="disabled"
-  [indeterminate]="indeterminate"
+  [formField]="control"
+  [indeterminate]="isIndeterminate"
   [labelPosition]="labelPosition"
-  (change)="valueChanged($event)">
-  <ng-content></ng-content>
+  [attr.aria-label]="ariaLabel"
+  (change)="clearIndeterminate()">
+  {{ label }}<ng-content></ng-content>
 </mat-checkbox>

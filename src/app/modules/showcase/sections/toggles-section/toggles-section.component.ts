@@ -1,11 +1,20 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { disabled, form } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS } from '@core/constants/app-icons';
 import { TRANSLATION_KEYS } from '@core/constants/translation-keys';
 import { ButtonToggleValue } from '@shared/base-components/button-toggle/button-toggle.component';
 import { ButtonToggleOption } from '@shared/base-components/button-toggle/button-toggle.type';
 import { RadioButtonType } from '@shared/types/radio-button.type';
+
+type CheckboxShowcaseModel = {
+  checked: boolean;
+  unchecked: boolean;
+  indeterminate: boolean;
+  disabled: boolean;
+  labelBefore: boolean;
+};
 
 @Component({
   selector: 'app-toggles-section',
@@ -33,7 +42,17 @@ export class TogglesSectionComponent extends ComponentBase {
     'app-chip',
   ];
 
-  protected readonly checkboxControl: FormControl<boolean | null> = new FormControl<boolean | null>(true);
+  protected readonly checkboxModel = signal<CheckboxShowcaseModel>({
+    checked: true,
+    unchecked: false,
+    indeterminate: true,
+    disabled: true,
+    labelBefore: true,
+  });
+  protected readonly checkboxForm = form(this.checkboxModel, (f) => {
+    disabled(f.disabled);
+  });
+
   protected readonly toggleControl: FormControl<boolean | null> = new FormControl<boolean | null>(false);
 
   protected readonly radioOptions: RadioButtonType[] = [

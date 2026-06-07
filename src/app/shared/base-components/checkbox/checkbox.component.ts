@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, input, OnInit, output, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 
 export type CheckboxLabelPosition = 'before' | 'after';
@@ -11,45 +10,36 @@ export type CheckboxLabelPosition = 'before' | 'after';
   templateUrl: './checkbox.component.html',
   styleUrl: './checkbox.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class]': 'hostClass()',
+  },
 })
-export class CheckboxComponent extends ComponentBase implements OnInit {
-  readonly control = input<FormControl<boolean | null> | undefined>(undefined);
-  readonly checked = input<boolean | undefined>(undefined);
-  readonly disabled = input<boolean>(false);
-  readonly indeterminate = input<boolean>(false);
+export class CheckboxComponent extends ComponentBase {
+  readonly control = input.required<FieldTree<boolean, string>>();
+  readonly label = input<string>('');
+  readonly ariaLabel = input<string>();
   readonly labelPosition = input<CheckboxLabelPosition>('after');
+  readonly isIndeterminate = model<boolean>(false);
+  readonly cssClass = input<string>('');
 
-  readonly changed = output<boolean>();
+  readonly hasError = computed<boolean>(() => {
+    const state = this.control()();
+    return state.invalid() && state.touched();
+  });
 
-  protected readonly checkedValue = signal<boolean>(false);
-
-  constructor() {
-    super();
-    effect(() => {
-      const checked = this.checked();
-      if (checked !== undefined) {
-        this.checkedValue.set(checked);
-      }
-    });
-    effect(() => {
-      const control = this.control();
-      if (control !== undefined) {
-        this.checkedValue.set(control.value ?? false);
-      }
-    });
-  }
-
-  ngOnInit(): void {
-    const control = this.control();
-    if (control !== undefined) {
-      control.valueChanges.pipe(this.takeUntilDestroyed()).subscribe((value) => {
-        this.checkedValue.set(value ?? false);
-      });
+  readonly hostClass = computed<string>(() => {
+    const classes = ['app-checkbox-host'];
+    if (this.hasError()) {
+      classes.push('app-checkbox-host--invalid');
     }
-  }
+    const css = this.cssClass();
+    if (css) {
+      classes.push(css);
+    }
+    return classes.join(' ');
+  });
 
-  protected valueChanged($event: MatCheckboxChange): void {
-    this.changed.emit($event.checked);
-    this.control()?.setValue($event.checked);
+  clearIndeterminate(): void {
+    this.isIndeterminate.set(false);
   }
 }
