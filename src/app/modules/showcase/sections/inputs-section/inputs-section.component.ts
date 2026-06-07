@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal, signal } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { disabled, form, readonly } from '@angular/forms/signals';
 import { ComponentBase } from '@core/base/component-base';
 import { APP_ICONS } from '@core/constants/app-icons';
@@ -11,6 +10,10 @@ import { ISelectItem } from '@shared/base-components/input-select/input-select.t
 type SelectShowcaseModel = {
   single: InputSelectValue;
   multi: InputSelectValue;
+};
+
+type AutocompleteShowcaseModel = {
+  selected: InputSelectSearchValue;
 };
 
 type InputShowcaseModel = {
@@ -82,9 +85,8 @@ export class InputsSectionComponent extends ComponentBase {
   });
   protected readonly selectForm = form(this.selectModel);
 
-  protected readonly autocompleteControl: FormControl<InputSelectSearchValue> = new FormControl<InputSelectSearchValue>(
-    null,
-  );
+  protected readonly autocompleteModel = signal<AutocompleteShowcaseModel>({ selected: null });
+  protected readonly autocompleteForm = form(this.autocompleteModel);
 
   protected readonly searchModel = signal<SearchShowcaseModel>({ query: '' });
   protected readonly searchForm = form(this.searchModel);

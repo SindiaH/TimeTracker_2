@@ -2,26 +2,10 @@
   display: block;
 }
 
-.input-select-search-container {
-  display: flex;
-  align-items: center;
-  gap: var(--app-spacing-2xs);
+.app-input-select-search {
+  width: 100%;
 }
 
-.input-select-search {
-  flex: 1;
-}
-
-.load-more-option {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--app-spacing-xs);
-  padding: var(--app-spacing-xs);
-  cursor: pointer;
-  color: var(--app-color-primary);
-}
-
-.is-active-option {
-  background-color: var(--app-color-surface-container-high);
+.app-input-select-search-error-icon {
+  color: var(--app-color-error);
 }

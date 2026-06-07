@@ -5,7 +5,7 @@
 @let inputForm = this.inputForm;
 @let selectItems = this.selectItems;
 @let selectForm = this.selectForm;
-@let autocompleteControl = this.autocompleteControl;
+@let autocompleteForm = this.autocompleteForm;
 @let searchForm = this.searchForm;
 
 @if (searchTerm | searchFilter: keywords) {
@@ -52,7 +52,7 @@
         [multiple]="true" />
       <app-input-select-search
         labelText="Autocomplete"
-        [control]="autocompleteControl"
+        [control]="autocompleteForm.selected"
         [items]="selectItems" />
     </div>
     <div class="showcase-row">
